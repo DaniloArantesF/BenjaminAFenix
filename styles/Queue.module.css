@@ -1,0 +1,60 @@
+
+.queue_component {
+  --header-height: 2em;
+  display: inline-grid;
+  position: relative;
+  min-height: 400px;
+  max-height: 60%;
+  overflow-y: auto;
+  overflow-x: block;
+  width: 60%;
+  max-width: 900px;
+  grid-template-rows: repeat(auto-fill, 4em);
+  gap: 0.2em;
+  transition: all 100ms ease-out;
+  padding: calc(var(--header-height) + 0.2em) 0.2em 0.2em;
+  font-size: 100%;
+}
+
+.queue__item {
+  display: inline-grid;
+  height: 4em;
+  grid-template-columns: 50px repeat(auto-fit, minmax(50px, 1fr));
+  gap: 0.1em;
+  padding: 0 0.5em;
+  margin: 0 0.1em;
+  align-items: center;
+  justify-items: center;
+  background: var(--clr-surface1);
+  transition: inherit;
+  overflow: hidden;
+  text-align: center;
+}
+
+.queue__item > span {
+  max-height: 90%;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.queue__header {
+  word-break: normal;
+  color: var(--clr-title);
+  background-color: #454a4d;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  margin: 0;
+}
+
+.queue__item:hover {
+  transform: scale(1.01);
+  margin: 0;
+}
+
+.queue__header:hover {
+  transform: none;
+}
+
