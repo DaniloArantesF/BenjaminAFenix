@@ -1,7 +1,7 @@
 import React from 'react';
-import { Track, } from '../../util/types';
-import classes from '../../styles/Queue.module.css';
-import { msToMinSec } from '../../util/util';
+import { Track, } from '../util/types';
+import classes from '../styles/Queue.module.css';
+import { msToMinSec } from '../util/util';
 export interface QItem extends Track {
   itemPosition: number;
 }

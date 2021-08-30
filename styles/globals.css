@@ -10,6 +10,11 @@
   --clr-surface1-dark: #1d1f21;
   --clr-surface1: var(--clr-surface1-dark);
 
+  --clr-surface2-dark: #131516;
+  --clr-surface2: var(--clr-surface2-dark);
+
+  --clr-accent: #a50e31;
+
   --orange: #ea6f0b;
   --yellow: #d7a936;
   --red: #de4456;

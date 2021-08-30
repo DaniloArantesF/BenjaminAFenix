@@ -1,0 +1,44 @@
+
+
+.sideBar_container {
+  width: 200px;
+  display: inline-grid;
+  grid-auto-rows: repeat(auto-fill, 1fr);
+  padding: 1rem;
+  align-content: flex-start;
+  justify-content: center;
+  text-align: center;
+  gap: 1em;
+  font-size: 1.5em;
+  word-wrap: break-word;
+}
+
+.sideBar_container > div {
+  display: inline-block;
+  width: 100%;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.logo_container {
+  position: relative;
+}
+
+.logo_container svg {
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px;
+}
+
+.navLink {
+  --clr-font-navlink: rgb(165, 165, 165);
+  cursor: pointer;
+  color: var(--clr-font-navlink);
+  font-weight: 900;
+}
+
+.navLink:hover {
+  cursor: default;
+  color: var(--clr-accent);
+}
