@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import styles from '../styles/Home.module.css'
+import classes from '../styles/Home.module.css'
 import Queue from '../components/Queue/Queue';
 //import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import tracks from '../mock/mockQueue';
@@ -15,8 +15,14 @@ import tracks from '../mock/mockQueue';
 
 const Home: NextPage = () => {
   return (
-    <div className={ styles.home_container}>
-      <Queue items={ tracks }/>
+    <div className={classes.home_container}>
+      <section>
+        <video src="https://www.youtube.com/watch?v=dQw4w9WgXcQ"></video>
+      </section>
+      <section>
+        <Queue items={ tracks }/>
+      </section>
+      <section>Info</section>
     </div>
   );
 }

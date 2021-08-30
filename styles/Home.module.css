@@ -1,9 +1,33 @@
 
 .home_container {
   width: 100%;
-  height: 100vh;
-  display: flex;
+  max-height: 100vh;
+  display: grid;
   position: relative;
   align-items: center;
-  justify-content: center;
+  grid-template-areas:
+  "vid info"
+  "que info";
+  grid-template-rows: minmax(auto, 50vh) minmax(auto, 50vh);
+}
+
+.home_container > section {
+  height: 100%;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.home_container > section:nth-child(1) {
+  grid-area: vid;
+  grid-row: span 1;
+}
+
+.home_container > section:nth-child(2) {
+  grid-area: que;
+  grid-row: span 1;
+}
+
+.home_container > section:nth-child(3) {
+  grid-area: info;
+  height: 100%;
 }
