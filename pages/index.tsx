@@ -5,6 +5,7 @@ import Queue from '../components/Queue';
 import tracks from '../mock/mockQueue';
 import Youtube from '../components/Youtube';
 import SideBar from '../components/SideBar';
+import SearchBar from '../components/SearchBar';
 
 /*export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch('');
@@ -20,7 +21,6 @@ const Home: NextPage = () => {
 
   return (
     <div className={classes.home_container}>
-
       <SideBar />
       <div className={classes.dashboard_container}>
         <section>
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
         <section>
           <Queue items={ tracks }/>
         </section>
-        <section>Info</section>
+        <section> <SearchBar /> </section>
       </div>
     </div>
   );

@@ -1,0 +1,24 @@
+
+.searchBar_container {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  width: 100%;
+}
+
+.search_input {
+  position: relative;
+  font-weight: bold;
+  padding: .5rem;
+  font-size: 1rem;
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid var(--clr-bg);
+  outline: none;
+  background: transparent;
+  transition: all 200ms ease-out;
+}
+
+.search_input:focus {
+  border-bottom: 1px solid var(--clr-accent);
+}
