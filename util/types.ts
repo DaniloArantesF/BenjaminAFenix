@@ -1,17 +1,17 @@
 
 export interface Command {
-  id: number,
-  value: string;
-  description: string;
-  priviledged: boolean;
   aliases?: Array<string>;
+  description: string;
   execute: (...args: any[]) => void;
+  id: number,
+  priviledged: boolean;
+  value: string;
 }
 
 export interface Track {
-  title: string;
   author: string;
   duration: number;
+  title: string;
   url: string;
   user: string;         // user who requested track
 }

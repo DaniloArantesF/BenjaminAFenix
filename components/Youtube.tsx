@@ -1,11 +1,28 @@
 import React from 'react';
 import classes from '../styles/Youtube.module.css';
+import { YoutubeProps, YoutubeItem, ItemsEntity } from '../util/youtube_types';
 
-type YoutubeProps = {
-  embedId: string;
+
+export const parseYoutubeItems = (items: any): Array<YoutubeItem> => {
+  return items.map((item: ItemsEntity) => {
+    return {
+      channelId: item.snippet.channelId,
+      channelTitle: item.snippet.channelTitle,
+      description: item.snippet.description,
+      id: item.id.videoId,
+      publishedAt: item.snippet.publishedAt,
+      publishTime: item.snippet.publishTime,
+      thumbnails: {
+        default: item.snippet.thumbnails.default,
+        medium: item.snippet.thumbnails.medium,
+        high: item.snippet.thumbnails.high
+      },
+      title: item.snippet.title,
+    }
+  });
 }
 
-const Youtube = ({ embedId }: YoutubeProps) => {
+const YoutubeEmbed = ({ embedId }: YoutubeProps) => {
   return (
     <div className={ classes.video_container }>
       <iframe
@@ -19,4 +36,4 @@ const Youtube = ({ embedId }: YoutubeProps) => {
   );
 };
 
-export default Youtube;
+export default YoutubeEmbed;

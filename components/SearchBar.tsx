@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from '../styles/SearchBar.module.css';
 import Logo from '../assets/BenjaminAFenix.svg';
+import SearchIcon from '../assets/search_icon.svg';
 
 const SearchBar = () => {
   return (
@@ -12,6 +13,7 @@ const SearchBar = () => {
           />
         </label>
       </form>
+      <SearchIcon className={ classes.search__icon } />
     </div>
   );
 };

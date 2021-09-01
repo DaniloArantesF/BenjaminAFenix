@@ -2,8 +2,11 @@
 .searchBar_container {
   display: inline-flex;
   align-items: center;
-  height: 2rem;
-  width: 100%;
+  justify-content: center;
+  width: fit-content;
+  height: 3rem;
+  background-color: var(--clr-surface2);
+  padding: 0.1em 0.5em;
 }
 
 .search_input {
@@ -21,4 +24,9 @@
 
 .search_input:focus {
   border-bottom: 1px solid var(--clr-accent);
+}
+
+.search__icon * {
+  transform: scale(0.8); /* TODO: find a better way of doing this ?*/
+  fill: var(--clr-btn);
 }

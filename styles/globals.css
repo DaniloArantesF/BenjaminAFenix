@@ -23,6 +23,8 @@
   font-family: "Roboto Condensed", sans-serif;
   --clr-font: #e8e6e3;
   --clr-title: #cdc8c2;
+
+  --clr-btn: #6b6a69;
 }
 
 body {
