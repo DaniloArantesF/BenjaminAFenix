@@ -1,7 +1,7 @@
 
 
 .sideBar_container {
-  width: 200px;
+  width: 180px;
   display: inline-grid;
   grid-auto-rows: repeat(auto-fill, 1fr);
   padding: 1rem;
@@ -17,7 +17,7 @@
   display: inline-block;
   width: 100%;
   word-wrap: break-word;
-  word-break: break-all;
+  word-break: normal;
 }
 
 .logo_container {

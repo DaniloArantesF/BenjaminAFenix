@@ -11,6 +11,7 @@ import Search from '../components/Search';
 const Home: NextPage = () => {
   return (
     <div className={classes.home_container}>
+      <SideBar />
       <div className={classes.dashboard_container}>
         <section>
           <YoutubeEmbed embedId={ 'dQw4w9WgXcQ' } />

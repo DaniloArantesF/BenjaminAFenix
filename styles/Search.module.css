@@ -3,6 +3,7 @@
   --thumb-width: 120px;
   --thumb-height: 90px;
   display: inline-grid;
+  max-width: 900px;
   grid-template-columns: 100%;
   grid-template-rows: 50px 1fr;
   gap: 1em;
@@ -31,7 +32,6 @@
   height: calc(var(--thumb-height) + 1em);
   transition: all 100ms linear;
   background-color: var(--clr-surface2);
-  z-index: 10;
 }
 
 .search__item > span {
@@ -39,9 +39,6 @@
   overflow: hidden;
 }
 
-.search__item:hover {
-  padding: 0 0 0 0.2em;
-}
 
 .search__item:hover::before {
   content: '';
