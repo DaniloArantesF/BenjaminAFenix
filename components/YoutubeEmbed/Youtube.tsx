@@ -1,7 +1,6 @@
 import React from 'react';
-import classes from '../styles/Youtube.module.css';
-import { YoutubeProps, YoutubeItem, ItemsEntity } from '../util/youtube_types';
-
+import classes from './Youtube.module.css';
+import { YoutubeProps, YoutubeItem, ItemsEntity } from '../../util/youtube_types';
 
 export const parseYoutubeItems = (items: any): Array<YoutubeItem> => {
   return items.map((item: ItemsEntity) => {

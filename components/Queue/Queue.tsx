@@ -1,7 +1,10 @@
 import React from 'react';
-import { Track, } from '../util/types';
-import classes from '../styles/Queue.module.css';
-import { msToMinSec } from '../util/util';
+import { Track, } from '../../util/types';
+import { msToMinSec } from '../../util/util';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { next, previous, selectPosition, setPosition } from './queueSlice';
+import classes from './Queue.module.css';
+
 export interface QItem extends Track {
   itemPosition: number;
 }
@@ -35,6 +38,10 @@ const QueueHeader = () => {
 };
 
 const Queue = ({ items }: QProps) => {
+  const dispatch = useAppDispatch();
+  const position = useAppSelector(selectPosition);
+
+
   return (
     <div className={classes.queue_component}>
       <QueueHeader />

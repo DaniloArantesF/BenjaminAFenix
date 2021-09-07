@@ -1,7 +1,7 @@
 import React from 'react';
-import classes from '../styles/SearchBar.module.css';
-import Logo from '../assets/BenjaminAFenix.svg';
-import SearchIcon from '../assets/search_icon.svg';
+import classes from './Search.module.css';
+import Logo from '../../assets/BenjaminAFenix.svg';
+import SearchIcon from '../../assets/search_icon.svg';
 
 const SearchBar = () => {
   return (
