@@ -1,15 +1,17 @@
-import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import classes from './Search.module.css';
 import SearchBar from './SearchBar';
-import { parseYoutubeItems } from '../YoutubeEmbed/Youtube';
 import { YoutubeItem } from '../../types/youtube';
-import SearchIcon from '../../assets/search_icon.svg';
-import axios from 'axios';
 import type { InputHandler } from '../../types/types';
+import Youtube from '../../libs/Youtube';
 
-const Search = () => {
+type SearchProps = {
+  youtube: Youtube;
+}
+
+const Search = ({ youtube }: SearchProps) => {
   const [query, setQuery] = useState('');
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<Array<YoutubeItem>>([]);
 
   const SearchItem = ({ thumbnails, title, channelTitle }: YoutubeItem) => {
     const thumb = thumbnails.default;
@@ -28,21 +30,8 @@ const Search = () => {
   };
   const searchSubmitHandler: InputHandler = async (event) => {
     event.preventDefault();
-
-    try {
-      const { data } = await axios.get(
-        `api/youtube`,
-        {
-          params: {
-            value: query,
-            type: 'video'
-          }
-        }
-      );
-      setItems(data.items);
-    } catch (error) {
-      console.error(error);
-    }
+    const data = await youtube.search(query);
+    setItems(data || []);
     return 0;
   };
 

@@ -5,8 +5,12 @@ import tracks from '../mock/mockQueue';
 import YoutubeEmbed from '../components/YoutubeEmbed/Youtube';
 import Navbar from '../components/Navbar/Navbar';
 import Search from '../components/Search/Search';
+import { useState } from 'react';
+import Youtube from '../libs/Youtube';
 
 const Home: NextPage = () => {
+  const [youtube, setYoutube] = useState(new Youtube(process.env.NEXT_PUBLIC_YOUTUBE_KEY || ''));
+
   return (
     <div className={classes.home_container}>
       <div className={classes.dashboard_container}>
@@ -17,7 +21,7 @@ const Home: NextPage = () => {
         </section>
         <section>
           {' '}
-          <Search />{' '}
+          <Search youtube={youtube}/>{' '}
         </section>
       </div>
     </div>
