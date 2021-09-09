@@ -9,10 +9,8 @@ import Search from '../components/Search/Search';
 const Home: NextPage = () => {
   return (
     <div className={classes.home_container}>
-      <Navbar />
       <div className={classes.dashboard_container}>
         <section>
-          <YoutubeEmbed embedId={'dQw4w9WgXcQ'} />
         </section>
         <section>
           <Queue items={tracks} />

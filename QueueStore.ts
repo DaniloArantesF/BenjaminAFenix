@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, } from 'react';
-import { Track } from './util/types';
+import { Track } from './types/types';
 
 type State =
   | {

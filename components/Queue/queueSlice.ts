@@ -3,7 +3,7 @@
 // reducer
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppState } from '../../app/store';
-import type { Track } from '../../util/types';
+import type { Track } from '../../types/types';
 
 // define type for slice state
 interface QueueState {

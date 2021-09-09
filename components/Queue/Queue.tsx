@@ -1,5 +1,5 @@
 import React from 'react';
-import { Track, } from '../../util/types';
+import { Track, } from '../../types/types';
 import { msToMinSec } from '../../util/util';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { next, previous, selectPosition, setPosition } from './queueSlice';

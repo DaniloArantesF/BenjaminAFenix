@@ -1,3 +1,4 @@
+import { BaseSyntheticEvent } from "react";
 
 export interface Command {
   aliases?: Array<string>;
@@ -15,3 +16,5 @@ export interface Track {
   url: string;
   user: string;         // user who requested track
 }
+
+export type InputHandler = (event: BaseSyntheticEvent) => Promise<number>;

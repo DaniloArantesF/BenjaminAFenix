@@ -1,8 +1,8 @@
 import React from 'react';
 import classes from './Youtube.module.css';
-import { YoutubeProps, YoutubeItem, ItemsEntity } from '../../util/youtube_types';
+import { YoutubeProps, YoutubeItem, ItemsEntity } from '../../types/youtube';
 
-export const parseYoutubeItems = (items: any): Array<YoutubeItem> => {
+export const parseYoutubeItems = (items: Array<ItemsEntity>): Array<YoutubeItem> => {
   return items.map((item: ItemsEntity) => {
     return {
       channelId: item.snippet.channelId,
