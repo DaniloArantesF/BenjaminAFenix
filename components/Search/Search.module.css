@@ -1,4 +1,3 @@
-
 .search_container {
   --thumb-width: 120px;
   --thumb-height: 90px;
@@ -9,7 +8,6 @@
   gap: 1em;
   padding: 0.5em;
 }
-
 
 .search_container > ul {
   display: inline-flex;
@@ -39,7 +37,6 @@
   overflow: hidden;
 }
 
-
 .search__item:hover::before {
   content: '';
   position: absolute;
@@ -51,6 +48,8 @@
 }
 
 .searchBar_container {
+  --side-anim-duration: 1.5s;
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -58,19 +57,109 @@
   height: 3rem;
   background-color: var(--clr-surface2);
   padding: 0.1em 0.5em;
+  overflow: hidden;
+}
+
+.searchBar_container > span {
+  position: absolute;
+  display: block;
+}
+
+/* Top */
+.loading > span:nth-child(1) {
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--clr-accent));
+  animation: top-anim var(--side-anim-duration) linear infinite;
+  animation-delay: calc((var(--side-anim-duration) / 4) * 1);
+}
+
+@keyframes top-anim {
+  0% {
+    left: -100%;
+  }
+  50%,
+  100% {
+    left: 100%;
+  }
+}
+
+/* Right */
+.loading > span:nth-child(2) {
+  top: -100%;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, var(--clr-accent));
+  animation: right-anim var(--side-anim-duration) linear infinite;
+  animation-delay: calc((var(--side-anim-duration) / 4) * 2);
+}
+
+@keyframes right-anim {
+  0% {
+    top: -100%;
+  }
+  50%,
+  100% {
+    top: 100%;
+  }
+}
+
+/* Bottom */
+.loading > span:nth-child(3) {
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(270deg, transparent, var(--clr-accent));
+  animation: bottom-anim var(--side-anim-duration) linear infinite;
+  animation-delay: calc((var(--side-anim-duration) / 4) * 3);
+}
+
+@keyframes bottom-anim {
+  0% {
+    right: -100%;
+  }
+  50%,
+  100% {
+    right: 100%;
+  }
+}
+
+/* Left */
+.loading > span:nth-child(4) {
+  bottom: -100%;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(360deg, transparent, var(--clr-accent));
+  animation: left-anim var(--side-anim-duration) linear infinite;
+}
+
+@keyframes left-anim {
+  0% {
+    bottom: -100%;
+  }
+  50%,
+  100% {
+    bottom: 100%;
+  }
 }
 
 .search_input {
   position: relative;
   font-weight: bold;
-  padding: .5rem;
+  padding: 0.5rem;
   font-size: 1rem;
   color: #fff;
   border: none;
+  border-top: 1px solid var(--clr-bg);
   border-bottom: 1px solid var(--clr-bg);
   outline: none;
   background: transparent;
-  transition: all 200ms ease-out;
+  transition: all 100ms ease-in;
 }
 
 .search_input:focus {
@@ -80,4 +169,10 @@
 .search__icon * {
   transform: scale(0.8); /* TODO: find a better way of doing this ?*/
   fill: var(--clr-btn);
+  transition: all 150ms ease-out;
+}
+
+.search__icon:hover * {
+  fill: var(--clr-accent);
+  transform: scale(0.9);
 }

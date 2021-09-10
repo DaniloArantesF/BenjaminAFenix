@@ -12,6 +12,7 @@ type SearchProps = {
 const Search = ({ youtube }: SearchProps) => {
   const [query, setQuery] = useState('');
   const [items, setItems] = useState<Array<YoutubeItem>>([]);
+  const [loading, setLoading] = useState(false);
 
   const SearchItem = ({ thumbnails, title, channelTitle }: YoutubeItem) => {
     const thumb = thumbnails.default;
@@ -30,8 +31,11 @@ const Search = ({ youtube }: SearchProps) => {
   };
   const searchSubmitHandler: InputHandler = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    setQuery('');
     const data = await youtube.search(query);
     setItems(data || []);
+    setLoading(false);
     return 0;
   };
 
@@ -40,6 +44,7 @@ const Search = ({ youtube }: SearchProps) => {
       <SearchBar
         inputCallback={searchInputHandler}
         submitCallback={searchSubmitHandler}
+        isLoading={ loading }
       />
       <ul>
         {items.map((item, index) => {
