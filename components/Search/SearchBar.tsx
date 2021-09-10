@@ -13,7 +13,7 @@ const SearchBar = ({ inputCallback, submitCallback }: SearchBarProps) => {
 
   return (
     <div className={classes.searchBar_container}>
-      <form onSubmit={ submitCallback }>
+      <form onSubmit={submitCallback}>
         <label>
           <input autoComplete={"false"} className={classes.search_input}
             placeholder={"Search..."}
@@ -21,7 +21,7 @@ const SearchBar = ({ inputCallback, submitCallback }: SearchBarProps) => {
           />
         </label>
       </form>
-      <SearchIcon className={ classes.search__icon } />
+      <SearchIcon onClick={ submitCallback }className={ classes.search__icon } />
     </div>
   );
 };
