@@ -17,6 +17,7 @@ import {
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { QueueState } from '../components/Queue/queueSlice';
+import { Controls } from '../components/Button/Button';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -51,31 +52,13 @@ const Home: NextPage = ({
     <div className={classes.home_container}>
       <div className={classes.dashboard_container}>
         <section>
-          { (position !== -1) && <YoutubeEmbed embedId={ items[position].id }/>}
-          <div className={`${classes.controls}`}>
-            <button
-              className={`${classes.btn_border}`}
-              onClick={() => dispatch(previous())}
-            >
-              Prev
-            </button>
-            <button className={`${classes.btn_border}`} onClick={() => null}>
-              Play
-            </button>
-            <button
-              className={`${classes.btn_border}`}
-              onClick={() => dispatch(next())}
-            >
-              Next
-            </button>
-            <input placeholder={'GOTO'}></input>
-          </div>
+          {position !== -1 && <YoutubeEmbed embedId={items[position].id} />}
         </section>
         <section>
           <Queue items={items} />
         </section>
         <section>
-          {' '}
+          <Controls />
           <Search youtube={youtube} />{' '}
         </section>
       </div>

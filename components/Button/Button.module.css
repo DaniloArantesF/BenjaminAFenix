@@ -1,0 +1,89 @@
+.controls {
+  --border-width: 4px;
+  --duration: 50ms;
+  display: inline-flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.controls > button {
+  margin: 1em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1.5;
+  font-weight: 700;
+  font-size: 1.2em;
+  padding: .5em 1em;
+  letter-spacing: 0.05em;
+}
+
+.btn_border {
+  box-shadow: inset 0 0 0 var(--border-width) var(--clr-btn);
+  color: var(--clr-font);
+  transition: color var(--duration) calc(var(--duration) / 3);
+  position: relative;
+}
+
+.btn_border::before, .btn_border::after {
+  border: 0 solid transparent;
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+  height: 0;
+
+  /* where anim will begin from*/
+  top: 0;
+  left: 0;
+}
+
+.btn_border::before {
+  border-top-width: var(--border-width);
+  border-right-width: var(--border-width); /* opposite to starting */
+}
+
+.btn_border::after {
+  border-bottom-width: var(--border-width); /* opposite to starting */
+  border-left-width: var(--border-width);
+}
+
+.btn_border:hover {
+  color: var(--clr-surface0);
+}
+
+.btn_border:focus {
+  animation: click 100ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+
+@keyframes click {
+  0% {
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.btn_border:hover {
+  color: var(--clr-accent);
+}
+
+.btn_border:hover::before, .btn_border:hover::after {
+  border-color: var(--clr-accent);
+  transition: border-color 0s, width var(--duration), height var(--duration);
+  width: 100%;
+  height: 100%;
+}
+
+.btn_border:hover::before {
+  transition-delay: 0s, 0s, var(--duration);
+}
+
+.btn_border:hover::after {
+  transition-delay: 0s, var(--duration), 0s;
+}

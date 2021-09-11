@@ -24,4 +24,4 @@ export interface Track {
   service: Services;
 }
 
-export type InputHandler = (event: BaseSyntheticEvent) => Promise<number>;
+export type InputHandler = (event: BaseSyntheticEvent) => Promise<number> | void;

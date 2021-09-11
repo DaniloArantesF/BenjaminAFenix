@@ -27,6 +27,9 @@ export const queueSlice = createSlice({
     },
     next: (state) => {
       state.position !== -1 ? (state.position += 1) : -1;
+      if (state.position >= state.items.length) {
+        state.position = 0;
+      }
       return state;
     },
     previous: (state) => {
