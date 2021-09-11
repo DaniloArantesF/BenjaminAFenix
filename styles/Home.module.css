@@ -21,13 +21,13 @@
 
 .dashboard_container > section {
   background-color: var(--clr-surface1);
-  padding: 0.5em;
   display: inline-flex;
 }
 
 .dashboard_container > section:nth-child(1) {
   grid-area: vid;
   grid-row: span 1;
+  background: none;
 }
 
 .dashboard_container > section:nth-child(2) {
