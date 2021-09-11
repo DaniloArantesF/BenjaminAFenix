@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import classes from '../styles/Home.module.css';
 import Queue from '../components/Queue/Queue';
-import tracks from '../mock/mockQueue';
 import YoutubeEmbed from '../components/YoutubeEmbed/Youtube';
 import Navbar from '../components/Navbar/Navbar';
 import Search from '../components/Search/Search';
@@ -23,8 +22,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       queue: {
-        position: 0,
-        items: tracks,
+        position: -1,
+        items: [],
       },
     },
   };

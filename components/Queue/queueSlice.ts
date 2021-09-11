@@ -42,7 +42,9 @@ export const queueSlice = createSlice({
         itemPosition: state.items.length + 1,
         ...action.payload
       };
-      state.items = [ ...state.items, newItem];
+      state.items = [...state.items, newItem];
+      if (state.position === -1)
+        state.position = 0;
       return state;
     }
   },
