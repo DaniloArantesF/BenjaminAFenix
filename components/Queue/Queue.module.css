@@ -17,6 +17,7 @@
 }
 
 .queue__item {
+  position: relative;
   display: inline-grid;
   height: 4em;
   grid-template-columns: 50px repeat(auto-fit, minmax(50px, 1fr));
@@ -60,3 +61,32 @@
   transform: none;
 }
 
+.queue__item.inactive {
+  animation: pop 200ms ease-out;
+  left: -100%;
+}
+
+@keyframes pop {
+  0% {
+    left: 0;
+    opacity: 100;
+  }
+  99% {
+    left: -99%;
+    opacity: 100;
+  }
+  100% {
+    left: -100%;
+    opacity: 0;
+    display: none;
+  }
+}
+
+@keyframes push {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 0;
+  }
+}

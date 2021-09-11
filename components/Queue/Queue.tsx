@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Track, } from '../../types/types';
 import { msToMinSec } from '../../util/util';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
@@ -37,10 +37,13 @@ const QueueHeader = () => {
   );
 };
 
+
+
+
+
 const Queue = ({ items }: QProps) => {
   const dispatch = useAppDispatch();
   const position = useAppSelector(selectPosition);
-
 
   return (
     <div className={classes.queue_component}>
