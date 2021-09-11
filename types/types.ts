@@ -9,12 +9,19 @@ export interface Command {
   value: string;
 }
 
+export enum Services {
+  Youtube,
+  Spotify,
+  SoundCloud,
+}
+
 export interface Track {
   author: string;
   duration: number;
   title: string;
-  url: string;
+  id: string;
   user: string;         // user who requested track
+  service: Services;
 }
 
 export type InputHandler = (event: BaseSyntheticEvent) => Promise<number>;

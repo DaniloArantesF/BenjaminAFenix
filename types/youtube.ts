@@ -1,7 +1,8 @@
 
 
 export type YoutubeProps = {
-  embedId: string;
+  embedId?: string;
+  url?: string;
 }
 
 /* Used to represent a resource from youtube inside app */

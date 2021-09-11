@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Track, } from '../../types/types';
+import { Track } from '../../types/types';
 import { msToMinSec } from '../../util/util';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { next, previous, selectPosition, setPosition } from './queueSlice';
@@ -37,10 +37,6 @@ const QueueHeader = () => {
   );
 };
 
-
-
-
-
 const Queue = ({ items }: QProps) => {
   const dispatch = useAppDispatch();
   const position = useAppSelector(selectPosition);
@@ -48,8 +44,8 @@ const Queue = ({ items }: QProps) => {
   return (
     <div className={classes.queue_component}>
       <QueueHeader />
-      {items.map((item, index) => {
-        return <QueueItem key={index} {...item} />
+      { items.map((item, index) => {
+        return <QueueItem key={index} {...item} />;
       }) }
     </div>
   );

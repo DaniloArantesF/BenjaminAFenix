@@ -8,10 +8,12 @@ import Search from '../components/Search/Search';
 import { useEffect, useState } from 'react';
 import Youtube from '../libs/Youtube';
 import {
+  selectItems,
   next,
   previous,
   setPosition,
   setQueue,
+  selectPosition,
 } from '../components/Queue/queueSlice';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -39,6 +41,8 @@ const Home: NextPage = ({
     new Youtube(process.env.NEXT_PUBLIC_YOUTUBE_KEY || '')
   );
   const dispatch = useAppDispatch();
+  const items = useAppSelector(selectItems);
+  const position = useAppSelector(selectPosition);
 
   useEffect(() => {
     dispatch(setQueue({ ...queue }));
@@ -48,6 +52,7 @@ const Home: NextPage = ({
     <div className={classes.home_container}>
       <div className={classes.dashboard_container}>
         <section>
+          { (position !== -1) && <YoutubeEmbed embedId={ items[position].id }/>}
           <div className={`${classes.controls}`}>
             <button
               className={`${classes.btn_border}`}
@@ -68,7 +73,7 @@ const Home: NextPage = ({
           </div>
         </section>
         <section>
-          <Queue items={tracks} />
+          <Queue items={items} />
         </section>
         <section>
           {' '}

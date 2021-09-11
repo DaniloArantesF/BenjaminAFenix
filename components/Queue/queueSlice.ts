@@ -4,10 +4,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppState } from '../../app/store';
 import type { Track } from '../../types/types';
+import { QItem } from './Queue';
 
 // define type for slice state
 export interface QueueState {
-  items: [] | Array<Track>;
+  items: [] | Array<QItem>;
   position: number;
 }
 
@@ -36,10 +37,19 @@ export const queueSlice = createSlice({
       state.position ? (state.position += action.payload) : null;
       return state;
     },
+    pushTrack: (state, action: PayloadAction<Track>) => {
+      let newItem: QItem = {
+        itemPosition: state.items.length + 1,
+        ...action.payload
+      };
+      state.items = [ ...state.items, newItem];
+      return state;
+    }
   },
 });
 
-export const { next, previous, setPosition, setQueue } = queueSlice.actions;
+export const { next, previous, setPosition, setQueue, pushTrack, } = queueSlice.actions;
 export const selectPosition = (state: AppState) => state.queue.position;
+export const selectItems = (state: AppState) => state.queue.items;
 
 export default queueSlice.reducer;
