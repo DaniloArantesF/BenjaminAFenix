@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './Youtube.module.css';
 import { YoutubeProps, YoutubeItem, ItemsEntity } from '../../types/youtube';
-
-const AUTOPLAY = true;
+import YouTube from 'react-youtube';
+import { YouTubePlayer } from 'youtube-player/dist/types';
+const AUTOPLAY = 1;
 
 const YoutubeEmbed = ({ embedId }: YoutubeProps) => {
+  const [player, setPlayer] = useState<YouTubePlayer>();
+
+  const onReady = (event: { target: YouTubePlayer }) => {
+    setPlayer(event.target);
+  };
+  
   return (
-    <div className={ classes.video_container }>
-      <iframe
-        src={`https://www.youtube.com/embed/${embedId}?autoplay=${Number(AUTOPLAY)}`}
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        title="Embed"
+    <div className={classes.video_container}>
+      <YouTube
+        videoId={embedId}
+        opts={{
+          playerVars: {
+            autoplay: AUTOPLAY,
+          },
+        }}
+        onReady={ onReady }
       />
     </div>
   );
