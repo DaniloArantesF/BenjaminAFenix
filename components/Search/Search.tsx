@@ -67,8 +67,12 @@ const Search = ({ youtube }: SearchProps) => {
 
   const selectItem = async (item: YoutubeItem) => {
     const track = await getTrackFromItem(item);
-    console.log(track);
     dispatch(pushTrack(track));
+    resetSearch();
+  };
+
+  const resetSearch = () => {
+    setItems([]);
   };
 
   return (
