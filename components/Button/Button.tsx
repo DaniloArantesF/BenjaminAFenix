@@ -4,13 +4,14 @@ import { useAppDispatch } from '../../app/hooks';
 import { previous, next } from '../Queue/queueSlice';
 import { ActionCreator } from 'redux';
 import type { InputHandler } from '../../types/types';
+import { togglePlayer } from '../Player/playerSlice';
 
 export const Controls = () => {
 
   return (
     <div className={`${classes.controls}`}>
       <Button action={ previous }>Prev</Button>
-
+      <Button action={ togglePlayer }>Play</Button>
       <Button action={ next }>Next</Button>
     </div>
   );

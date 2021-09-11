@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import queueReducer from '../components/Queue/queueSlice';
+import playerReducer from '../components/Player/playerSlice';
 
 export const store = configureStore({
   reducer: {
     queue: queueReducer,
+    player: playerReducer,
   },
 });
 
