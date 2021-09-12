@@ -87,3 +87,15 @@
 .btn_border:hover::after {
   transition-delay: 0s, var(--duration), 0s;
 }
+
+
+.btn_border.btn_inactive, .btn_border.btn_inactive *  {
+  opacity: 20%;
+  color: var(--clr-font);
+  animation: none;
+  cursor: default;
+}
+
+.btn_border.btn_inactive:hover::before, .btn_border.btn_inactive:hover::after {
+  display: none;
+}

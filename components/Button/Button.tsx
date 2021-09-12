@@ -1,18 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Button.module.css';
-import { useAppDispatch } from '../../app/hooks';
-import { previous, next } from '../Queue/queueSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { previous, next, selectQueue } from '../Queue/queueSlice';
 import { ActionCreator } from 'redux';
 import type { InputHandler } from '../../types/types';
 import { togglePlayer } from '../Player/playerSlice';
 
 export const Controls = () => {
+  const queue = useAppSelector(selectQueue);
+  const [active, setActive] = useState(false);
+
+  const btns = [
+    {
+      label: "Prev",
+      icon: null,
+      isActive: () => (queue.items.length > 1) && (queue.position > 0),
+      action: previous,
+    },
+    {
+      label: "Play",
+      icon: null,
+      isActive: () => (queue.items.length > 0),
+      action: togglePlayer,
+    },
+    {
+      label: "Next",
+      icon: null,
+      isActive: () => (queue.items.length > 1) && (queue.position + 1 < queue.items.length),
+      action: next,
+    },
+  ];
 
   return (
     <div className={`${classes.controls}`}>
-      <Button action={ previous }>Prev</Button>
-      <Button action={ togglePlayer }>Play</Button>
-      <Button action={ next }>Next</Button>
+      {
+        btns.map((btn, index) => {
+          return <Button action={btn.action} isActive={() => btn.isActive()}>
+            {btn.label}
+          </Button>
+        })
+      }
     </div>
   );
 };
@@ -20,14 +47,15 @@ export const Controls = () => {
 interface ButtonProps {
   children: React.ReactNode,
   action: ActionCreator<any>,
+  isActive: () => boolean,
 }
 
-const Button = ({ children, action }: ButtonProps) => {
+const Button = ({ children, action, isActive }: ButtonProps) => {
   const dispatch = useAppDispatch();
-  const [isActive, setActive] = useState(true);
+  const active = isActive();
 
   const clickHandler: InputHandler = (event) => {
-    if (!isActive) return;
+    if (!active) return;
     dispatch(action());
     event.target.blur();
   };
@@ -35,7 +63,7 @@ const Button = ({ children, action }: ButtonProps) => {
   return (
     <>
       <button
-        className={`${classes.btn_border}`}
+        className={`${classes.btn_border} ${!active && classes.btn_inactive}`}
         onClick={clickHandler}
       >
         { children }
