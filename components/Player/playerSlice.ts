@@ -1,18 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppState } from '../../app/store';
 
-export interface YoutubePlayer {
-  playVideo(): void
-  pauseVideo(): void
-}
-
 export interface PlayerState {
-  youtube: YoutubePlayer  | null;
   playing: boolean;
 }
 
 const initialState: PlayerState = {
-  youtube: null,
   playing: false,
 };
 
@@ -30,6 +23,6 @@ export const playerSlice = createSlice({
   },
 });
 
-export const { togglePlayer, setYoutube } = playerSlice.actions;
-export const selectYoutube = (state: AppState) => state.player.youtube;
+export const { togglePlayer } = playerSlice.actions;
+export const selectPlaying = (state: AppState) => state.player.playing;
 export default playerSlice.reducer;
