@@ -1,7 +1,7 @@
 
 .queue_component {
   --header-height: 2em;
-  display: grid;
+  display: inline-grid;
   position: relative;
   max-height: 45vh;
   overflow-y: auto;
@@ -14,14 +14,13 @@
   padding: 0 0.5em 0.5em 0.5em;
   font-size: 100%;
   margin: 0 auto;
-  overflow: hidden;
 }
 
 .queue__item {
   position: relative;
   display: inline-grid;
   height: 4em;
-  grid-template-columns: 50px repeat(auto-fit, minmax(50px, 1fr));
+  grid-template-columns: 50px minmax(30%, 1fr) minmax(20%, 0.8fr) repeat(auto-fit, minmax(50px, 0.5fr));
   gap: 0.1em;
   padding: 0 0.5em;
   margin: 0 0.1em;
@@ -52,6 +51,12 @@
   height: var(--header-height);
   margin: 0;
   z-index: 10;
+}
+
+/* TODO: find a better way to do this later */
+.draggable {
+  transform: scale(0.2) translateY(-100%);
+  opacity: 50%;
 }
 
 .queue__item:hover {

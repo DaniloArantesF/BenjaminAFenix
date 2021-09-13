@@ -57,5 +57,5 @@ export const { next, previous, setPosition, setQueue, pushTrack, } = queueSlice.
 export const selectPosition = (state: AppState) => state.queue.position;
 export const selectItems = (state: AppState) => state.queue.items;
 export const selectQueue = (state: AppState) => state.queue;
-
+export const selectQueueLength = (state: AppState) => state.queue.items.length;
 export default queueSlice.reducer;

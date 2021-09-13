@@ -35,7 +35,7 @@ export const Controls = () => {
     <div className={`${classes.controls}`}>
       {
         btns.map((btn, index) => {
-          return <Button action={btn.action} isActive={() => btn.isActive()}>
+          return <Button key={index} action={btn.action} isActive={() => btn.isActive()}>
             {btn.label}
           </Button>
         })
