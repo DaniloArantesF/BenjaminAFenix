@@ -4,7 +4,7 @@ import Logo from '../../assets/BenjaminAFenix.svg';
 
 const Navbar = () => {
   return (
-    <div className={classes.Navbar_container}>
+    <div className={classes.navbar_container}>
       <div className={classes.logo_container}>
         <Logo />
       </div>

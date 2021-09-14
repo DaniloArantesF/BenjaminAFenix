@@ -1,7 +1,7 @@
-.Navbar_container {
+.navbar_container {
   width: 180px;
   display: inline-grid;
-  grid-auto-rows: repeat(auto-fill, 1fr);
+  grid-template-rows: repeat(auto-fill, 1fr);
   padding: 1rem;
   align-content: flex-start;
   justify-content: center;
@@ -11,7 +11,7 @@
   word-wrap: break-word;
 }
 
-.Navbar_container > div {
+.navbar_container > div {
   display: inline-block;
   width: 100%;
   word-wrap: break-word;
@@ -39,4 +39,11 @@
 .navLink:hover {
   cursor: default;
   color: var(--clr-accent);
+}
+
+@media screen and (max-width: 1150px) {
+  .navbar_container {
+    position: absolute;
+    left: -100%;
+  }
 }

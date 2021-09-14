@@ -32,6 +32,12 @@ type HomeProps = {
   queue: QueueState;
 };
 
+export enum breakpoints {
+  LARGE = 1150,
+  MEDIUM = 850,
+  SMALL = 0,
+}
+
 const Home: NextPage = ({
   queue,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -41,13 +47,24 @@ const Home: NextPage = ({
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
   const position = useAppSelector(selectPosition);
+  const [windowWidth, setWindowWidth] = useState<number>();
+  const [Dashboard, setDashboard] = useState<JSX.Element>();
 
+  // Setup queue on initial cycle
   useEffect(() => {
     dispatch(setQueue({ ...queue }));
+    if (window) {
+      // Window resizes should affect the sidebar position
+      window.addEventListener('resize', function (event: UIEvent) {     // fixing window is not defined see https://bit.ly/3k8w4lr
+        const win = event.target as Window;
+        if (event.target && win.innerWidth != windowWidth) setWindowWidth(win.innerWidth);
+      });
+    }
   }, []);
 
   return (
     <div className={classes.home_container}>
+      <Navbar />
       <div className={classes.dashboard_container}>
         <section>
           {position !== -1 && <YoutubeEmbed embedId={items[position].id} />}
