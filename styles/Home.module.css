@@ -34,7 +34,7 @@
 .dashboard_container > section:nth-child(2) {
   grid-area: que;
   grid-row: span 1;
-  align-items: flex-start
+  align-items: flex-start;
 }
 
 .dashboard_container > section:nth-child(3) {

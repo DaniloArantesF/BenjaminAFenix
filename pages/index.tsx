@@ -18,14 +18,12 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { QueueState } from '../components/Queue/queueSlice';
 import { Controls } from '../components/Button/Button';
+import mockQueue, { overflowingQueue } from '../__mock__/mockQueue';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
-      queue: {
-        position: -1,
-        items: [],
-      },
+      queue: mockQueue,
     },
   };
 };

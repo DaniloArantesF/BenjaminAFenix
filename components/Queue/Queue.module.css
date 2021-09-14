@@ -7,7 +7,6 @@
   overflow-y: auto;
   overflow-x: block;
   width: 100%;
-  max-width: 900px;
   grid-template-rows: var(--header-height) repeat(auto-fill, 4em);
   gap: 0.2em;
   transition: all 100ms ease-out;
@@ -55,7 +54,7 @@
 
 /* TODO: find a better way to do this later */
 .draggable {
-  transform: scale(0.2) translateY(-100%);
+  transform: scale(0.2) translateY(-85%);
   opacity: 50%;
 }
 
