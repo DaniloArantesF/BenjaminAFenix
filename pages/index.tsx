@@ -18,7 +18,8 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { QueueState } from '../components/Queue/queueSlice';
 import { Controls } from '../components/Button/Button';
-import mockQueue, { overflowingQueue } from '../__mock__/mockQueue';
+// import mockQueue, { overflowingQueue } from '../__mock__/mockQueue';
+import { mockQueue } from '../mock/mockData';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -67,7 +68,7 @@ const Home: NextPage = ({
       <Navbar />
       <div className={classes.dashboard_container}>
         <section>
-          {position !== -1 && <YoutubeEmbed embedId={items[position].id} />}
+          {items?.length > 0 && <YoutubeEmbed embedId={items[position].id} />}
         </section>
         <section>
           <Queue items={items} />

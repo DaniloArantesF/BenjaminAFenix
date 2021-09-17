@@ -1,7 +1,7 @@
 // Declaration of Youtube API and export youtube types
 import type { YoutubeItem } from '../../../types/youtube';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { parseYoutubeItems } from '../../../components/YoutubeEmbed/Youtube';
+import { parseYoutubeItems } from '../../../libs/Youtube';
 
 type SearchResponse = {
   items: Array<YoutubeItem>;
