@@ -1,2 +1,69 @@
 
 
+.login_container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.form_component {
+  width: auto;
+  display: grid;
+  overflow: block;
+  align-content: center;
+  justify-items: center;
+  background-color: var(--clr-surface1);
+  padding: 2em;
+}
+
+.form__title {
+  display: inline-block;
+  padding-bottom: 1em;
+}
+
+.form__item {
+  position: relative;
+  display: inline-block;
+}
+
+.form__item > input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #fff;
+  font-size: 1em;
+
+  margin-bottom: 2.8em;
+  color: #fff;
+}
+
+.form__item > input:focus {
+  outline: none;
+}
+
+.form__item > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transition: all 200ms ease-in;
+}
+
+/* moves label up on focus and
+ * when input is provided
+*/
+.form__item input:focus ~ label, .filled {
+  top: -25px;
+  left: 0;
+  font-size: 0.8em;
+}
+
+.form__submit {
+  border: none;
+  background: var(--clr-accent);
+  font-size: 1.1em;
+  color: white;
+  padding: 0.5em 1em;
+}

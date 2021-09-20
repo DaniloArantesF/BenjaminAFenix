@@ -8,6 +8,7 @@ export const useForm =
   (handler: (content: TContent) => void) =>
   async (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
+    event.persist();
     const form = event.target as HTMLFormElement;
     console.log(form.elements)
     const elements = Array.from(form.elements) as HTMLInputElement[];
@@ -21,7 +22,7 @@ export const useForm =
         defaultValues
       );
     await handler(data);
-    form.reset();
+    //form.reset();
   };
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
