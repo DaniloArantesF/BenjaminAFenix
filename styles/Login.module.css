@@ -21,7 +21,7 @@
 
 .form__title {
   display: inline-block;
-  padding-bottom: 1em;
+  padding-bottom: 1.5em;
 }
 
 .form__item {
@@ -54,7 +54,7 @@
 /* moves label up on focus and
  * when input is provided
 */
-.form__item input:focus ~ label, .filled {
+.form__item input:focus ~ label, .form__item .filled {
   top: -25px;
   left: 0;
   font-size: 0.8em;

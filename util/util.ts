@@ -1,3 +1,4 @@
+import { stringify } from 'querystring';
 import { parse } from 'tinyduration';
 
 export type Duration = {
@@ -39,3 +40,5 @@ export const convertISODurationToMS = (isoDuration: string) => {
   }
   return durationMilli;
 };
+
+export const captalizeName = (name: string) => name.charAt(0).toUpperCase() + name.slice(1);
