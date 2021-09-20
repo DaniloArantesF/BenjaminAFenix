@@ -1,3 +1,4 @@
+import { sign } from 'crypto';
 import { NextPage } from 'next';
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { selectAuth, setUsername, setPassword } from '../app/authSlice';
@@ -6,10 +7,10 @@ import classes from '../styles/Login.module.css';
 import { captalizeName } from '../util/util';
 
 // https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
-const PASS_RE = new RegExp('^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{5,}$');
+const PASS_RE = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/);
 // https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username/12019115
 const USER_RE = new RegExp(
-  '^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$'
+  /^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/
 );
 
 export interface FormField {
@@ -18,16 +19,26 @@ export interface FormField {
   isValid: (pass: string) => boolean;
   errorMessage: string;
   type: string;
-  handler: (e: ChangeEvent<HTMLInputElement>) => any
+  handler: (e: ChangeEvent<HTMLInputElement>) => any;
 }
 
-const FormItem = ({ name, type, handler, value }: FormField) => {
+const FormItem = ({
+  name,
+  type,
+  handler,
+  value,
+  errorMessage,
+  isValid,
+}: FormField) => {
   return (
     <div className={classes.form__item}>
-      <input name={name} type={type} value={value} onChange={handler}/>
+      <input name={name} type={type} value={value} onChange={handler} />
       <label className={value !== '' ? classes.filled : ''}>
         {captalizeName(name)}
       </label>
+      <span className={classes.form__error}>
+        {!(value === '' || isValid(value || '')) && errorMessage}
+      </span>
     </div>
   );
 };
@@ -35,8 +46,6 @@ const FormItem = ({ name, type, handler, value }: FormField) => {
 const Login: NextPage = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector(selectAuth);
-  // const [username, setUsername] = useState('');
-  // const [password, setPassword] = useState('');
 
   const fields: FormField[] = [
     {
@@ -46,7 +55,7 @@ const Login: NextPage = () => {
       type: 'text',
       handler: (event) => {
         event.preventDefault();
-        dispatch(setUsername(event.target.value))
+        dispatch(setUsername(event.target.value));
       },
     },
     {
@@ -56,15 +65,31 @@ const Login: NextPage = () => {
       type: 'password',
       handler: (event) => {
         event.preventDefault();
-        dispatch(setPassword(event.target.value))
+        dispatch(setPassword(event.target.value));
       },
     },
   ];
 
+  // iterate calling isValid for each field then reduce to single value using AND
+  const validateFields = () => {
+    return fields
+      .map((field, index) => {
+        return field.isValid(auth[field.name] || '');
+      })
+      .reduce((validSoFar, curField) => validSoFar && curField);
+  };
+
+  const submitHandler = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formValid = validateFields();
+    if (formValid) {
+      // redirect
+    }
+  };
 
   return (
     <div className={classes.login_container}>
-      <form className={classes.form_component}>
+      <form className={classes.form_component} onSubmit={submitHandler}>
         <h2 className={classes.form__title}>Login</h2>
         {fields.map((field, index) => {
           return <FormItem key={index} value={auth[field.name]} {...field} />;
