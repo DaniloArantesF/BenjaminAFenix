@@ -2,7 +2,6 @@ import fs from 'fs';
 import { Client, Collection, Intents } from 'discord.js';
 import type { ClientOptions } from 'discord.js';
 import type { APIMessageInteraction } from 'discord-api-types';
-import { SlashCommandBuilder } from '@discordjs/builders';
 
 export interface Command {
   data: {
@@ -27,19 +26,19 @@ class DiscordClient extends Client {
   }
 
   private setUpCommands() {
-    const commandFiles = fs.readdirSync('commands/').filter(file => file.endsWith('.ts'));
+    const commandFiles = fs.readdirSync('src/commands/').filter(file => file.endsWith('.ts'));
 
     for (const file of commandFiles) {
-      const { command } = require(`../commands/${file}`);
+      const { command } = require(`./commands/${file}`);
       DiscordClient.commands.set(command.data.name, command);
     }
   }
 
   private setUpEvents() {
-    const eventFiles = fs.readdirSync('events/').filter(file => file.endsWith('.ts'));
+    const eventFiles = fs.readdirSync('src/events/').filter(file => file.endsWith('.ts'));
 
     for (const file of eventFiles) {
-      const event = require(`../events/${file}`);
+      const event = require(`./events/${file}`);
       if (event.once) {
         this.once(event.name, (...args) => event.execute(...args));
       } else {

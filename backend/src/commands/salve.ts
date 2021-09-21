@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { Command } from '../src/DiscordClient';
+import { Command } from '../DiscordClient';
 
 export const command: Command = {
   data: new SlashCommandBuilder()

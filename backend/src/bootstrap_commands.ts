@@ -10,10 +10,10 @@ dotenv.config();
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const commands = [];
-const commandFiles = fs.readdirSync('commands/').filter(file => file.endsWith('.ts'));
+const commandFiles = fs.readdirSync('src/commands/').filter(file => file.endsWith('.ts'));
 
 for (const file of commandFiles) {
-  const { command } = require(`../commands/${file}`);
+  const { command } = require(`./commands/${file}`);
   commands.push(command.data.toJSON());
 }
 
