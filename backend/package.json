@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "commands": "node -r ts-node/register src/bootstrap_commands.ts",
     "bot": "nodemon --config nodemon.json src/bot.ts",
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",

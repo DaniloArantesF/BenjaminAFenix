@@ -2,6 +2,7 @@ import fs from 'fs';
 import { Client, Collection, Intents } from 'discord.js';
 import type { ClientOptions } from 'discord.js';
 import type { APIMessageInteraction } from 'discord-api-types';
+import { CommandInteraction } from 'discord.js';
 
 export interface Command {
   data: {
@@ -12,7 +13,7 @@ export interface Command {
   },
   aliases?: string[],
   args?: boolean,
-  execute(interaction: APIMessageInteraction): void,
+  execute(interaction: CommandInteraction): void,
   guildOnly?: boolean,
   usage: string,
 }
