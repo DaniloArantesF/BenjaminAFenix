@@ -1,14 +1,18 @@
+import DiscordClient from '../src/DiscordClient';
+
 module.exports = {
 	name: 'interactionCreate',
   async execute(interaction: any) {
     console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
-    console.log(interaction);
-    if (!interaction.isCommand()) return;
-    const { commandName } = interaction;
+    const command = DiscordClient.commands.get(interaction.commandName);
 
-    switch (commandName) {
-      case 'salve':
-        await interaction.reply('salve parsa');
+    if (!command) return;
+
+    try {
+      await command.execute(interaction);
+    } catch (error) {
+      console.error(error);
+      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
     }
 	},
 };

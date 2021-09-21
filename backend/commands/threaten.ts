@@ -3,11 +3,17 @@ import { Command } from '../src/DiscordClient';
 
 export const command: Command = {
   data: new SlashCommandBuilder()
-    .setName('salve')
-    .setDescription('Friendly greeting'),
+    .setName('threaten')
+    .setDescription('Intimidates an user')
+    .addStringOption((option) =>
+      option
+        .setName('input')
+        .setDescription('User to threaten')
+        .setRequired(true)
+    ),
   async execute(interaction: any) {
     // to get client instance from interaction use interaction.client
-    await interaction.reply('pruu')
+    await interaction.reply('pruu');
   },
   usage: '',
 };

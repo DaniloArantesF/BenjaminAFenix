@@ -2,17 +2,18 @@
  * Only run this file if commands have been added or edited.
  * Else skip it during init process. Idk what happens but avoid it
  */
-import { SlashCommandBuilder } from '@discordjs/builders';
 import fs from 'fs';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const commands = [];
 const commandFiles = fs.readdirSync('commands/').filter(file => file.endsWith('.ts'));
 
 for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
+  const { command } = require(`../commands/${file}`);
   commands.push(command.data.toJSON());
 }
 
