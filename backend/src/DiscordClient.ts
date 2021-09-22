@@ -3,43 +3,54 @@ import { Client, Collection, Intents } from 'discord.js';
 import type { ClientOptions } from 'discord.js';
 import type { APIMessageInteraction } from 'discord-api-types';
 import { CommandInteraction } from 'discord.js';
+import ytdl from 'ytdl-core';
 
 export interface Command {
   data: {
-    name: string,
-    options: any,
-    description: string,
-    defaultPermissions?: any,
-  },
-  aliases?: string[],
-  args?: boolean,
-  execute(interaction: CommandInteraction): void,
-  guildOnly?: boolean,
-  usage: string,
+    name: string;
+    options: any;
+    description: string;
+    defaultPermissions?: any;
+  };
+  aliases?: string[];
+  args?: boolean;
+  execute(client: DiscordClient, interaction: CommandInteraction): void;
+  guildOnly?: boolean;
+  usage: string;
 }
 
 class DiscordClient extends Client {
   static commands = new Collection<string, Command>();
+  ready: boolean;
+
   constructor(props: ClientOptions) {
     super(props);
+    this.ready = false;
     this.setUpCommands();
     this.setUpEvents();
   }
 
   private setUpCommands() {
-    const commandFiles = fs.readdirSync('src/commands/').filter(file => file.endsWith('.ts'));
+    const commandFiles = fs
+      .readdirSync('src/commands/')
+      .filter((file) => file.endsWith('.ts'));
 
     for (const file of commandFiles) {
       const { command } = require(`./commands/${file}`);
+
+      if (!command?.data) continue; // Ignore empty files
       DiscordClient.commands.set(command.data.name, command);
     }
   }
 
   private setUpEvents() {
-    const eventFiles = fs.readdirSync('src/events/').filter(file => file.endsWith('.ts'));
+    const eventFiles = fs
+      .readdirSync('src/events/')
+      .filter((file) => file.endsWith('.ts'));
 
     for (const file of eventFiles) {
       const event = require(`./events/${file}`);
+      if (!event?.name) continue
       if (event.once) {
         this.once(event.name, (...args) => event.execute(...args));
       } else {
@@ -47,7 +58,6 @@ class DiscordClient extends Client {
       }
     }
   }
-
 }
 
 export default DiscordClient;

@@ -1,6 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Command } from '../DiscordClient';
-import { CommandInteraction } from 'discord.js';
 
 export const command: Command = {
   data: new SlashCommandBuilder()
@@ -12,7 +11,7 @@ export const command: Command = {
         .setDescription('User to threaten')
         .setRequired(true)
     ),
-  async execute(interaction: CommandInteraction) {
+  async execute(client, interaction) {
     const target = interaction.options.getUser('target');
     interaction.reply(`${target} te cuida seu merda` );
   },

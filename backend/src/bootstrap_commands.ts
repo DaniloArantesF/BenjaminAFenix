@@ -14,6 +14,7 @@ const commandFiles = fs.readdirSync('src/commands/').filter(file => file.endsWit
 
 for (const file of commandFiles) {
   const { command } = require(`./commands/${file}`);
+  if (!command?.data) continue; // Ignore empty files
   commands.push(command.data.toJSON());
 }
 
