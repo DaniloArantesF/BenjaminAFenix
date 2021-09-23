@@ -6,6 +6,8 @@ export const command: Command = {
     .setName('play')
     .setDescription('play'),
   async execute(client, interaction) {
+    client.joinChannelFromInteraction(interaction);
+    interaction.reply('tocando');
   },
   usage: ''
 };
