@@ -9,7 +9,14 @@ import {
   VoiceChannel,
 } from 'discord.js';
 
-import { AudioPlayerStatus, StreamType, createAudioPlayer, createAudioResource, joinVoiceChannel, VoiceConnection } from '@discordjs/voice';
+import {
+  AudioPlayerStatus,
+  StreamType,
+  createAudioPlayer,
+  createAudioResource,
+  joinVoiceChannel,
+  VoiceConnection,
+} from '@discordjs/voice';
 import type { ClientOptions } from 'discord.js';
 import type { APIMessageInteraction } from 'discord-api-types';
 import { CommandInteraction } from 'discord.js';
@@ -42,9 +49,14 @@ export interface AudioResource {
   item: YoutubeItem;
 }
 
+export interface DiscordConnection {
+  connection: VoiceConnection;
+  player: PlayerController;
+}
+
 class DiscordClient extends Client {
   static commands = new Collection<string, Command>();
-  connections: Map<string, VoiceConnection>;
+  connections: Map<string, DiscordConnection>;
   ready: boolean;
 
   constructor(props: ClientOptions) {
@@ -84,14 +96,18 @@ class DiscordClient extends Client {
     }
   }
 
-  public async joinChannel(guild: Guild, channelId: string): Promise<VoiceConnection | null> {
+  public async joinChannel(
+    guild: Guild,
+    channelId: string
+  ): Promise<VoiceConnection | null> {
     try {
       const connection = joinVoiceChannel({
         channelId,
         guildId: guild.id,
         adapterCreator: guild.voiceAdapterCreator,
       });
-      this.connections.set(guild.id, connection);
+      const player = new PlayerController();
+      this.connections.set(guild.id, { connection, player });
       return connection;
     } catch (error) {
       console.error(error);
@@ -101,14 +117,15 @@ class DiscordClient extends Client {
 
   public async playResource(guildId: string, data: AudioResource) {
     // TODO: handle other services
-    const connection = this.connections.get(guildId);
+    const { connection, player } = this.connections.get(guildId);
     const stream = ytdl(this.getYoutubeUrl(data.item.id), {
       filter: 'audioonly',
-      highWaterMark: 1<<25,
+      highWaterMark: 1 << 25,
     });
 
-    const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-    const player = new PlayerController();
+    const resource = createAudioResource(stream, {
+      inputType: StreamType.Arbitrary,
+    });
 
     player.play(resource);
     connection.subscribe(player);

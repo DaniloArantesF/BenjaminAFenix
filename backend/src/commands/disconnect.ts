@@ -16,7 +16,7 @@ export const command: Command = {
 
     // Disconnect then remove connection from map
     interaction.reply("flw mens :rocket:");
-    client.connections.get(guildId).destroy();
+    client.connections.get(guildId).connection.destroy();
     client.connections.delete(guildId);
   },
   usage: ''

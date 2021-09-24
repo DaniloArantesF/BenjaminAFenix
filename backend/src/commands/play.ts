@@ -12,14 +12,31 @@ export const command: Command = {
       option
         .setName('song')
         .setDescription('<Url | Id | Query>')
-        .setRequired(true)
+        .setRequired(false)
     ),
   async execute(client, interaction) {
     const channelId = await client.getUserVoiceChannel(interaction);
     const request = interaction.options.getString('song');
-    
-    if (!request) { // Stop if no user input
-      return interaction.reply('deu ruim');
+    const connection = client.connections.get(interaction.guild.id);
+
+    if (!request) {
+      if (connection.player) {
+        const player = connection.player;
+        if (player.isPlaying) {
+          // [Error] Player is not paused
+          return interaction.reply('ta me tirando porra');
+        } else {
+          // Unpause if player is paused
+          player.unpause();
+          return interaction.reply({
+            content: 'tuts tuts caralho',
+            ephemeral: true,
+          });
+        }
+      } else {
+        // [Error] No connection && no input
+        return interaction.reply('ta me tirando porra');
+      }
     }
 
     let item = null;
@@ -38,7 +55,7 @@ export const command: Command = {
     }
 
     client.joinChannel(interaction.guild, channelId);
-    client.playResource(interaction.guild.id, { service: 1, item })
+    client.playResource(interaction.guild.id, { service: 1, item });
     interaction.reply('tocando');
   },
   usage: '',

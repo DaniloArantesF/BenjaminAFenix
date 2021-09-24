@@ -21,6 +21,9 @@ class PlayerController extends AudioPlayer {
       this.isPlaying = true;
     });
 
+    this.on(AudioPlayerStatus.Paused, () => {
+      this.isPlaying = false;
+    });
   }
 }
 
