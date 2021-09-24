@@ -10,20 +10,21 @@ export const command: Command = {
     .setDescription('play')
     .addStringOption((option) =>
       option
-        .setName('link')
-        .setDescription('song link')
+        .setName('song')
+        .setDescription('<Url | Id | Query>')
         .setRequired(true)
     ),
   async execute(client, interaction) {
     const channelId = await client.getUserVoiceChannel(interaction);
-    const request = interaction.options.getString('link');
+    const request = interaction.options.getString('song');
+    
     if (!request) { // Stop if no user input
       return interaction.reply('deu ruim');
     }
 
     let item = null;
 
-    // Check request format
+    // Determine request format
     if (ytdl.validateURL(request)) {
       // Handle URLs
       const id = getIdFromUrl(request);
