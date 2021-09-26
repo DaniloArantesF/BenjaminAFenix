@@ -23,6 +23,7 @@ import { CommandInteraction } from 'discord.js';
 import ytdl from 'ytdl-core';
 import PlayerController from './PlayerController';
 import type { YoutubeItem } from './lib/Youtube.d';
+import QueueController from './QueueController';
 
 export interface Command {
   data: {
@@ -52,6 +53,7 @@ export interface AudioResource {
 export interface DiscordConnection {
   connection: VoiceConnection;
   player: PlayerController;
+  queue: QueueController;
 }
 
 class DiscordClient extends Client {
@@ -106,8 +108,15 @@ class DiscordClient extends Client {
         guildId: guild.id,
         adapterCreator: guild.voiceAdapterCreator,
       });
+
       const player = new PlayerController();
-      this.connections.set(guild.id, { connection, player });
+      const queue = new QueueController();
+
+      this.connections.set(guild.id, {
+        connection,
+        player,
+        queue,
+      });
       return connection;
     } catch (error) {
       console.error(error);
@@ -120,6 +129,7 @@ class DiscordClient extends Client {
     const { connection, player } = this.connections.get(guildId);
     const stream = ytdl(this.getYoutubeUrl(data.item.id), {
       filter: 'audioonly',
+      // tslint:disable-next-line: no-bitwise
       highWaterMark: 1 << 25,
     });
 
@@ -130,6 +140,14 @@ class DiscordClient extends Client {
     player.play(resource);
     connection.subscribe(player);
   }
+
+  /**
+   * Create audio resource containing stream and
+   * push it into a server's queue
+   * @param guildId Server Id to update queue
+   * @param data    Item to be pushed
+   */
+  private pushItem(guildId: string, data: AudioResource) {}
 
   private getYoutubeUrl(id: string) {
     return `https://www.youtube.com/watch?v=${id}`;

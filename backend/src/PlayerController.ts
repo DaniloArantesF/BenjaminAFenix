@@ -1,6 +1,7 @@
 import { AudioPlayerStatus, StreamType, createAudioPlayer, createAudioResource, joinVoiceChannel, VoiceConnection, AudioPlayer } from '@discordjs/voice';
 import ytdl from 'ytdl-core';
 import DiscordClient from './DiscordClient';
+import type { AudioResource } from './DiscordClient';
 
 class PlayerController extends AudioPlayer {
   client: DiscordClient;
@@ -13,6 +14,7 @@ class PlayerController extends AudioPlayer {
     this.on(AudioPlayerStatus.Idle, () => {
       console.log("Idle...");
       // TODO: handle player going idle
+
       this.isPlaying = false;
     });
 
