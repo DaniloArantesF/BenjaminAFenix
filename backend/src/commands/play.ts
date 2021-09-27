@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { AudioPlayerStatus } from '@discordjs/voice';
 import YouTube from 'react-youtube';
 import ytdl from 'ytdl-core';
 import { Command } from '../DiscordClient';
@@ -16,13 +17,16 @@ export const command: Command = {
     ),
   async execute(client, interaction) {
     const channelId = await client.getUserVoiceChannel(interaction);
+    if (!channelId) {
+      return interaction.reply("Entra num canal de voz mongol");
+    }
     const request = interaction.options.getString('song');
-    const connection = client.connections.get(interaction.guild.id);
+    let connection = client.connections.get(interaction.guild.id);
 
-    if (!request) {
+    if (!request) { // either means unpause or malformed request
       if (connection.player) {
         const player = connection.player;
-        if (player.isPlaying) {
+        if (player.status === AudioPlayerStatus.Playing) {
           // [Error] Player is not paused
           return interaction.reply('ta me tirando porra');
         } else {
@@ -54,8 +58,12 @@ export const command: Command = {
       item = (await searchYoutube(request))[0];
     }
 
-    client.joinChannel(interaction.guild, channelId);
-    client.playResource(interaction.guild.id, { service: 1, item });
+    // Join channel if not connected
+    if (!connection) {
+      connection = await client.joinChannel(interaction.guild, channelId);
+    }
+
+    connection.player.queueController.pushItem({ service: 1, ...item });
     interaction.reply('tocando');
   },
   usage: '',

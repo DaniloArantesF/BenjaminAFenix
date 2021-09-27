@@ -45,15 +45,13 @@ export enum Services {
   SoundCloud,
 }
 
-export interface AudioResource {
+export interface AudioResource extends YoutubeItem {
   service: Services;
-  item: YoutubeItem;
 }
 
 export interface DiscordConnection {
   connection: VoiceConnection;
   player: PlayerController;
-  queue: QueueController;
 }
 
 class DiscordClient extends Client {
@@ -101,7 +99,7 @@ class DiscordClient extends Client {
   public async joinChannel(
     guild: Guild,
     channelId: string
-  ): Promise<VoiceConnection | null> {
+  ): Promise<DiscordConnection | null> {
     try {
       const connection = joinVoiceChannel({
         channelId,
@@ -110,47 +108,28 @@ class DiscordClient extends Client {
       });
 
       const player = new PlayerController();
-      const queue = new QueueController();
+      connection.subscribe(player);
 
       this.connections.set(guild.id, {
         connection,
         player,
-        queue,
       });
-      return connection;
+      return { connection, player };
     } catch (error) {
       console.error(error);
       return null;
     }
   }
 
-  public async playResource(guildId: string, data: AudioResource) {
-    // TODO: handle other services
-    const { connection, player } = this.connections.get(guildId);
-    const stream = ytdl(this.getYoutubeUrl(data.item.id), {
-      filter: 'audioonly',
-      // tslint:disable-next-line: no-bitwise
-      highWaterMark: 1 << 25,
-    });
-
-    const resource = createAudioResource(stream, {
-      inputType: StreamType.Arbitrary,
-    });
-
-    player.play(resource);
-    connection.subscribe(player);
-  }
-
   /**
-   * Create audio resource containing stream and
-   * push it into a server's queue
+   * Push item into guild's queue
    * @param guildId Server Id to update queue
    * @param data    Item to be pushed
    */
-  private pushItem(guildId: string, data: AudioResource) {}
-
-  private getYoutubeUrl(id: string) {
-    return `https://www.youtube.com/watch?v=${id}`;
+  public pushItem(guildId: string, item: AudioResource) {
+    const connection = this.connections.get(guildId);
+    const queueController = connection.player.queueController;
+    queueController.pushItem(item);
   }
 
   /**

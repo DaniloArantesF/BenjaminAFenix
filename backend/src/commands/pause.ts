@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { AudioPlayerStatus } from '@discordjs/voice';
 import { Command } from '../DiscordClient';
 
 export const command: Command = {
@@ -11,7 +12,7 @@ export const command: Command = {
     const { player } = client.connections.get(guildId);
 
     // [Error] No song is currently playing
-    if (!player.isPlaying) {
+    if (player.status !== AudioPlayerStatus.Playing) {
       return interaction.reply("Nenhuma musica tocando");
     }
 
