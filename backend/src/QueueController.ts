@@ -45,8 +45,9 @@ class QueueController extends EventEmitter {
       this.position = -1;
       return null;
     }
+    this.position++;
     this.emit('queue_update');
-    return this.items[++this.position];
+    return this.items[this.position];
   }
 
   /**

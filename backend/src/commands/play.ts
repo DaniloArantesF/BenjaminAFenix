@@ -24,7 +24,7 @@ export const command: Command = {
     let connection = client.connections.get(interaction.guild.id);
 
     if (!request) { // either means unpause or malformed request
-      if (connection.player) {
+      if (connection?.player) {
         const player = connection.player;
         if (player.status === AudioPlayerStatus.Playing) {
           // [Error] Player is not paused
