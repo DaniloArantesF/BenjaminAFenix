@@ -30,7 +30,6 @@
     "fluent-ffmpeg": "^2.1.2",
     "googleapis": "^87.0.0",
     "libsodium-wrappers": "^0.7.9",
-    "tweetnacl": "^1.0.3",
     "ytdl-core": "^4.9.1"
   },
   "devDependencies": {
