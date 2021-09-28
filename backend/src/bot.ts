@@ -21,7 +21,6 @@ const intents = [
 const client = new DiscordClient({ intents });
 
 client.on('interactionCreate', async (interaction: any) => {
-  console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
   const command = DiscordClient.commands.get(interaction.commandName);
 
   if (!command) return;
@@ -30,7 +29,7 @@ client.on('interactionCreate', async (interaction: any) => {
     await command.execute(client, interaction);
   } catch (error) {
     console.error(error);
-    await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    await interaction.reply({ content: 'Deu ruim meu bom', ephemeral: true });
   }
 })
 

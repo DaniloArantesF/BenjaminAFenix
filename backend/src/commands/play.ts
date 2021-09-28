@@ -18,12 +18,13 @@ export const command: Command = {
   async execute(client, interaction) {
     const channelId = await client.getUserVoiceChannel(interaction);
     if (!channelId) {
-      return interaction.reply("Entra num canal de voz mongol");
+      return interaction.reply('Entra num canal de voz mongol');
     }
     const request = interaction.options.getString('song');
     let connection = client.connections.get(interaction.guild.id);
 
-    if (!request) { // either means unpause or malformed request
+    if (!request) {
+      // either means unpause or malformed request
       if (connection?.player) {
         const player = connection.player;
         if (player.status === AudioPlayerStatus.Playing) {
@@ -63,8 +64,10 @@ export const command: Command = {
       connection = await client.joinChannel(interaction.guild, channelId);
     }
 
+    // Pushing item will push item into guild's queue & trigger a player update
+    // Player update checks for queue's current track and plays if not playing
     connection.player.queueController.pushItem({ service: 1, ...item });
-    interaction.reply('tocando');
+    interaction.reply('sente esse som cuzao');
   },
   usage: '',
 };

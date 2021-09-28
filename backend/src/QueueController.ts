@@ -25,8 +25,8 @@ class QueueController extends EventEmitter {
       this.position = 0;
       this.emit('queue_update');
     }
-    console.info("Pushed Items:")
-    console.info(this.items)
+    // console.info("Pushed Items:")
+    // console.info(this.items)
   }
 
   /**
