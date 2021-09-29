@@ -5,7 +5,7 @@ import { Command } from '../DiscordClient';
 export const command: Command = {
   data: new SlashCommandBuilder()
     .setName('pause')
-    .setDescription('Pause current playback'),
+    .setDescription('Pauses current playback'),
   async execute(client, interaction) {
     // Get guild to disconnect
     const guildId = interaction.guild.id;
@@ -20,5 +20,5 @@ export const command: Command = {
     interaction.reply({ content: "Pausado, chefe", ephemeral: true });
     player.pause();
   },
-  usage: ''
+  usage: '/pause'
 };

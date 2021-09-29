@@ -32,7 +32,7 @@ export const PlayEmbed = (topItems: AudioResource[]) => {
 export const command: Command = {
   data: new SlashCommandBuilder()
     .setName('play')
-    .setDescription('play')
+    .setDescription('Plays specified song or unpauses playback')
     .addStringOption((option) =>
       option
         .setName('song')
@@ -101,5 +101,6 @@ export const command: Command = {
       embeds: [PlayEmbed(connection.player.queueController.topItems())],
     });
   },
-  usage: '',
+  usage: '/play <url, id, query>',
+  // TODO: add examples
 };

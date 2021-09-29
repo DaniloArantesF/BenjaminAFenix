@@ -15,5 +15,5 @@ export const command: Command = {
     const target = interaction.options.getUser('target');
     interaction.reply(`${target} te cuida seu merda` );
   },
-  usage: '/threaten target:<user_to_threaten>',
+  usage: '/threaten <user_to_threaten>',
 };

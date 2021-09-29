@@ -4,7 +4,7 @@ import { Command } from '../DiscordClient';
 export const command: Command = {
   data: new SlashCommandBuilder()
     .setName('disconnect')
-    .setDescription('Disconnect bot from server'),
+    .setDescription('Disconnects bot from server'),
   async execute(client, interaction) {
     // Get guild to disconnect
     const guildId = interaction.guild.id;
@@ -19,5 +19,5 @@ export const command: Command = {
     client.connections.get(guildId).connection.destroy();
     client.connections.delete(guildId);
   },
-  usage: ''
+  usage: '/disconnect'
 };

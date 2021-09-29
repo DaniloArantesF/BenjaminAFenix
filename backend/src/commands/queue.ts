@@ -28,7 +28,9 @@ export const QueueEmbed = (queue: AudioResource[]) => {
 };
 
 export const command: Command = {
-  data: new SlashCommandBuilder().setName('queue').setDescription('queue'),
+  data: new SlashCommandBuilder()
+    .setName('queue')
+    .setDescription('Displays server\'s queue'),
   async execute(client, interaction) {
     const connection = client.connections.get(interaction.guild.id);
     interaction.reply({ content: 'pru', ephemeral: true });
@@ -41,5 +43,5 @@ export const command: Command = {
       embeds: [QueueEmbed(connection.player.queueController.items)],
     });
   },
-  usage: '',
+  usage: '/queue',
 };
