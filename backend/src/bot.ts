@@ -1,6 +1,7 @@
 import { Intents } from 'discord.js';
 import DiscordClient from './DiscordClient';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const TOKEN = process.env.DISCORD_TOKEN;
@@ -22,7 +23,6 @@ const client = new DiscordClient({ intents });
 
 client.on('interactionCreate', async (interaction: any) => {
   const command = DiscordClient.commands.get(interaction.commandName);
-
   if (!command) return;
 
   try {
