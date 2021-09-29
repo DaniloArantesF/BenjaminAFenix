@@ -33,3 +33,5 @@ const rest = new REST({ version: '9' }).setToken(TOKEN);
     }
   }
 )();
+
+export default {};

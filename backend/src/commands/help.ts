@@ -1,6 +1,4 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { AudioPlayerStatus } from '@discordjs/voice';
-import ytdl from 'ytdl-core';
 import { AudioResource, Command } from '../DiscordClient';
 import { getYoutubeUrl } from '../lib/Youtube';
 import { MessageEmbed } from 'discord.js';

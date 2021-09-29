@@ -101,6 +101,6 @@ export const command: Command = {
       embeds: [PlayEmbed(connection.player.queueController.topItems())],
     });
   },
-  usage: '/play <url, id, query>',
+  usage: '/play <url, id, >',
   // TODO: add examples
 };

@@ -19,5 +19,5 @@ export const command: Command = {
     client.connections.get(guildId).connection.destroy();
     client.connections.delete(guildId);
   },
-  usage: '/disconnect'
+  usage: '/disconnectdd'
 };

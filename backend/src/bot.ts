@@ -1,6 +1,7 @@
 import { Intents } from 'discord.js';
 import DiscordClient from './DiscordClient';
 import dotenv from 'dotenv';
+import FileWatcher from './util/FileWatcher';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const intents = [
   Intents.FLAGS.DIRECT_MESSAGE_TYPING,
 ];
 
+FileWatcher();
 const client = new DiscordClient({ intents });
 
 client.on('interactionCreate', async (interaction: any) => {

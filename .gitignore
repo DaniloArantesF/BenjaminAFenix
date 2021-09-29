@@ -37,3 +37,5 @@ yarn-error.log*
 
 # Mock Data
 */__mock__
+
+backend/cmds.cache
