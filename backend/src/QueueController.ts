@@ -25,8 +25,6 @@ class QueueController extends EventEmitter {
       this.position = 0;
       this.emit('queue_update');
     }
-    // console.info("Pushed Items:")
-    // console.info(this.items)
   }
 
   /**
@@ -34,6 +32,10 @@ class QueueController extends EventEmitter {
    */
   public getTrack() {
     return this.items[this.position];
+  }
+
+  public topItems() {
+    return this.items.slice(0, 2);
   }
 
   /**

@@ -37,7 +37,7 @@ class PlayerController extends AudioPlayer {
     });
 
     this.on(AudioPlayerStatus.Playing, () => {
-      console.info(`[${Date.now()}] Playing...`)
+      console.info(`[${new Date().getHours()}:${new Date().getMinutes()} ${new Date().getSeconds()}s] Playing...`)
       this.status = AudioPlayerStatus.Playing;
     });
 
@@ -73,7 +73,7 @@ class PlayerController extends AudioPlayer {
     const resource = createAudioResource(stream, {
       inputType: StreamType.Arbitrary,
     });
-    console.info(`[${Date.now()}] Calling play...`)
+    console.info(`[${new Date().getHours()}:${new Date().getMinutes()} ${new Date().getSeconds()}s] Calling play...`)
     this.play(resource);
   }
 

@@ -1,9 +1,33 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { AudioPlayerStatus } from '@discordjs/voice';
-import YouTube from 'react-youtube';
 import ytdl from 'ytdl-core';
-import { Command } from '../DiscordClient';
-import { getIdFromUrl, getYoutubeItem, searchYoutube } from '../lib/Youtube';
+import { AudioResource, Command } from '../DiscordClient';
+import {
+  getIdFromUrl,
+  getYoutubeItem,
+  getYoutubeUrl,
+  searchYoutube,
+} from '../lib/Youtube';
+import { MessageEmbed } from 'discord.js';
+
+export const PlayEmbed = (topItems: AudioResource[]) => {
+  const fields = [
+    { name: 'Currently Playing', value: topItems[0].title, inline: true },
+  ];
+  if (topItems.length > 1) {
+    fields.push({ name: 'Up Next', value: topItems[1].title, inline: true });
+  }
+
+  return new MessageEmbed()
+    .setColor('#b700ff')
+    .setTitle('Queue')
+    .setURL(getYoutubeUrl(topItems[0].id))
+    .setThumbnail(
+      'https://media1.tenor.com/images/75f1a082d67bcd34cc4960131e905bed/tenor.gif?itemid=5505046'
+    )
+    .addFields(...fields, { name: '\u200B', value: '\u200B' }, /* blank field */)
+    .setFooter('To see full queue use /queue');
+};
 
 export const command: Command = {
   data: new SlashCommandBuilder()
@@ -68,6 +92,11 @@ export const command: Command = {
     // Player update checks for queue's current track and plays if not playing
     connection.player.queueController.pushItem({ service: 1, ...item });
     interaction.reply('sente esse som cuzao');
+
+    // TODO: remove old embeds
+    interaction.channel.send({
+      embeds: [PlayEmbed(connection.player.queueController.topItems())],
+    });
   },
   usage: '',
 };
