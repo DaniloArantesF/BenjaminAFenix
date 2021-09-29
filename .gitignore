@@ -10,11 +10,11 @@
 /coverage
 
 # next.js
-/.next/
-/out/
+*/.next/
+*/out/
 
 # production
-/build
+*/build
 
 # misc
 .DS_Store
@@ -34,3 +34,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# Mock Data
+*/__mock__
