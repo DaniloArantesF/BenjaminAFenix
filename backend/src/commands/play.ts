@@ -93,8 +93,11 @@ export const command: Command = {
     connection.player.queueController.pushItem({ service: 1, ...item });
     interaction.reply('sente esse som cuzao');
 
-    // TODO: remove old embeds
-    interaction.channel.send({
+    // Remove old embeds and save new
+    if (connection.player.lastEmbed) {
+      connection.player.lastEmbed.delete();
+    }
+    connection.player.lastEmbed = await interaction.channel.send({
       embeds: [PlayEmbed(connection.player.queueController.topItems())],
     });
   },

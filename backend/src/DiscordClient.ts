@@ -10,20 +10,14 @@ import {
 } from 'discord.js';
 
 import {
-  AudioPlayerStatus,
-  StreamType,
-  createAudioPlayer,
-  createAudioResource,
   joinVoiceChannel,
   VoiceConnection,
 } from '@discordjs/voice';
 import type { ClientOptions } from 'discord.js';
-import type { APIMessageInteraction } from 'discord-api-types';
 import { CommandInteraction } from 'discord.js';
-import ytdl from 'ytdl-core';
 import PlayerController from './PlayerController';
 import type { YoutubeItem } from './lib/Youtube.d';
-import QueueController from './QueueController';
+import { APIMessage } from 'discord-api-types';
 
 export interface Command {
   data: {
@@ -64,7 +58,12 @@ class DiscordClient extends Client {
     this.ready = false;
     this.connections = new Map(); // maps guild ids to voice connections
     this.setUpCommands();
-    this.setUpEvents();
+    // this.setUpEvents();
+
+    this.on('ready', () => {
+      console.log("Bot is ready!")
+      this.ready = true;
+    });
   }
 
   private setUpCommands() {

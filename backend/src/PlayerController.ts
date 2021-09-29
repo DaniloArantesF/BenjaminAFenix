@@ -5,10 +5,10 @@ import {
   AudioPlayer,
 } from '@discordjs/voice';
 import ytdl from 'ytdl-core';
-import DiscordClient from './DiscordClient';
 import type { AudioResource } from './DiscordClient';
 import QueueController from './QueueController';
 import { getYoutubeUrl } from './lib/Youtube';
+import { Message } from 'discord.js';
 
 /**
  * Manages player state and holds queue controller
@@ -19,6 +19,7 @@ class PlayerController extends AudioPlayer {
   currentTrack: AudioResource;
   progress: number; // player progress in MS
   queueController: QueueController;
+  lastEmbed: Message;
 
   constructor() {
     super();
