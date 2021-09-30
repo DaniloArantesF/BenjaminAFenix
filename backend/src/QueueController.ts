@@ -67,6 +67,12 @@ class QueueController extends EventEmitter {
 
   // TODO: public insertTrack() {}
 
+  // Resets queue to empty state.
+  // Emits no events
+  public reset() {
+    this.items = [];
+    this.position = -1;
+  }
 }
 
 export default QueueController;
