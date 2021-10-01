@@ -23,8 +23,8 @@ class QueueController extends EventEmitter {
     this.items = [...this.items, item];
     if (this.position === -1) {
       this.position = 0;
-      this.emit('queue_update');
     }
+    this.emit('queue_update');
   }
 
   /**

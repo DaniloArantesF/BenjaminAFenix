@@ -1,23 +1,12 @@
 import fs from 'fs';
-import {
-  Channel,
-  Client,
-  Collection,
-  Guild,
-  GuildMember,
-  Intents,
-  VoiceChannel,
-} from 'discord.js';
-
-import {
-  joinVoiceChannel,
-  VoiceConnection,
-} from '@discordjs/voice';
+import { Client, Collection, Guild, GuildMember } from 'discord.js';
+import { joinVoiceChannel, VoiceConnection } from '@discordjs/voice';
 import type { ClientOptions } from 'discord.js';
 import { CommandInteraction } from 'discord.js';
 import PlayerController from './PlayerController';
 import type { YoutubeItem } from './lib/Youtube.d';
 import { APIMessage } from 'discord-api-types';
+import { Server, Socket } from 'socket.io';
 
 export interface Command {
   data: {
@@ -52,16 +41,18 @@ class DiscordClient extends Client {
   static commands = new Collection<string, Command>();
   connections: Map<string, DiscordConnection>;
   ready: boolean;
+  io: Server;
 
-  constructor(props: ClientOptions) {
+  constructor(props: ClientOptions, io: Server) {
     super(props);
     this.ready = false;
     this.connections = new Map(); // maps guild ids to voice connections
+    this.io = io;
     this.setUpCommands();
     // this.setUpEvents();
 
     this.on('ready', () => {
-      console.log("Bot is ready!")
+      console.log('Bot is ready!');
       this.ready = true;
     });
   }
@@ -106,7 +97,8 @@ class DiscordClient extends Client {
         adapterCreator: guild.voiceAdapterCreator,
       });
 
-      const player = new PlayerController();
+      const channel = this.io.of(`/bot/${guild.id}`);
+      const player = new PlayerController(channel);
       connection.subscribe(player);
 
       this.connections.set(guild.id, {

@@ -14,18 +14,6 @@ import { Controls } from '../components/Button/Button';
 import { mockQueue } from '../mock/mockData';
 import socketIOClient, { io, Socket } from 'socket.io-client';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return {
-    props: {
-      queue: mockQueue,
-    },
-  };
-};
-
-type HomeProps = {
-  queue: QueueState;
-};
-
 // TODO: manage layouts better
 export enum breakpoints {
   LARGE = 1150,
@@ -33,9 +21,7 @@ export enum breakpoints {
   SMALL = 0,
 }
 
-const Home: NextPage = ({
-  queue,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home: NextPage = () => {
   const [youtube, setYoutube] = useState(
     new Youtube(process.env.NEXT_PUBLIC_YOUTUBE_KEY || '')
   );
@@ -44,21 +30,12 @@ const Home: NextPage = ({
   const position = useAppSelector(selectPosition);
   const [windowWidth, setWindowWidth] = useState<number>();
   const [socket, setSocket] = useState<Socket>();
-
+  const [guildId, setGuildId] = useState('817654492782657566');
   // Setup queue on initial cycle
   useEffect(() => {
-    const endpoint = "localhost:8000/bot";
-    const socket = socketIOClient(endpoint);
-    setSocket(socket);
+    const endpoint = `localhost:8000/bot/${guildId}`;
+    setSocket(socketIOClient(endpoint));
 
-    // [Error] socket init error
-    if (!socket) return;
-    socket.on('send message', (msg: any) => {
-      console.log(`Received a message!\n${msg}`);
-    });
-
-    // ---
-    dispatch(setQueue({ ...queue }));
     if (window) {
       // Window resizes should affect the sidebar position
       window.addEventListener('resize', function (event: UIEvent) {
@@ -72,12 +49,29 @@ const Home: NextPage = ({
     // TODO: Add socket.off on unmount
   }, []);
 
+  useEffect(() => {
+    if (!socket) return;
+    
+    socket.on('connect', () => {
+      console.info("Connected to server!");
+    });
+
+    socket.on('queue_update', (payload: any) => {
+      const queue = payload.queue as QueueState;
+      console.info('Client Queue Update');
+      console.info(queue);
+      dispatch(setQueue(queue))
+    });
+
+  }, [socket]);
+
+
   return (
     <div className={classes.home_container}>
       <Navbar />
       <div className={classes.dashboard_container}>
         <section>
-          {items?.length > 0 && <YoutubeEmbed embedId={items[position].id} />}
+          {(items?.length > 0 && position >= 0) && <YoutubeEmbed embedId={items[position].id} />}
         </section>
         <section>
           <Queue items={items} />
