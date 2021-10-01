@@ -33,7 +33,7 @@ const Home: NextPage = () => {
   const [guildId, setGuildId] = useState('817654492782657566');
   // Setup queue on initial cycle
   useEffect(() => {
-    const endpoint = `localhost:8000/bot/${guildId}`;
+    const endpoint = `localhost:8000/bot`;
     setSocket(socketIOClient(endpoint));
 
     if (window) {
@@ -51,9 +51,10 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (!socket) return;
-    
+
     socket.on('connect', () => {
       console.info("Connected to server!");
+      socket.emit('get_queue', { guildId });
     });
 
     socket.on('queue_update', (payload: any) => {

@@ -23,13 +23,15 @@ class PlayerController extends AudioPlayer {
   lastEmbed: Message;
   webClients: Map<string, Socket>;
   channel: Namespace;
+  guildId: string;
 
-  constructor(channel: Namespace) {
+  constructor(guildId: string, channel: Namespace) {
     super();
     this.status = AudioPlayerStatus.Idle;
     this.queueController = new QueueController();
     this.channel = channel;
     this.webClients = new Map();
+    this.guildId = guildId;
 
     /* Player Events */
     this.on(AudioPlayerStatus.Idle, () => {
@@ -55,26 +57,6 @@ class PlayerController extends AudioPlayer {
     });
 
     this.queueController.on('queue_update', this.updatePlayer.bind(this));
-
-    /* Socket.io Events */
-    channel.on('connection', (socket: Socket) => {
-      //console.info(`WebClient ${socket.id} connected`);
-      this.webClients.set(socket.id, socket);
-
-      socket.on('disconnect', (reason) => {
-        // Remove disconnected client
-        //console.info(`WebClient ${socket.id} disconnected for ${reason}`);
-        this.webClients.delete(socket.id);
-      });
-
-      // Send queue to client
-      socket.emit('queue_update', {
-        queue: {
-          items: this.queueController.items,
-          position: this.queueController.position,
-        },
-      });
-    });
   }
 
   /**
@@ -92,7 +74,7 @@ class PlayerController extends AudioPlayer {
     }
 
     // Update web clients
-    this.channel.emit('queue_update', {
+    this.channel.to(this.guildId).emit('queue_update', {
       queue: {
         items: this.queueController.items,
         position: this.queueController.position,

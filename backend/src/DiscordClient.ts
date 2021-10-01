@@ -6,7 +6,7 @@ import { CommandInteraction } from 'discord.js';
 import PlayerController from './PlayerController';
 import type { YoutubeItem } from './lib/Youtube.d';
 import { APIMessage } from 'discord-api-types';
-import { Server, Socket } from 'socket.io';
+import { Namespace, Server, Socket } from 'socket.io';
 
 export interface Command {
   data: {
@@ -41,19 +41,53 @@ class DiscordClient extends Client {
   static commands = new Collection<string, Command>();
   connections: Map<string, DiscordConnection>;
   ready: boolean;
-  io: Server;
-
+  server: Namespace;
+  webClients: Map<string, Socket[]>; // Holds clients connected to guild
   constructor(props: ClientOptions, io: Server) {
     super(props);
     this.ready = false;
     this.connections = new Map(); // maps guild ids to voice connections
-    this.io = io;
+    this.server = io.of('/bot');
+    this.webClients = new Map();
     this.setUpCommands();
     // this.setUpEvents();
 
     this.on('ready', () => {
       console.log('Bot is ready!');
       this.ready = true;
+    });
+
+    /* Socket.io Events */
+    this.server.on('connection', (socket: Socket) => {
+      // console.info(`WebClient ${socket.id} connected`);
+      socket.on('get_queue', (payload) => {
+        const { guildId } = payload;
+        const guildClients = this.webClients.get(guildId);
+
+        // TODO: Handle requests for non-existent guilds
+        // socket is pushed to room but not saved in guildClients
+        socket.join(guildId);
+        if (!guildClients) {
+          return console.info("Client connected to non-existent guild");
+        }
+
+        // Save new socket
+        guildClients.push(socket);
+
+        // Send queue to client
+        const { player } = this.connections.get(guildId);
+        socket.emit('queue_update', {
+          queue: {
+            items: player.queueController.items,
+            position: player.queueController.position,
+          },
+        });
+      });
+
+      socket.on('disconnect', (reason) => {
+        // Remove disconnected client
+        // console.info(`WebClient ${socket.id} disconnected for ${reason}`);
+      });
     });
   }
 
@@ -97,14 +131,14 @@ class DiscordClient extends Client {
         adapterCreator: guild.voiceAdapterCreator,
       });
 
-      const channel = this.io.of(`/bot/${guild.id}`);
-      const player = new PlayerController(channel);
+      const player = new PlayerController(guild.id, this.server);
       connection.subscribe(player);
 
       this.connections.set(guild.id, {
         connection,
         player,
       });
+      this.webClients.set(guild.id, []);
       return { connection, player };
     } catch (error) {
       console.error(error);
