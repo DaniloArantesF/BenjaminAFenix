@@ -6,20 +6,13 @@ import Navbar from '../components/Navbar/Navbar';
 import Search from '../components/Search/Search';
 import { useEffect, useState } from 'react';
 import Youtube from '../libs/Youtube';
-import {
-  selectItems,
-  next,
-  previous,
-  setPosition,
-  setQueue,
-  selectPosition,
-} from '../components/Queue/queueSlice';
+import { selectItems, setQueue, selectPosition } from '../components/Queue/queueSlice';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { QueueState } from '../components/Queue/queueSlice';
 import { Controls } from '../components/Button/Button';
-// import mockQueue, { overflowingQueue } from '../__mock__/mockQueue';
 import { mockQueue } from '../mock/mockData';
+import socketIOClient, { io, Socket } from 'socket.io-client';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -33,6 +26,7 @@ type HomeProps = {
   queue: QueueState;
 };
 
+// TODO: manage layouts better
 export enum breakpoints {
   LARGE = 1150,
   MEDIUM = 850,
@@ -49,18 +43,33 @@ const Home: NextPage = ({
   const items = useAppSelector(selectItems);
   const position = useAppSelector(selectPosition);
   const [windowWidth, setWindowWidth] = useState<number>();
-  const [Dashboard, setDashboard] = useState<JSX.Element>();
+  const [socket, setSocket] = useState<Socket>();
 
   // Setup queue on initial cycle
   useEffect(() => {
+    const endpoint = "localhost:8000/bot";
+    const socket = socketIOClient(endpoint);
+    setSocket(socket);
+
+    // [Error] socket init error
+    if (!socket) return;
+    socket.on('send message', (msg: any) => {
+      console.log(`Received a message!\n${msg}`);
+    });
+
+    // ---
     dispatch(setQueue({ ...queue }));
     if (window) {
       // Window resizes should affect the sidebar position
-      window.addEventListener('resize', function (event: UIEvent) {     // fixing window is not defined see https://bit.ly/3k8w4lr
+      window.addEventListener('resize', function (event: UIEvent) {
+        // fixing window is not defined see https://bit.ly/3k8w4lr
         const win = event.target as Window;
-        if (event.target && win.innerWidth != windowWidth) setWindowWidth(win.innerWidth);
+        if (event.target && win.innerWidth != windowWidth)
+          setWindowWidth(win.innerWidth);
       });
     }
+
+    // TODO: Add socket.off on unmount
   }, []);
 
   return (

@@ -2,8 +2,8 @@ import { Intents } from 'discord.js';
 import DiscordClient from './DiscordClient';
 import dotenv from 'dotenv';
 import FileWatcher from './util/FileWatcher';
-
 dotenv.config();
+FileWatcher();
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const intents = [
@@ -20,20 +20,23 @@ const intents = [
   Intents.FLAGS.DIRECT_MESSAGE_TYPING,
 ];
 
-FileWatcher();
-const client = new DiscordClient({ intents });
+const Bot = () => {
+  const client = new DiscordClient({ intents });
 
-client.on('interactionCreate', async (interaction: any) => {
-  const command = DiscordClient.commands.get(interaction.commandName);
-  if (!command) return;
+  client.on('interactionCreate', async (interaction: any) => {
+    const command = DiscordClient.commands.get(interaction.commandName);
+    if (!command) return;
 
-  try {
-    await command.execute(client, interaction);
-  } catch (error) {
-    console.error(error);
-    await interaction.reply({ content: 'Deu ruim meu bom', ephemeral: true });
-  }
-})
+    try {
+      await command.execute(client, interaction);
+    } catch (error) {
+      console.error(error);
+      await interaction.reply({ content: 'Deu ruim meu bom', ephemeral: true });
+    }
+  })
 
-client.login(TOKEN);
-export default client;
+  client.login(TOKEN);
+  return client;
+}
+
+export default Bot;
