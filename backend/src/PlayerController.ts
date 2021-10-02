@@ -35,7 +35,7 @@ class PlayerController extends AudioPlayer {
 
     /* Player Events */
     this.on(AudioPlayerStatus.Idle, () => {
-      console.log('Song Over');
+      console.info('Playing next title...');
       this.queueController.next();
 
       // make playr idle if no song left

@@ -39,7 +39,7 @@ export interface DiscordConnection {
 
 class DiscordClient extends Client {
   static commands = new Collection<string, Command>();
-  connections: Map<string, DiscordConnection>;
+  connections: Map<string, DiscordConnection | null>;
   ready: boolean;
   server: Namespace;
   webClients: Map<string, Socket[]>; // Holds clients connected to guild
@@ -54,6 +54,16 @@ class DiscordClient extends Client {
 
     this.on('ready', () => {
       console.log('Bot is ready!');
+
+      // Init data structures for all guilds
+      const guildIds = this.guilds.cache.map((guild) => guild.id);
+
+      guildIds.forEach((guildId) => {
+        console.log(guildId);
+        this.connections.set(guildId, null);
+        this.webClients.set(guildId, []);
+      });
+
       this.ready = true;
     });
 
@@ -64,17 +74,20 @@ class DiscordClient extends Client {
         const { guildId } = payload;
         const guildClients = this.webClients.get(guildId);
 
-        // TODO: Handle requests for non-existent guilds
-        // socket is pushed to room but not saved in guildClients
-        socket.join(guildId);
         if (!guildClients) {
           return console.info("Client connected to non-existent guild");
         }
 
-        // Save new socket
+        // Save new socket and join user to room
         guildClients.push(socket);
+        socket.join(guildId);
 
-        // Send queue to client
+        // Check if bot is active in this guild
+        if (!this.connections.get(guildId)) {
+          return socket.emit('not_active');
+        }
+
+        // Otherwise send queue to client
         const { player } = this.connections.get(guildId);
         socket.emit('queue_update', {
           queue: {
