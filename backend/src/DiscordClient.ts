@@ -28,7 +28,7 @@ export enum Services {
   SoundCloud,
 }
 
-export interface AudioResource extends YoutubeItem {
+export interface Track extends YoutubeItem {
   service: Services;
 }
 
@@ -59,7 +59,6 @@ class DiscordClient extends Client {
       const guildIds = this.guilds.cache.map((guild) => guild.id);
 
       guildIds.forEach((guildId) => {
-        console.log(guildId);
         this.connections.set(guildId, null);
         this.webClients.set(guildId, []);
       });
@@ -75,7 +74,7 @@ class DiscordClient extends Client {
         const guildClients = this.webClients.get(guildId);
 
         if (!guildClients) {
-          return console.info("Client connected to non-existent guild");
+          return console.info('Client connected to non-existent guild');
         }
 
         // Save new socket and join user to room
@@ -164,7 +163,7 @@ class DiscordClient extends Client {
    * @param guildId Server Id to update queue
    * @param data    Item to be pushed
    */
-  public pushItem(guildId: string, item: AudioResource) {
+  public pushItem(guildId: string, item: Track) {
     const connection = this.connections.get(guildId);
     const queueController = connection.player.queueController;
     queueController.pushItem(item);

@@ -1,11 +1,11 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { AudioPlayerStatus } from '@discordjs/voice';
 import ytdl from 'ytdl-core';
-import { AudioResource, Command } from '../DiscordClient';
+import { Track, Command } from '../DiscordClient';
 import { getYoutubeUrl } from '../lib/Youtube';
 import { MessageEmbed } from 'discord.js';
 
-export const QueueEmbed = (queue: AudioResource[]) => {
+export const QueueEmbed = (queue: Track[]) => {
   const fields = [
     { name: `1 - ${queue[0].title}`, value: getYoutubeUrl(queue[0].id) },
     ...queue.slice(1, queue.length).map((item, index) => {
@@ -30,7 +30,7 @@ export const QueueEmbed = (queue: AudioResource[]) => {
 export const command: Command = {
   data: new SlashCommandBuilder()
     .setName('queue')
-    .setDescription('Displays server\'s queue'),
+    .setDescription("Displays server's queue"),
   async execute(client, interaction) {
     const connection = client.connections.get(interaction.guild.id);
     interaction.reply({ content: 'pru', ephemeral: true });

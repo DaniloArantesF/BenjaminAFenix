@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { AudioPlayerStatus } from '@discordjs/voice';
 import ytdl from 'ytdl-core';
-import { AudioResource, Command } from '../DiscordClient';
+import { Track, Command } from '../DiscordClient';
 import {
   getIdFromUrl,
   getYoutubeItem,
@@ -10,7 +10,7 @@ import {
 } from '../lib/Youtube';
 import { MessageEmbed } from 'discord.js';
 
-export const PlayEmbed = (topItems: AudioResource[]) => {
+export const PlayEmbed = (topItems: Track[]) => {
   const fields = [
     { name: 'Currently Playing', value: topItems[0].title, inline: true },
   ];
@@ -25,7 +25,7 @@ export const PlayEmbed = (topItems: AudioResource[]) => {
     .setThumbnail(
       'https://media1.tenor.com/images/75f1a082d67bcd34cc4960131e905bed/tenor.gif?itemid=5505046'
     )
-    .addFields(...fields, { name: '\u200B', value: '\u200B' }, /* blank field */)
+    .addFields(...fields, { name: '\u200B', value: '\u200B' } /* blank field */)
     .setFooter('To see full queue use /queue');
 };
 

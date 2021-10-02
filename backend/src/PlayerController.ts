@@ -3,9 +3,10 @@ import {
   StreamType,
   createAudioResource,
   AudioPlayer,
+  AudioResource,
 } from '@discordjs/voice';
 import ytdl from 'ytdl-core';
-import type { AudioResource } from './DiscordClient';
+import type { Track } from './DiscordClient';
 import QueueController from './QueueController';
 import { getYoutubeUrl } from './lib/Youtube';
 import { Message } from 'discord.js';
@@ -17,21 +18,22 @@ import { Namespace, Socket } from 'socket.io';
  */
 class PlayerController extends AudioPlayer {
   status: AudioPlayerStatus;
-  currentTrack: AudioResource;
+  currentTrack: Track;
   progress: number; // player progress in MS
   queueController: QueueController;
   lastEmbed: Message;
-  webClients: Map<string, Socket>;
   channel: Namespace;
   guildId: string;
+  volume: number;
+  resource: AudioResource; // Current audio resource being played
 
   constructor(guildId: string, channel: Namespace) {
     super();
-    this.status = AudioPlayerStatus.Idle;
     this.queueController = new QueueController();
-    this.channel = channel;
-    this.webClients = new Map();
+    this.status = AudioPlayerStatus.Idle;
     this.guildId = guildId;
+    this.volume = 1;
+    this.channel = channel;
 
     /* Player Events */
     this.on(AudioPlayerStatus.Idle, () => {
@@ -91,11 +93,16 @@ class PlayerController extends AudioPlayer {
     });
     const resource = createAudioResource(stream, {
       inputType: StreamType.Arbitrary,
+      inlineVolume: true,   // Creates volume transformer allowing volume settings
     });
-    console.info(
-      `[${new Date().getHours()}:${new Date().getMinutes()} ${new Date().getSeconds()}s] Calling play...`
-    );
+    this.resource = resource;
+    resource.volume.setVolumeLogarithmic(this.volume);
     this.play(resource);
+  }
+
+  public setVolume(volume: number) {
+    this.resource.volume.setVolumeLogarithmic(volume);
+    this.volume = volume;
   }
 }
 
