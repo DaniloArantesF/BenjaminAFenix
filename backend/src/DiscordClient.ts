@@ -28,7 +28,12 @@ export enum Services {
   SoundCloud,
 }
 
-export interface Track extends YoutubeItem {
+export interface Track {
+  channelTitle: string;
+  duration: number;
+  title: string;
+  id: string;
+  user: string;
   service: Services;
 }
 
@@ -69,7 +74,7 @@ class DiscordClient extends Client {
     /* Socket.io Events */
     this.server.on('connection', (socket: Socket) => {
       // console.info(`WebClient ${socket.id} connected`);
-      socket.on('get_queue', (payload) => {
+      socket.on('get_player', (payload) => {
         const { guildId } = payload;
         const guildClients = this.webClients.get(guildId);
 
@@ -88,12 +93,7 @@ class DiscordClient extends Client {
 
         // Otherwise send queue to client
         const { player } = this.connections.get(guildId);
-        socket.emit('queue_update', {
-          queue: {
-            items: player.queueController.items,
-            position: player.queueController.position,
-          },
-        });
+        socket.emit('player_update', player.getPlayerState());
       });
 
       socket.on('disconnect', (reason) => {

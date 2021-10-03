@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 require('dotenv').config();
 import type { ItemsEntity, YoutubeItem } from './Youtube.d';
+import { convertISODurationToMS } from '../util/time';
 
 const youtube = google.youtube({ version: 'v3', auth: process.env.APIKEY });
 
@@ -20,17 +21,19 @@ export async function searchYoutube(query: string, maxResults?: number): Promise
     videoCategoryId: '10',
   });
 
-  const items = search.data.items.map((item: ItemsEntity) => {
+  const items = await Promise.all(search.data.items.map(async (item: ItemsEntity) => {
     const { id, snippet } = item;
-    return { id: id.videoId, ...snippet };
-  });
+    const duration = await getItemDuration(item.id.videoId);
+    const { publishedAt, channelId, title, description, thumbnails, channelTitle } = snippet;
+    return { id: id.videoId, publishedAt, channelId, title, duration, description, thumbnails, channelTitle } as YoutubeItem;
+  }));
 
   return items;
 }
 
 export async function getYoutubeItem(id: string): Promise<YoutubeItem> {//
   const { data } = await youtube.videos.list({
-    part: ['snippet'],
+    part: ['snippet', 'contentDetails'],
     id: [id]
   });
 
@@ -39,7 +42,8 @@ export async function getYoutubeItem(id: string): Promise<YoutubeItem> {//
   delete thumbnails.maxres;
   delete thumbnails.standard;
 
-  return { id: data.items[0].id, publishedAt, channelId, title, description, thumbnails, channelTitle } as YoutubeItem;
+  const duration = await getItemDuration(data.items[0].id);
+  return { id: data.items[0].id, duration, publishedAt, channelId, title, description, thumbnails, channelTitle } as YoutubeItem;
 }
 
 export function getIdFromUrl(url: string): string {
@@ -66,4 +70,15 @@ export function getIdFromUrl(url: string): string {
 
 export function getYoutubeUrl(id: string) {
   return `https://www.youtube.com/watch?v=${id}`;
+}
+
+export async function getItemDuration(id: string) {
+  const { data } = await youtube.videos.list({
+    part: ['contentDetails'],
+    id: [id]
+  });
+
+  const contentDetails = data.items[0].contentDetails;
+  const duration = convertISODurationToMS(contentDetails.duration)
+  return duration;
 }

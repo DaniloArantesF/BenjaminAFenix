@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppState } from '../../app/store';
+import { Track } from '../../types/types';
 
 export interface PlayerState {
   playing: boolean;

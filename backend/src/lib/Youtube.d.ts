@@ -13,6 +13,7 @@ export interface YoutubeItem {
   publishTime?: string;
   thumbnails: Thumbnails;
   title: string;
+  duration: number;
 }
 
 export interface YoutubeSearchResult {

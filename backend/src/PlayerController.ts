@@ -4,28 +4,29 @@ import {
   createAudioResource,
   AudioPlayer,
   AudioResource,
+  AudioPlayerPlayingState,
 } from '@discordjs/voice';
 import ytdl from 'ytdl-core';
 import type { Track } from './DiscordClient';
 import QueueController from './QueueController';
 import { getYoutubeUrl } from './lib/Youtube';
 import { Message } from 'discord.js';
-import { Namespace, Socket } from 'socket.io';
+import { Namespace } from 'socket.io';
 
 /**
  * Manages player state and holds queue controller
  * Calls queue for state updates relaying commands from client
  */
 class PlayerController extends AudioPlayer {
-  status: AudioPlayerStatus;
+  channel: Namespace;
   currentTrack: Track;
+  guildId: string;
+  lastEmbed: Message;
   progress: number; // player progress in MS
   queueController: QueueController;
-  lastEmbed: Message;
-  channel: Namespace;
-  guildId: string;
-  volume: number;
   resource: AudioResource; // Current audio resource being played
+  status: AudioPlayerStatus;
+  volume: number;
 
   constructor(guildId: string, channel: Namespace) {
     super();
@@ -38,6 +39,7 @@ class PlayerController extends AudioPlayer {
     /* Player Events */
     this.on(AudioPlayerStatus.Idle, () => {
       console.info('Playing next title...');
+      this.progress = 0;
       this.queueController.next();
 
       // make playr idle if no song left
@@ -52,6 +54,12 @@ class PlayerController extends AudioPlayer {
         `[${new Date().getHours()}:${new Date().getMinutes()} ${new Date().getSeconds()}s] Playing...`
       );
       this.status = AudioPlayerStatus.Playing;
+
+      // Keep track of player progress
+      setInterval(() => {
+        const state = this.state as AudioPlayerPlayingState;
+        this.progress = state.playbackDuration;
+      }, 500);
     });
 
     this.on(AudioPlayerStatus.Paused, () => {
@@ -76,7 +84,7 @@ class PlayerController extends AudioPlayer {
     }
 
     // Update web clients
-    this.channel.to(this.guildId).emit('queue_update', {
+    this.channel.to(this.guildId).emit('player_update', {
       queue: {
         items: this.queueController.items,
         position: this.queueController.position,
@@ -93,7 +101,7 @@ class PlayerController extends AudioPlayer {
     });
     const resource = createAudioResource(stream, {
       inputType: StreamType.Arbitrary,
-      inlineVolume: true,   // Creates volume transformer allowing volume settings
+      inlineVolume: true, // Creates volume transformer allowing volume settings
     });
     this.resource = resource;
     resource.volume.setVolumeLogarithmic(this.volume);
@@ -103,6 +111,21 @@ class PlayerController extends AudioPlayer {
   public setVolume(volume: number) {
     this.resource.volume.setVolumeLogarithmic(volume);
     this.volume = volume;
+  }
+
+  public getPlayerState() {
+    const { currentTrack, progress, queueController, status, volume } = this;
+
+    return {
+      currentTrack,
+      progress,
+      status,
+      volume,
+      queue: {
+        items: queueController.items,
+        position: queueController.position
+      }
+    }
   }
 }
 

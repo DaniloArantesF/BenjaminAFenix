@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { AudioPlayerStatus } from '@discordjs/voice';
 import ytdl from 'ytdl-core';
-import { Track, Command } from '../DiscordClient';
+import { Track, Command, Services } from '../DiscordClient';
 import {
   getIdFromUrl,
   getYoutubeItem,
@@ -88,9 +88,19 @@ export const command: Command = {
       connection = await client.joinChannel(interaction.guild, channelId);
     }
 
+    // Convert YoutubeItem to track as expected by player
+    const track: Track = {
+      channelTitle: item.channelTitle,
+      duration: item.duration,
+      title: item.title,
+      id: item.id,
+      user: interaction.user.tag,
+      service: Services.Youtube,
+    }
+
     // Pushing item will push item into guild's queue & trigger a player update
     // Player update checks for queue's current track and plays if not playing
-    connection.player.queueController.pushItem({ service: 1, ...item });
+    connection.player.queueController.pushItem(track);
     interaction.reply('sente esse som cuzao');
 
     // Remove old embeds and save new

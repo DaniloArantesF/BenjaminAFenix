@@ -32,6 +32,7 @@
     "inspector-api": "^1.4.2",
     "libsodium-wrappers": "^0.7.9",
     "socket.io": "^4.2.0",
+    "tinyduration": "^3.2.2",
     "ytdl-core": "^4.9.1"
   },
   "devDependencies": {

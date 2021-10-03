@@ -6,13 +6,18 @@ import Navbar from '../components/Navbar/Navbar';
 import Search from '../components/Search/Search';
 import { useEffect, useState } from 'react';
 import Youtube from '../libs/Youtube';
-import { selectItems, setQueue, selectPosition } from '../components/Queue/queueSlice';
+import {
+  selectItems,
+  setQueue,
+  selectPosition,
+} from '../components/Queue/queueSlice';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { QueueState } from '../components/Queue/queueSlice';
 import { Controls } from '../components/Button/Button';
 import { mockQueue } from '../mock/mockData';
 import socketIOClient, { io, Socket } from 'socket.io-client';
+import { PlayerState } from '../components/Player/playerSlice';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -53,26 +58,26 @@ const Home: NextPage = () => {
     if (!socket) return;
 
     socket.on('connect', () => {
-      console.info("Connected to server!");
-      socket.emit('get_queue', { guildId });
+      console.info('Connected to server!');
+      socket.emit('get_player', { guildId });
     });
 
-    socket.on('queue_update', (payload: any) => {
+    socket.on('player_update', (payload: any) => {
       const queue = payload.queue as QueueState;
       console.info('Client Queue Update');
       console.info(queue);
-      dispatch(setQueue(queue))
+      dispatch(setQueue(queue));
     });
-
   }, [socket]);
-
 
   return (
     <div className={classes.home_container}>
       <Navbar />
       <div className={classes.dashboard_container}>
         <section>
-          {(items?.length > 0 && position >= 0) && <YoutubeEmbed embedId={items[position].id} />}
+          {items?.length > 0 && position >= 0 && (
+            <YoutubeEmbed embedId={items[position].id} />
+          )}
         </section>
         <section>
           <Queue items={items} />

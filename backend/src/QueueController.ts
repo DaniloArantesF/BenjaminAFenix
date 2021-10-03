@@ -19,6 +19,7 @@ class QueueController extends EventEmitter {
   }
 
   public pushItem(item: Track) {
+    console.log(JSON.stringify(item, null, 2));
     this.items = [...this.items, item];
     if (this.position === -1) {
       this.position = 0;
