@@ -39,8 +39,10 @@ export const command: Command = {
     if (connection.player.lastEmbed) {
       connection.player.lastEmbed.delete();
     }
+
+    const queue = connection.player.queueController.getQueue();
     connection.player.lastEmbed = await interaction.channel.send({
-      embeds: [QueueEmbed(connection.player.queueController.items)],
+      embeds: [QueueEmbed(queue)],
     });
   },
   usage: '/queue',

@@ -32,7 +32,7 @@ class QueueController extends EventEmitter {
   }
 
   public topItems() {
-    return this.items.slice(0, 2);
+    return this.items.slice(this.position, this.position + 2);
   }
 
   /**
@@ -69,6 +69,14 @@ class QueueController extends EventEmitter {
   public reset() {
     this.items = [];
     this.position = -1;
+  }
+
+  /**
+   * Returns tracks in queue.
+   * i.e. tracks that have not been played
+   */
+  public getQueue() {
+    return this.items.slice(this.position);
   }
 }
 
