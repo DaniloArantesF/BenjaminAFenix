@@ -63,6 +63,7 @@ const Home: NextPage = () => {
     });
 
     socket.on('player_update', (payload: any) => {
+      console.log(payload);
       const queue = payload.queue as QueueState;
       console.info('Client Queue Update');
       console.info(queue);

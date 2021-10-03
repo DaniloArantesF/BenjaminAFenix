@@ -40,10 +40,10 @@ class PlayerController extends AudioPlayer {
     this.on(AudioPlayerStatus.Idle, () => {
       console.info('Playing next title...');
       this.progress = 0;
-      this.queueController.next();
+      const nextTrack = this.queueController.next();
 
       // make playr idle if no song left
-      if (!this.queueController.getTrack()) {
+      if (!nextTrack) {
         console.info('Player going idle...');
         this.status = AudioPlayerStatus.Idle;
       }
@@ -76,7 +76,29 @@ class PlayerController extends AudioPlayer {
    */
   public updatePlayer() {
     console.info('Checking updates to player...');
-    const track = this.queueController.getTrack();
+    let track;
+
+    // Idle can either mean player has not been played or
+    // reached the end of the queue
+    if (this.status === AudioPlayerStatus.Idle) {
+      if (this.queueController.position === -1) {
+        // Not initialized
+        console.info("Queue not init");
+        this.queueController.position = 0;
+        track = this.queueController.getTrack();
+      } else {
+        // End of Queue
+        this.queueController.position++;
+        track = this.queueController.getTrack();
+      }
+    } else { // Otherwise position is updated
+      track = this.queueController.getTrack();
+    }
+
+    if (!track) { // Return to avoid error
+      return;
+    }
+    // Update current track and play new item
     if (!this.currentTrack || track !== this.currentTrack) {
       this.currentTrack = track;
       this.progress = 0;
@@ -84,12 +106,7 @@ class PlayerController extends AudioPlayer {
     }
 
     // Update web clients
-    this.channel.to(this.guildId).emit('player_update', {
-      queue: {
-        items: this.queueController.items,
-        position: this.queueController.position,
-      },
-    });
+    this.channel.to(this.guildId).emit('player_update', this.getPlayerState());
   }
 
   private playCurrentItem() {
@@ -105,6 +122,7 @@ class PlayerController extends AudioPlayer {
     });
     this.resource = resource;
     resource.volume.setVolumeLogarithmic(this.volume);
+    this.status = AudioPlayerStatus.Playing;
     this.play(resource);
   }
 

@@ -3,11 +3,17 @@ import type { AppState } from '../../app/store';
 import { Track } from '../../types/types';
 
 export interface PlayerState {
-  playing: boolean;
+  currentTrack: Track | null;
+  progress: number;
+  status: string;
+  volume: number;
 }
 
 const initialState: PlayerState = {
-  playing: false,
+  currentTrack: null,
+  progress: -1,
+  status: 'idle',
+  volume: 1,
 };
 
 export const playerSlice = createSlice({
@@ -18,12 +24,19 @@ export const playerSlice = createSlice({
       return { ...state, youtube: { playVideo: action.payload.playVideo, pauseVideo: action.payload.pauseVideo } };
     },
     togglePlayer: (state) => {
-      state.playing = !state.playing;
+      if (state.status === 'playing') {
+        state.status = 'paused';
+      } else if (state.status === 'paused') {
+        state.status = 'playing';
+      } else {
+        state.status = 'idle';
+      }
+
       return state;
     },
   },
 });
 
 export const { togglePlayer } = playerSlice.actions;
-export const selectPlaying = (state: AppState) => state.player.playing;
+export const selectStatus = (state: AppState) => state.player.status;
 export default playerSlice.reducer;
