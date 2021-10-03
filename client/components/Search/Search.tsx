@@ -27,7 +27,7 @@ const Search = ({ youtube }: SearchProps) => {
   const getTrackFromItem = async (item: YoutubeItem) => {
     const res = await youtube.getItemFromId(item.id);
     return {
-      author: res.channelTitle,
+      channelTitle: res.channelTitle,
       duration: res.duration,
       title: res.title,
       id: res.id,
@@ -40,10 +40,7 @@ const Search = ({ youtube }: SearchProps) => {
     const { thumbnails, title, channelTitle } = item;
     const thumb = thumbnails.default;
     return (
-      <div
-        className={classes.search__item}
-        onClick={() => selectItem(item)}
-      >
+      <div className={classes.search__item} onClick={() => selectItem(item)}>
         <img src={thumb.url} alt="item_thumbnail" />
         <span>{title}</span>
         <span>{channelTitle}</span>

@@ -36,7 +36,7 @@ interface QItemProps {
 
 const QueueItem = ({ item, dragCallback, mouseUpCb }: QItemProps) => {
   const [hover, setHover] = useState(false); // current item is being hovered
-  const { itemPosition, title, author, duration, user } = item;
+  const { itemPosition, title, channelTitle, duration, user } = item;
 
   return (
     <div
@@ -55,7 +55,7 @@ const QueueItem = ({ item, dragCallback, mouseUpCb }: QItemProps) => {
         <span>{itemPosition}</span>
       )}
       <span>{title}</span>
-      <span>{author}</span>
+      <span>{channelTitle}</span>
       <span>{msToMinSec(duration)}</span>
       <span>{user}</span>
     </div>
@@ -79,11 +79,11 @@ const Queue = ({ items }: QProps) => {
 
   const endDrag = (event: any) => {
     event.target.style = ''; // Reset CSS used to change row
-    if (newItems) {           // Reset hook
+    if (newItems) {
+      // Reset hook
       dispatch(setQueue({ items: newItems, position }));
       setNewItems(undefined);
     }
-
   };
 
   const dragHandler = (index: number, event: any) => {
@@ -121,9 +121,7 @@ const Queue = ({ items }: QProps) => {
     itemHeight: number
   ) => {
     //console.log({ startY, endY, mouseY, itemHeight });
-    const position = Math.round(
-      (mouseY - startY) / itemHeight
-    ); // snap whenitem is halfway
+    const position = Math.round((mouseY - startY) / itemHeight); // snap whenitem is halfway
     return minMax(position - 1, 0, queueLength - 1);
   };
 
@@ -151,7 +149,7 @@ const Queue = ({ items }: QProps) => {
       ref={queueRef}
       className={classes.queue_component}
       onMouseLeave={() => setDragging(false)}
-      onMouseUp={ endDrag }
+      onMouseUp={endDrag}
     >
       <QueueHeader />
       {items.map((item, index) => {
