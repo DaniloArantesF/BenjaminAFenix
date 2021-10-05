@@ -61,13 +61,15 @@ const Button = ({ children, action, isActive }: ButtonProps) => {
   };
 
   return (
-    <>
+    <div className={`${classes.btn_container}`}>
       <button
         className={`${classes.btn_border} ${!active && classes.btn_inactive}`}
         onClick={clickHandler}
       >
         { children }
       </button>
-    </>
+    </div>
   );
 };
+
+export default Button;
