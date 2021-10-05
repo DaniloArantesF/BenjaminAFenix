@@ -4,6 +4,7 @@ import http from 'http';
 import cors from 'cors';
 import DiscordClient from './DiscordClient';
 import Auth from './lib/Auth';
+import DiscordAPI from './lib/Discord';
 
 const PORT = 8000;
 
@@ -35,6 +36,7 @@ class App {
 
   private routes() {
     this.express.use('/auth', Auth.router);
+    this.express.use('/discord', DiscordAPI.router);
   }
 }
 
