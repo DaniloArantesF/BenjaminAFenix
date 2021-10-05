@@ -106,6 +106,7 @@
   align-items: flex-start;
   justify-items: center;
   gap: 1em;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.24);
 }
 
 .login_container > section > h1 {

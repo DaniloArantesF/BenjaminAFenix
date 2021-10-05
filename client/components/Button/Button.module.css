@@ -9,9 +9,9 @@
 
 .btn_container > button{
   --border-width: 4px;
-  --duration: 150ms;
+  --duration: 200ms;
   margin: 1em;
-  background: var(--clr-btn);
+  background: var(--clr-font);
   border: none;
   cursor: pointer;
   line-height: 1.2;
