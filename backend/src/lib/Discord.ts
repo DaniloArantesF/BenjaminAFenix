@@ -19,12 +19,23 @@ interface DiscordUserResponse {
   mfa_enabled: boolean;
 }
 
+interface GuildData {
+  id: string,
+  name: string,
+  icon: string,
+  owner: boolean,
+  permissions: number,
+  features: string[],
+  permissions_new: string
+}
+
 class DiscordAPI {
   router: Router;
 
   constructor() {
     this.router = Router();
     this.router.get('/user', this.getDiscordUser);
+    this.router.get('/guilds', this.getUserGuilds);
   }
 
   public async getDiscordUser(req: Request, res: Response) {
@@ -43,8 +54,18 @@ class DiscordAPI {
     return res.send({ id, username, avatar, });
   }
 
-  // TODO
-  //public async getUserGuilds() {}
+  public async getUserGuilds(req: Request, res: Response) {
+    const accessToken = req.query.accessToken;
+    const guildsRes: AxiosResponse<GuildData[]> = await axios.get(
+      'https://discord.com/api/users/@me/guilds',
+      {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return res.send({ guilds: guildsRes.data});
+  }
 }
 
 export default new DiscordAPI();
