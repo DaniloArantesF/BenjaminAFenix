@@ -1,17 +1,41 @@
 import express from 'express';
 import Bot from './bot';
 import http from 'http';
+import cors from 'cors';
+import DiscordClient from './DiscordClient';
+import Auth from './lib/Auth';
 
-const app = express();
-const server = http.createServer(app);
-const bot = Bot(server);
 const PORT = 8000;
 
-app.get("/", (req, res) => {
-  res.send("hello")
-});
+class App {
+  public express: express.Application;
+  public bot: DiscordClient;
+  public server: http.Server;
 
-server.listen(PORT, () => {
-  console.info(`Server started at http://localhost:${PORT}`);
-});
+  constructor() {
+    this.express = express();
+    this.middleware();
+    this.routes();
 
+    // Set up web server to use with socket.io
+    this.server = http.createServer(this.express);
+    this.bot = Bot(this.server);
+
+    this.server.listen(PORT, () => {
+      console.log(`Server listening at ${PORT}`);
+    });
+  }
+
+  private middleware() {
+    this.express.use(express.urlencoded({ extended: true }));
+    this.express.use(express.json());
+    this.express.use(cors());
+    this.express.options('*', cors());
+  }
+
+  private routes() {
+    this.express.use('/auth', Auth.router);
+  }
+}
+
+export default new App().express;

@@ -26,6 +26,8 @@ export enum breakpoints {
   SMALL = 0,
 }
 
+const AUTH_URL = 'https://discord.com/api/oauth2/authorize?client_id=712958072007688232&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code&scope=guilds%20identify';
+
 const Home: NextPage = () => {
   const [youtube, setYoutube] = useState(
     new Youtube(process.env.NEXT_PUBLIC_YOUTUBE_KEY || '')
@@ -36,7 +38,8 @@ const Home: NextPage = () => {
   const [windowWidth, setWindowWidth] = useState<number>();
   const [socket, setSocket] = useState<Socket>();
   const [guildId, setGuildId] = useState('817654492782657566');
-  // Setup queue on initial cycle
+  const [active, setActive] = useState(false);
+
   useEffect(() => {
     const endpoint = `localhost:8000/bot`;
     setSocket(socketIOClient(endpoint));
@@ -60,6 +63,9 @@ const Home: NextPage = () => {
     socket.on('connect', () => {
       console.info('Connected to server!');
       socket.emit('get_player', { guildId });
+    });
+
+    socket.on('not_active', () => {
     });
 
     socket.on('player_update', (payload: any) => {

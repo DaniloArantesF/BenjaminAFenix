@@ -1,32 +1,61 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 import type { AppState } from '../app/store';
 
 export interface AuthState {
-  [username: string]: string,
-  password: string,
+  username: string;
+  accessToken: string;
+  refreshToken: string;
+  refreshInterval: number;
+  error: any;
 }
 
-// Define initial state using type above
 const initialState: AuthState = {
   username: '',
-  password: ''
-};
+  accessToken: '',
+  refreshToken: '',
+  refreshInterval: 0,
+  error: null,
+}
+
+// Payload creator
+export const fetchCredentials = createAsyncThunk('login', async (code: string, { rejectWithValue }) => {
+  try {
+    console.log("Fetching creds...");
+    console.log(code);
+    const { data } = await axios.post('http://localhost:8000/auth/code', { code });
+    console.log(data);
+    return { accessToken: data.accessToken, refreshToken: data.refreshToken };
+  } catch (error) {
+    console.error(error);
+    return rejectWithValue(error);
+  }
+});
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUsername: (state, action) => {
-      state.username = action.payload;
-      return state;
-    },
-    setPassword: (state, action) => {
-      state.password = action.payload;
+    useCode: (state, action) => {
       return state;
     },
   },
+  extraReducers: (builder) => {
+    // Builder callback is used as it provides correctly typed reducers from action creators
+    builder.addCase(fetchCredentials.fulfilled, (state, { payload }) => {
+      // TODO: set refresh interval
+      state.accessToken = payload.accessToken;
+      state.refreshToken = payload.refreshToken;
+      state.error = null;
+    });
+    builder.addCase(fetchCredentials.rejected, (state, { payload }) => {
+      if (payload) {
+        state.error = payload;
+      }
+    });
+  },
 });
 
-export const { setUsername, setPassword } = authSlice.actions;
+export const { } = authSlice.actions;
 export const selectAuth = (state: AppState) => state.auth;
 export default authSlice.reducer;
