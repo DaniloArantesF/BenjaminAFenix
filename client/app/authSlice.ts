@@ -3,6 +3,8 @@ import axios from 'axios';
 import type { AppState } from '../app/store';
 
 export interface AuthState {
+  id: string;
+  avatar: string;
   username: string;
   accessToken: string;
   refreshToken: string;
@@ -11,20 +13,18 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
+  id: '',
+  avatar: '',
   username: '',
   accessToken: '',
   refreshToken: '',
   refreshInterval: 0,
   error: null,
 }
-
-// Payload creator
+// Payload creator//
 export const fetchCredentials = createAsyncThunk('login', async (code: string, { rejectWithValue }) => {
   try {
-    console.log("Fetching creds...");
-    console.log(code);
     const { data } = await axios.post('http://localhost:8000/auth/code', { code });
-    console.log(data);
     return { accessToken: data.accessToken, refreshToken: data.refreshToken };
   } catch (error) {
     console.error(error);
@@ -36,8 +36,8 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    useCode: (state, action) => {
-      return state;
+    setUser: (state, { payload }) => {
+      return { ...state, ...payload };
     },
   },
   extraReducers: (builder) => {
@@ -46,6 +46,9 @@ export const authSlice = createSlice({
       // TODO: set refresh interval
       state.accessToken = payload.accessToken;
       state.refreshToken = payload.refreshToken;
+
+      localStorage.setItem('accessToken', payload.accessToken);
+      localStorage.setItem('refreshToken', payload.refreshToken);
       state.error = null;
     });
     builder.addCase(fetchCredentials.rejected, (state, { payload }) => {
@@ -56,6 +59,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { } = authSlice.actions;
+export const { setUser } = authSlice.actions;
 export const selectAuth = (state: AppState) => state.auth;
 export default authSlice.reducer;

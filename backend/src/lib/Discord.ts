@@ -20,13 +20,13 @@ interface DiscordUserResponse {
 }
 
 interface GuildData {
-  id: string,
-  name: string,
-  icon: string,
-  owner: boolean,
-  permissions: number,
-  features: string[],
-  permissions_new: string
+  id: string;
+  name: string;
+  icon: string;
+  owner: boolean;
+  permissions: number;
+  features: string[];
+  permissions_new: string;
 }
 
 class DiscordAPI {
@@ -50,12 +50,14 @@ class DiscordAPI {
       }
     );
 
-    const { id, username, avatar, } = userRes.data;
-    return res.send({ id, username, avatar, });
+    const { id, username, avatar } = userRes.data;
+    return res.send({ id, username, avatar });
   }
 
   public async getUserGuilds(req: Request, res: Response) {
     const accessToken = req.query.accessToken;
+    if (!accessToken) return res.sendStatus(400);
+
     const guildsRes: AxiosResponse<GuildData[]> = await axios.get(
       'https://discord.com/api/users/@me/guilds',
       {
@@ -64,7 +66,7 @@ class DiscordAPI {
         },
       }
     );
-    return res.send({ guilds: guildsRes.data});
+    return res.send({ guilds: guildsRes.data });
   }
 }
 

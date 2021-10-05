@@ -1,4 +1,5 @@
-import type { NextPage } from 'next';
+import type { GetServerSidePropsContext, NextPage } from 'next';
+import Router from 'next/router';
 import classes from '../styles/Home.module.css';
 import Queue from '../components/Queue/Queue';
 import YoutubeEmbed from '../components/YoutubeEmbed/Youtube';
@@ -18,6 +19,8 @@ import { Controls } from '../components/Button/Button';
 import { mockQueue } from '../mock/mockData';
 import socketIOClient, { io, Socket } from 'socket.io-client';
 import { PlayerState } from '../components/Player/playerSlice';
+import axios from 'axios';
+import { selectAuth, setUser } from '../app/authSlice';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -26,8 +29,6 @@ export enum breakpoints {
   SMALL = 0,
 }
 
-const AUTH_URL = 'https://discord.com/api/oauth2/authorize?client_id=712958072007688232&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code&scope=guilds%20identify';
-
 const Home: NextPage = () => {
   const [youtube, setYoutube] = useState(
     new Youtube(process.env.NEXT_PUBLIC_YOUTUBE_KEY || '')
@@ -35,12 +36,17 @@ const Home: NextPage = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
   const position = useAppSelector(selectPosition);
+  const auth = useAppSelector(selectAuth);
   const [windowWidth, setWindowWidth] = useState<number>();
   const [socket, setSocket] = useState<Socket>();
   const [guildId, setGuildId] = useState('817654492782657566');
   const [active, setActive] = useState(false);
 
   useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      Router.push('/login');
+    }
+    /* Connect to bot socket */
     const endpoint = `localhost:8000/bot`;
     setSocket(socketIOClient(endpoint));
 
@@ -54,6 +60,11 @@ const Home: NextPage = () => {
       });
     }
 
+    const username = localStorage.getItem('username');
+    if (!username) {
+      getDiscordUser();
+    }
+
     // TODO: Add socket.off on unmount
   }, []);
 
@@ -65,8 +76,7 @@ const Home: NextPage = () => {
       socket.emit('get_player', { guildId });
     });
 
-    socket.on('not_active', () => {
-    });
+    socket.on('not_active', () => {});
 
     socket.on('player_update', (payload: any) => {
       console.log(payload);
@@ -76,6 +86,35 @@ const Home: NextPage = () => {
       dispatch(setQueue(queue));
     });
   }, [socket]);
+
+  const getDiscordUser = async () => {
+    // Use localstorage if present
+    if (localStorage.getItem('username')) {
+      const id = localStorage.getItem('id');
+      const avatar = localStorage.getItem('avatar');
+      const username = localStorage.getItem('username');
+      return dispatch(setUser({ id, avatar, username }));
+    }
+
+    // Otherwise fetch data from server
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      Router.push('/login');
+    }
+
+    try {
+      const res = await axios.get('http://localhost:8000/discord/user', {
+        params: { accessToken },
+      });
+      const { id, username, avatar } = res.data;
+      localStorage.setItem('id', id);
+      localStorage.setItem('avatar', avatar);
+      localStorage.setItem('username', username);
+      return dispatch(setUser({ id, username, avatar }));
+    } catch (error) {
+      console.error('Error getting user');
+    }
+  };
 
   return (
     <div className={classes.home_container}>
