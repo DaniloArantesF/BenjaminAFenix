@@ -1,4 +1,4 @@
-import type { GetServerSidePropsContext, NextPage } from 'next';
+import type { NextPage } from 'next';
 import Router from 'next/router';
 import classes from '../styles/Home.module.css';
 import Queue from '../components/Queue/Queue';
@@ -13,14 +13,13 @@ import {
   selectPosition,
 } from '../components/Queue/queueSlice';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { QueueState } from '../components/Queue/queueSlice';
 import { Controls } from '../components/Button/Button';
 import { mockQueue } from '../mock/mockData';
 import socketIOClient, { io, Socket } from 'socket.io-client';
 import { PlayerState } from '../components/Player/playerSlice';
 import axios from 'axios';
-import { selectAuth, setUser } from '../app/authSlice';
+import { selectAuth, setUser, setUserGuilds, Guild, setCredentials } from '../app/authSlice';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -60,17 +59,13 @@ const Home: NextPage = () => {
       });
     }
 
-    const username = localStorage.getItem('username');
-    if (!username) {
-      getDiscordUser();
-    }
-
+    init();
     // TODO: Add socket.off on unmount
   }, []);
 
+  /* Handle bot socket events */
   useEffect(() => {
     if (!socket) return;
-
     socket.on('connect', () => {
       console.info('Connected to server!');
       socket.emit('get_player', { guildId });
@@ -79,30 +74,15 @@ const Home: NextPage = () => {
     socket.on('not_active', () => {});
 
     socket.on('player_update', (payload: any) => {
-      console.log(payload);
       const queue = payload.queue as QueueState;
       console.info('Client Queue Update');
-      console.info(queue);
       dispatch(setQueue(queue));
     });
   }, [socket]);
 
-  const getDiscordUser = async () => {
-    // Use localstorage if present
-    if (localStorage.getItem('username')) {
-      const id = localStorage.getItem('id');
-      const avatar = localStorage.getItem('avatar');
-      const username = localStorage.getItem('username');
-      return dispatch(setUser({ id, avatar, username }));
-    }
-
-    // Otherwise fetch data from server
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
-      Router.push('/login');
-    }
-
+  const getUserData = async (accessToken: string) => {
     try {
+      console.info("Fetching user data...");
       const res = await axios.get('http://localhost:8000/discord/user', {
         params: { accessToken },
       });
@@ -115,6 +95,49 @@ const Home: NextPage = () => {
       console.error('Error getting user');
     }
   };
+
+  const getUserGuilds = async (accessToken: string) => {
+    try {
+      console.info("Fetching user guilds...");
+      const res = await axios.get('http://localhost:8000/discord/guilds', {
+        params: { accessToken },
+      });
+
+      const guilds: Guild[] = res.data.guilds;
+      console.log(guilds);
+      return dispatch(setUserGuilds(guilds));
+    } catch (error) {
+      console.error('Error getting user guilds');
+    }
+  };
+
+  const init = () => {
+    console.log("Initializing Client...");
+    // Check that token is present
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    // Redirect to login if not
+    if (!accessToken || !refreshToken) {
+      return Router.push('/login');
+    }
+
+    // Set credentials
+    dispatch(setCredentials({ accessToken, refreshToken }));
+
+    // Set user Data
+    if (localStorage.getItem('username')) {
+      const id = localStorage.getItem('id');
+      const avatar = localStorage.getItem('avatar');
+      const username = localStorage.getItem('username');
+      dispatch(setUser({ id, avatar, username }));
+    } else {
+      getUserData(accessToken);
+    }
+
+    // Get user guilds
+    getUserGuilds(accessToken);
+  }
 
   return (
     <div className={classes.home_container}>

@@ -2,6 +2,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { AppState } from '../app/store';
 
+export interface Guild {
+  id: string;
+  name: string;
+  icon: string;
+  owner: boolean;
+}
+
 export interface AuthState {
   id: string;
   avatar: string;
@@ -10,6 +17,7 @@ export interface AuthState {
   refreshToken: string;
   refreshInterval: number;
   error: any;
+  guilds: Guild[];
 }
 
 const initialState: AuthState = {
@@ -20,6 +28,7 @@ const initialState: AuthState = {
   refreshToken: '',
   refreshInterval: 0,
   error: null,
+  guilds: [],
 }
 // Payload creator//
 export const fetchCredentials = createAsyncThunk('login', async (code: string, { rejectWithValue }) => {
@@ -38,6 +47,14 @@ export const authSlice = createSlice({
   reducers: {
     setUser: (state, { payload }) => {
       return { ...state, ...payload };
+    },
+    setUserGuilds: (state, { payload }) => {
+      state.guilds = payload;
+      return state;
+    },
+    setCredentials: (state, { payload }) => {
+      state.accessToken = payload.accessToken;
+      state.refreshToken = payload.refreshToken;
     },
   },
   extraReducers: (builder) => {
@@ -59,6 +76,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { setUser, setUserGuilds, setCredentials } = authSlice.actions;
 export const selectAuth = (state: AppState) => state.auth;
 export default authSlice.reducer;

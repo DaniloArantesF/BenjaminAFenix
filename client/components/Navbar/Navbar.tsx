@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Navbar.module.css';
-import Logo from '../../assets/BenjaminAFenix.svg';
+import Logo from '../../assets/Logo.svg';
 
 const Navbar = () => {
   return (
@@ -8,8 +8,11 @@ const Navbar = () => {
       <div className={classes.logo_container}>
         <Logo />
       </div>
-      <div className={classes.navLink}>Dashboard</div>
-      <div className={classes.navLink}>Commands</div>
+      <section>
+        
+      </section>
+      <div className={classes.navLink}>Help</div>
+      <div className={classes.navLink}>Logout</div>
     </div>
   );
 };
