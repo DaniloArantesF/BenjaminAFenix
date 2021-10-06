@@ -17,7 +17,7 @@ import {
   setQueue,
 } from './queueSlice';
 import classes from './Queue.module.css';
-import DraggableIcon from '../../assets/draggable_icon.svg';
+import DraggableIcon from '../../assets/draggable.svg';
 
 export interface QItem extends Track {
   itemPosition: number;
