@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './Navbar.module.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Logo from '../../assets/Logo.svg';
-import { Guild, selectDashboard } from '../../app/dashboardSlice';
+import { Guild, selectDashboard, setCurrentGuild } from '../../app/dashboardSlice';
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   const handleGuildUpdate = (newGuild: Guild) => {
-
+    dispatch(setCurrentGuild(newGuild));
   }
 
   return (

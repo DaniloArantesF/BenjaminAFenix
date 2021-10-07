@@ -9,12 +9,12 @@ export interface Guild {
 }
 
 export interface DashboardState {
-  selectedGuild: Guild | null;
+  currentGuild: Guild | null;
   guilds: Guild[];
 }
 
 const initialState: DashboardState = {
-  selectedGuild: null,
+  currentGuild: null,
   guilds: [],
 }
 
@@ -26,13 +26,13 @@ export const dashboardSlice = createSlice({
       state.guilds = payload;
       return state;
     },
-    selectGuild: (state, { payload }) => {
-      state.selectedGuild = payload;
+    setCurrentGuild: (state, { payload }) => {
+      state.currentGuild = payload;
       return state;
     }
   },
 });
 
-export const { setUserGuilds, } = dashboardSlice.actions;
+export const { setUserGuilds, setCurrentGuild } = dashboardSlice.actions;
 export const selectDashboard = (state: AppState) => state.dashboard;
 export default dashboardSlice.reducer;
