@@ -1,15 +1,12 @@
-import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchCredentials, selectAuth } from '../../store/authSlice';
 import classes from './Login.module.css';
 import Background from '../../assets/Background.svg';
-import Logo from '../../assets/Logo.svg';
+import Logo from '../../../assets/Logo.svg';
 import Button from '../../components/Button/Button';
-import Router from 'next/router';
 
-const DISCORD_AUTH_URL =
-  'https://discord.com/api/oauth2/authorize?client_id=712958072007688232&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&response_type=code&scope=identify%20guilds';
+const DISCORD_AUTH_URL = 'https://discord.com/api/oauth2/authorize?client_id=712958072007688232&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&response_type=code&scope=identify%20guilds';
 
 const Login = () => {
   const { accessToken } = useAppSelector(selectAuth);
@@ -33,8 +30,8 @@ const Login = () => {
 
   useEffect(() => {
     if (!accessToken) return;
-    Router.push('/');
-  }, [accessToken]);
+    //Router.push('/');
+  }, [ accessToken ]);
 
   return (
     <div className={classes.login_container}>
@@ -48,12 +45,8 @@ const Login = () => {
         <p>Use your discord account to log into your bot</p>
         <Button
           isActive={() => !loading}
-          action={() => {
-            location.href = DISCORD_AUTH_URL;
-          }}
-        >
-          Login using Discord!
-        </Button>
+          action={() => { location.href = DISCORD_AUTH_URL}}
+        >Login using Discord!</Button>
       </section>
     </div>
   );

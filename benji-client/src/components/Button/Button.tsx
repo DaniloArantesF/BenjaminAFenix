@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { previous, next, selectQueue } from '../../store/queueSlice';
 import { ActionCreator } from 'redux';
 import type { InputHandler } from '../../types/types';
-import { togglePlayer } from '../Player/playerSlice';
+import { togglePlayer } from '../../store/playerSlice';
 
 export const Controls = () => {
   const queue = useAppSelector(selectQueue);

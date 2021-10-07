@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { AppState } from '../../store/store';
-import { Track } from '../../types/types';
+import type { AppState } from './store';
+import { Track } from '../types/types';
 
 export interface PlayerState {
   currentTrack: Track | null;

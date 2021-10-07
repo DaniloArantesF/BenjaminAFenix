@@ -1,25 +1,23 @@
-import type { NextPage } from 'next';
-import Router from 'next/router';
-import classes from '../styles/Home.module.css';
-import Queue from '../components/Queue/Queue';
-import YoutubeEmbed from '../components/YoutubeEmbed/Youtube';
-import Navbar from '../components/Navbar/Navbar';
-import Search from '../components/Search/Search';
+import classes from './Dashboard.module.css';
+import Queue from '../../components/Queue/Queue';
+import YoutubeEmbed from '../../components/YoutubeEmbed/Youtube';
+import Navbar from '../../components/Navbar/Navbar';
+import Search from '../../components/Search/Search';
 import { useEffect, useState } from 'react';
-import Youtube from '../libs/Youtube';
+import Youtube from '../../libs/Youtube';
 import {
   selectItems,
   setQueue,
   selectPosition,
-} from '../app/queueSlice';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
-import type { QueueState } from '../app/queueSlice';
-import { Controls } from '../components/Button/Button';
+} from '../../store/queueSlice';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import type { QueueState } from '../../store/queueSlice';
+import { Controls } from '../../components/Button/Button';
 import socketIOClient, { Socket } from 'socket.io-client';
 import axios, { AxiosResponse } from 'axios';
-import { selectAuth, setUser, setCredentials } from '../app/authSlice';
-import type { Guild } from '../app/dashboardSlice';
-import { setUserGuilds } from '../app/dashboardSlice';
+import { selectAuth, setUser, setCredentials } from '../../store/authSlice';
+import type { Guild } from '../../store/dashboardSlice';
+import { setUserGuilds } from '../../store/dashboardSlice';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -28,7 +26,7 @@ export enum breakpoints {
   SMALL = 0,
 }
 
-const Home: NextPage = () => {
+const Home = () => {
   const [youtube, setYoutube] = useState(
     new Youtube(process.env.NEXT_PUBLIC_YOUTUBE_KEY || '')
   );
@@ -43,7 +41,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (!localStorage.getItem('accessToken')) {
-      Router.push('/login');
+      //Router.push('/login');
     }
     /* Connect to bot socket */
     const endpoint = `localhost:8000/bot`;
@@ -123,7 +121,8 @@ const Home: NextPage = () => {
 
     // Redirect to login if not
     if (!accessToken || !refreshToken) {
-      return Router.push('/login');
+      //return Router.push('/login');
+      return;
     }
 
     // Set credentials

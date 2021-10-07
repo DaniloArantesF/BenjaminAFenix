@@ -1,0 +1,101 @@
+.controls {
+  --border-width: 4px;
+  --duration: 50ms;
+  display: inline-flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn_container > button{
+  --border-width: 4px;
+  --duration: 200ms;
+  margin: 1em;
+  background: var(--clr-font);
+  border: none;
+  cursor: pointer;
+  line-height: 1.2;
+  font-weight: 700;
+  font-size: 1.2em;
+  padding: .5em 1em;
+  letter-spacing: 0.05em;
+}
+
+.btn_border {
+  box-shadow: inset 0 0 0 var(--border-width) var(--clr-surface2);
+  color: var(--clr-surface2);
+  font-weight: 900;
+  transition: color var(--duration) calc(var(--duration) / 3);
+  transition: background-color var(--duration);
+  position: relative;
+}
+
+.btn_border::before, .btn_border::after {
+  border: 0 solid transparent;
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+  height: 0;
+
+  /* where anim will begin from*/
+  top: 0;
+  left: 0;
+}
+
+.btn_border::before {
+  border-top-width: var(--border-width);
+  border-right-width: var(--border-width); /* opposite to starting */
+}
+
+.btn_border::after {
+  border-bottom-width: var(--border-width); /* opposite to starting */
+  border-left-width: var(--border-width);
+}
+
+.btn_border:focus {
+  animation: click 100ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+
+@keyframes click {
+  0% {
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.btn_border:hover {
+  background-color: var(--clr-accent);
+}
+
+.btn_border:hover::before, .btn_border:hover::after {
+  border-color: var(--clr-accent);
+  transition: border-color 0s, width var(--duration), height var(--duration);
+  width: 100%;
+  height: 100%;
+}
+
+.btn_border:hover::before {
+  transition-delay: 0s, 0s, var(--duration);
+}
+
+.btn_border:hover::after {
+  transition-delay: 0s, var(--duration), 0s;
+}
+
+
+.btn_border.btn_inactive, .btn_border.btn_inactive *  {
+  opacity: 20%;
+  color: var(--clr-font);
+  animation: none;
+  cursor: default;
+}
+
+.btn_border.btn_inactive:hover::before, .btn_border.btn_inactive:hover::after {
+  display: none;
+}

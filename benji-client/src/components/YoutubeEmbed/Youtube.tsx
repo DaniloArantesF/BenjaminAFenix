@@ -4,7 +4,7 @@ import { YoutubeProps } from '../../types/youtube';
 import YouTube from 'react-youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectStatus } from '../Player/playerSlice';
+import { selectStatus } from '../../store/playerSlice';
 const AUTOPLAY = 0;
 
 const YoutubeEmbed = ({ embedId }: YoutubeProps) => {

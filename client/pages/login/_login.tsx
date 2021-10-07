@@ -1,8 +1,8 @@
 import { sign } from 'crypto';
 import { NextPage } from 'next';
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { selectAuth } from '../../app/authSlice';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectAuth } from '../../store/authSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import classes from '../styles/Login.module.css';
 import { captalizeName } from '../../util/util';
 
@@ -42,8 +42,6 @@ const FormItem = ({
     </div>
   );
 };
-
-
 
 const Login: NextPage = () => {
   const dispatch = useAppDispatch();
