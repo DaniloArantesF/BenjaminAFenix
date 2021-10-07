@@ -19,7 +19,9 @@ import { mockQueue } from '../mock/mockData';
 import socketIOClient, { io, Socket } from 'socket.io-client';
 import { PlayerState } from '../components/Player/playerSlice';
 import axios from 'axios';
-import { selectAuth, setUser, setUserGuilds, Guild, setCredentials } from '../app/authSlice';
+import { selectAuth, setUser, setCredentials } from '../app/authSlice';
+import type { Guild } from '../app/dashboardSlice';
+import { setUserGuilds } from '../app/dashboardSlice';
 
 // TODO: manage layouts better
 export enum breakpoints {

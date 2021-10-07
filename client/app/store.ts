@@ -2,9 +2,11 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import queueReducer from '../components/Queue/queueSlice';
 import playerReducer from '../components/Player/playerSlice';
 import authReducer from '../app/authSlice';
+import dashboardReducer from '../app/dashboardSlice';
 
 export const store = configureStore({
   reducer: {
+    dashboard: dashboardReducer,
     queue: queueReducer,
     player: playerReducer,
     auth: authReducer,
