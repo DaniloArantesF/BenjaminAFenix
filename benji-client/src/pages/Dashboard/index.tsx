@@ -49,7 +49,7 @@ const Dashboard = () => {
       window.addEventListener('resize', function (event: UIEvent) {
         // fixing window is not defined see https://bit.ly/3k8w4lr
         const win = event.target as Window;
-        if (event.target && win.innerWidth != windowWidth)
+        if (event.target && win.innerWidth !== windowWidth)
           setWindowWidth(win.innerWidth);
       });
     }
