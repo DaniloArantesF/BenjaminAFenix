@@ -1,12 +1,12 @@
 import React from 'react';
 import classes from './Navbar.module.css';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
 import {
   Guild,
   selectDashboard,
   setCurrentGuild,
-} from '../../store/dashboardSlice';
+} from '../../app/dashboardSlice';
 
 const Navbar = () => {
   const dispatch = useAppDispatch();

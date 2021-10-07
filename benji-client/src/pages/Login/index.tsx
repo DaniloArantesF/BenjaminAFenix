@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchCredentials, selectAuth } from '../../store/authSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { fetchCredentials, selectAuth } from '../../app/authSlice';
 import classes from './Login.module.css';
 import { ReactComponent as Background } from '../../assets/Background.svg';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';

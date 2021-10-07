@@ -5,14 +5,14 @@ import Navbar from '../../components/Navbar/Navbar';
 import Search from '../../components/Search/Search';
 import { useEffect, useState } from 'react';
 import Youtube from '../../libs/Youtube';
-import { selectItems, setQueue, selectPosition } from '../../store/queueSlice';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import type { QueueState } from '../../store/queueSlice';
+import { selectItems, setQueue, selectPosition } from '../../app/queueSlice';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import type { QueueState } from '../../app/queueSlice';
 import socketIOClient, { Socket } from 'socket.io-client';
 import axios, { AxiosResponse } from 'axios';
-import { selectAuth, setUser, setCredentials } from '../../store/authSlice';
-import type { Guild } from '../../store/dashboardSlice';
-import { setUserGuilds } from '../../store/dashboardSlice';
+import { selectAuth, setUser, setCredentials } from '../../app/authSlice';
+import type { Guild } from '../../app/dashboardSlice';
+import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 
 // TODO: manage layouts better

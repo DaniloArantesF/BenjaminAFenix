@@ -4,8 +4,8 @@ import SearchBar from './SearchBar';
 import { YoutubeItem } from '../../types/youtube';
 import type { InputHandler, Track } from '../../types/types';
 import Youtube from '../../libs/Youtube';
-import { useAppDispatch } from '../../store/hooks';
-import { pushTrack } from '../../store/queueSlice';
+import { useAppDispatch } from '../../app/hooks';
+import { pushTrack } from '../../app/queueSlice';
 
 type SearchProps = {
   youtube: Youtube;

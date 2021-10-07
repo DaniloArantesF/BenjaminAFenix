@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import classes from './Button.module.css';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { previous, next, selectQueue } from '../../store/queueSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { previous, next, selectQueue } from '../../app/queueSlice';
 import { ActionCreator } from 'redux';
 import type { InputHandler } from '../../types/types';
-import { togglePlayer } from '../../store/playerSlice';
+import { togglePlayer } from '../../app/playerSlice';
 
 
 interface ButtonProps {
