@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Navbar.module.css';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import Logo from '../../assets/Logo.svg';
+import { ReactComponent as Logo } from '../../assets/Logo.svg';
 import {
   Guild,
   selectDashboard,

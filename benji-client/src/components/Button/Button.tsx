@@ -6,48 +6,6 @@ import { ActionCreator } from 'redux';
 import type { InputHandler } from '../../types/types';
 import { togglePlayer } from '../../store/playerSlice';
 
-export const Controls = () => {
-  const queue = useAppSelector(selectQueue);
-  const [active, setActive] = useState(false);
-
-  const btns = [
-    {
-      label: 'Prev',
-      icon: null,
-      isActive: () => queue.items.length > 1 && queue.position > 0,
-      action: previous,
-    },
-    {
-      label: 'Play',
-      icon: null,
-      isActive: () => queue.items.length > 0,
-      action: togglePlayer,
-    },
-    {
-      label: 'Next',
-      icon: null,
-      isActive: () =>
-        queue.items.length > 1 && queue.position + 1 < queue.items.length,
-      action: next,
-    },
-  ];
-
-  return (
-    <div className={`${classes.controls}`}>
-      {btns.map((btn, index) => {
-        return (
-          <Button
-            key={index}
-            action={btn.action}
-            isActive={() => btn.isActive()}
-          >
-            {btn.label}
-          </Button>
-        );
-      })}
-    </div>
-  );
-};
 
 interface ButtonProps {
   children: React.ReactNode;

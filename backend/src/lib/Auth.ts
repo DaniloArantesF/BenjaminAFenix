@@ -25,7 +25,9 @@ class Auth {
   public async getAccessToken(req: Request, res: Response) {
     const code = req.body.code;
     if (!code) {
-      return res.sendStatus(400);
+      return res.sendStatus(400).send({
+        message: "No code in request",
+      });
     }
 
     try {

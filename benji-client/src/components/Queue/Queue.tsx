@@ -8,7 +8,7 @@ import {
   setQueue,
 } from '../../store/queueSlice';
 import classes from './Queue.module.css';
-import DraggableIcon from '../../assets/draggable.svg';
+import { ReactComponent as DraggableIcon } from '../../assets/draggable.svg';
 
 export interface QItem extends Track {
   itemPosition: number;

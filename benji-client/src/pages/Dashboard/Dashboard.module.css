@@ -1,11 +1,11 @@
-.home_container {
+.dashboard_container {
   position: relative;
   height: 100vh;
   width: 100vw;
   display: flex;
 }
 
-.dashboard_container {
+.dashboard__body {
   width: 100%;
   height: 100%;
   display: inline-grid;
@@ -19,25 +19,25 @@
   padding: 2em 2em 2em 0em;
 }
 
-.dashboard_container > section {
+.dashboard__body > section {
   background-color: var(--clr-surface1);
   display: inline-flex;
   padding: 1em 0;
 }
 
-.dashboard_container > section:nth-child(1) {
+.dashboard__body > section:nth-child(1) {
   grid-area: vid;
   grid-row: span 1;
   background: none;
 }
 
-.dashboard_container > section:nth-child(2) {
+.dashboard__body > section:nth-child(2) {
   grid-area: que;
   grid-row: span 1;
   align-items: flex-start;
 }
 
-.dashboard_container > section:nth-child(3) {
+.dashboard__body > section:nth-child(3) {
   grid-area: info;
   height: 100%;
   display: inline-grid;

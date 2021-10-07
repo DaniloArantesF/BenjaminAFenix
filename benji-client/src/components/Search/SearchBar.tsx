@@ -1,7 +1,7 @@
 import React, { useState, useRef, RefObject } from 'react';
 import classes from './Search.module.css';
-import Logo from '../../assets/BenjaminAFenix.svg';
-import SearchIcon from '../../assets/search.svg';
+import { ReactComponent as Logo } from '../../assets/BenjaminAFenix.svg';
+import { ReactComponent as SearchIcon } from '../../assets/search.svg';
 import type { InputHandler } from '../../types/types';
 
 type SearchBarProps = {
