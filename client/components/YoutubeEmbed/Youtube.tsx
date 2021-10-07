@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import classes from './Youtube.module.css';
-import { YoutubeProps, YoutubeItem, ItemsEntity } from '../../types/youtube';
+import { YoutubeProps } from '../../types/youtube';
 import YouTube from 'react-youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';

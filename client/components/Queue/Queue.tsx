@@ -1,21 +1,12 @@
-import React, {
-  ReactElement,
-  SyntheticEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { SyntheticEvent, useRef, useState } from 'react';
 import { Track } from '../../types/types';
 import { msToMinSec } from '../../util/util';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
-  next,
-  previous,
   selectPosition,
-  setPosition,
   selectQueueLength,
   setQueue,
-} from './queueSlice';
+} from '../../app/queueSlice';
 import classes from './Queue.module.css';
 import DraggableIcon from '../../assets/draggable.svg';
 

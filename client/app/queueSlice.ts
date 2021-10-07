@@ -2,9 +2,9 @@
 // so that createSlice can correctly infer the type of state in each case
 // reducer
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { AppState } from '../../app/store';
-import type { Track } from '../../types/types';
-import { QItem } from './Queue';
+import type { AppState } from './store';
+import type { Track } from '../types/types';
+import { QItem } from '../components/Queue/Queue';
 
 // define type for slice state
 export interface QueueState {

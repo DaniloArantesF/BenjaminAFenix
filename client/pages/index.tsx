@@ -11,13 +11,11 @@ import {
   selectItems,
   setQueue,
   selectPosition,
-} from '../components/Queue/queueSlice';
+} from '../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import type { QueueState } from '../components/Queue/queueSlice';
+import type { QueueState } from '../app/queueSlice';
 import { Controls } from '../components/Button/Button';
-import { mockQueue } from '../mock/mockData';
-import socketIOClient, { io, Socket } from 'socket.io-client';
-import { PlayerState } from '../components/Player/playerSlice';
+import socketIOClient, { Socket } from 'socket.io-client';
 import axios from 'axios';
 import { selectAuth, setUser, setCredentials } from '../app/authSlice';
 import type { Guild } from '../app/dashboardSlice';

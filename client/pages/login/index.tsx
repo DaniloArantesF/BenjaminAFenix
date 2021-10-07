@@ -1,11 +1,11 @@
 import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { fetchCredentials, selectAuth } from '../app/authSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { fetchCredentials, selectAuth } from '../../app/authSlice';
 import classes from '../styles/Login.module.css';
 import Background from '../assets/Background.svg';
 import Logo from '../assets/Logo.svg';
-import Button from '../components/Button/Button';
+import Button from '../../components/Button/Button';
 import Router from 'next/router';
 
 const DISCORD_AUTH_URL = 'https://discord.com/api/oauth2/authorize?client_id=712958072007688232&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&response_type=code&scope=identify%20guilds';

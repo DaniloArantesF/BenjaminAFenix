@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classes from './Button.module.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { previous, next, selectQueue } from '../Queue/queueSlice';
+import { previous, next, selectQueue } from '../../app/queueSlice';
 import { ActionCreator } from 'redux';
 import type { InputHandler } from '../../types/types';
 import { togglePlayer } from '../Player/playerSlice';

@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import queueReducer from '../components/Queue/queueSlice';
+import queueReducer from './queueSlice';
 import playerReducer from '../components/Player/playerSlice';
 import authReducer from '../app/authSlice';
 import dashboardReducer from '../app/dashboardSlice';

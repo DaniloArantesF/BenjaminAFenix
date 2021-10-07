@@ -1,10 +1,10 @@
 import { sign } from 'crypto';
 import { NextPage } from 'next';
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { selectAuth, setUsername, setPassword } from '../app/authSlice';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { selectAuth } from '../../app/authSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import classes from '../styles/Login.module.css';
-import { captalizeName } from '../util/util';
+import { captalizeName } from '../../util/util';
 
 // https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
 const PASS_RE = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/);
@@ -57,7 +57,7 @@ const Login: NextPage = () => {
       type: 'text',
       handler: (event) => {
         event.preventDefault();
-        dispatch(setUsername(event.target.value));
+        //dispatch(setUsername(event.target.value));
       },
     },
     {
@@ -67,7 +67,7 @@ const Login: NextPage = () => {
       type: 'password',
       handler: (event) => {
         event.preventDefault();
-        dispatch(setPassword(event.target.value));
+        //dispatch(setPassword(event.target.value));
       },
     },
   ];
@@ -76,7 +76,7 @@ const Login: NextPage = () => {
   const validateFields = () => {
     return fields
       .map((field, index) => {
-        return field.isValid(auth[field.name] || '');
+        //return field.isValid(auth[field.name] || '');
       })
       .reduce((validSoFar, curField) => validSoFar && curField);
   };

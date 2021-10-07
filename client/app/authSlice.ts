@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { AppState } from '../app/store';
 
-
-
 export interface AuthState {
   id: string;
   avatar: string;

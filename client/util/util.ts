@@ -1,4 +1,3 @@
-import { stringify } from 'querystring';
 import { parse } from 'tinyduration';
 
 export type Duration = {
