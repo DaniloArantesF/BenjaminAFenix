@@ -2,9 +2,9 @@ import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchCredentials, selectAuth } from '../../app/authSlice';
-import classes from '../styles/Login.module.css';
-import Background from '../assets/Background.svg';
-import Logo from '../assets/Logo.svg';
+import classes from './Login.module.css';
+import Background from '../../assets/Background.svg';
+import Logo from '../../assets/Logo.svg';
 import Button from '../../components/Button/Button';
 import Router from 'next/router';
 

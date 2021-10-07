@@ -1,5 +1,5 @@
 import express from 'express';
-import Bot from './bot';
+import Bot from './Bot';
 import http from 'http';
 import cors from 'cors';
 import DiscordClient from './DiscordClient';

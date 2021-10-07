@@ -78,6 +78,10 @@ const Home: NextPage = () => {
       console.info('Client Queue Update');
       dispatch(setQueue(queue));
     });
+
+    socket.on('playback_state', (payload: any) => {
+      console.log(payload);
+    })
   }, [socket]);
 
   const getUserData = async (accessToken: string) => {

@@ -27,6 +27,8 @@ class PlayerController extends AudioPlayer {
   resource: AudioResource; // Current audio resource being played
   status: AudioPlayerStatus;
   volume: number;
+  playerInterval: NodeJS.Timer;
+  clientUpdateInterval: number; // Frequency with whitch clients will be updated
 
   constructor(guildId: string, channel: Namespace) {
     super();
@@ -35,6 +37,7 @@ class PlayerController extends AudioPlayer {
     this.guildId = guildId;
     this.volume = 1;
     this.channel = channel;
+    this.clientUpdateInterval = 1000;
 
     /* Player Events */
     this.on(AudioPlayerStatus.Idle, () => {
@@ -44,8 +47,11 @@ class PlayerController extends AudioPlayer {
 
       // make playr idle if no song left
       if (!nextTrack) {
-        console.info('Player going idle...');
+        console.info('No next title, going idle...');
+        // Stop tracking player state
+        clearInterval(this.playerInterval);
         this.status = AudioPlayerStatus.Idle;
+        this.broadcastPlaybackState();
       }
     });
 
@@ -55,17 +61,24 @@ class PlayerController extends AudioPlayer {
       );
       this.status = AudioPlayerStatus.Playing;
 
-      // Keep track of player progress
-      setInterval(() => {
-        const state = this.state as AudioPlayerPlayingState;
-        this.progress = state.playbackDuration;
-      }, 500);
+      // Keep track of player progress and update web clients
+      this.playerInterval = setInterval(() => {
+        this.broadcastPlaybackState();
+      }, this.clientUpdateInterval);
     });
 
     this.on(AudioPlayerStatus.Paused, () => {
+      console.info(
+        `[${new Date().getHours()}:${new Date().getMinutes()} ${new Date().getSeconds()}s] Paused.`
+      );
+
+      // Stop tracking player state
+      clearInterval(this.playerInterval);
       this.status = AudioPlayerStatus.Paused;
+      this.broadcastPlaybackState();
     });
 
+    // Handle update events coming from queue controller
     this.queueController.on('queue_update', this.updatePlayer.bind(this));
   }
 
@@ -79,11 +92,10 @@ class PlayerController extends AudioPlayer {
     let track;
 
     // Idle can either mean player has not been played or
-    // reached the end of the queue
+    // reached the end of the queue. Either case we need to update position.
     if (this.status === AudioPlayerStatus.Idle) {
       if (this.queueController.position === -1) {
         // Not initialized
-        console.info("Queue not init");
         this.queueController.position = 0;
         track = this.queueController.getTrack();
       } else {
@@ -91,11 +103,13 @@ class PlayerController extends AudioPlayer {
         this.queueController.position++;
         track = this.queueController.getTrack();
       }
-    } else { // Otherwise position is updated
+    } else {
+      // Otherwise position is already updated
       track = this.queueController.getTrack();
     }
 
-    if (!track) { // Return to avoid error
+    if (!track) {
+      // Return to avoid error
       return;
     }
     // Update current track and play new item
@@ -107,6 +121,25 @@ class PlayerController extends AudioPlayer {
 
     // Update web clients
     this.channel.to(this.guildId).emit('player_update', this.getPlayerState());
+  }
+
+  /**
+   * Periodically playback state to all web clients connected to this player instance.
+   */
+  private broadcastPlaybackState() {
+    const state = this.state as AudioPlayerPlayingState;
+
+    // Get current playback progress and save timestamp to
+    // TODO: account for latency later
+    this.progress = state.playbackDuration;
+    const timestamp = Date.now();
+
+    this.channel.to(this.guildId).emit('playback_state', {
+      status: this.status,
+      volume: this.volume,
+      progress: this.progress,
+      timestamp,
+    });
   }
 
   private playCurrentItem() {
@@ -141,9 +174,9 @@ class PlayerController extends AudioPlayer {
       volume,
       queue: {
         items: queueController.items,
-        position: queueController.position
-      }
-    }
+        position: queueController.position,
+      },
+    };
   }
 }
 
