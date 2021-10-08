@@ -20,6 +20,14 @@ const useSocket = () => {
 
   useEffect(() => {
     setSocket(socketIOClient(endpoint));
+
+    return () => {
+      socket?.off('connect');
+      socket?.off('not_active');
+      socket?.off('player_update');
+      socket?.off('playback_state');
+      socket?.disconnect();
+    };
   }, []);
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import cors from 'cors';
 import DiscordClient from './DiscordClient';
 import Auth from './lib/Auth';
 import DiscordAPI from './lib/Discord';
+import rateLimit from 'express-rate-limit';
 
 const PORT = 8000;
 
@@ -32,6 +33,14 @@ class App {
     this.express.use(express.json());
     this.express.use(cors());
     this.express.options('*', cors());
+
+    // Rate limiter
+    this.express.use(rateLimit({
+      windowMs: 60 * 1000, // One minute in ms,
+      max: 100,
+      message: 'Exceeded 100 requests/min',
+      headers: true,
+    }));
   }
 
   private routes() {
