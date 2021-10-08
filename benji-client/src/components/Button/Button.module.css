@@ -90,10 +90,14 @@
   transition-delay: 0s, var(--duration), 0s;
 }
 
+/* Disable hover background change*/
+.btn_border.btn_inactive:hover {
+  background: var(--clr-font);
+}
 
 .btn_border.btn_inactive, .btn_border.btn_inactive *  {
   opacity: 20%;
-  color: var(--clr-font);
+  color: var(--clr-surface1);
   animation: none;
   cursor: default;
 }

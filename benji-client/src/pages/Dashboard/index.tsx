@@ -129,7 +129,7 @@ const Dashboard = () => {
           )}
           {!active && (
             <div className={classes.inactive_btn}>
-              <Button isActive={() => true} onClick={ () => { console.log("click")}}>
+              <Button isActive={() => false} onClick={ () => { console.log("todo")}}>
                 Enable it!
               </Button>
             </div>

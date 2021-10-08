@@ -111,6 +111,9 @@ class DiscordClient extends Client {
         socket.emit('player_update', player.getPlayerState());
       });
 
+      socket.on('join_guild', (payload) => {
+      });
+
       socket.on('disconnect', (reason) => {
         // Remove socket from guild room and delete entry in clients map
         if (this.webClients.get(socket.id)) {
