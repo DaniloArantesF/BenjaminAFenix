@@ -10,6 +10,8 @@
 .btn_container > button{
   --border-width: 4px;
   --duration: 200ms;
+  min-width: 100px;
+  min-height: 75px;
   margin: 1em;
   background: var(--clr-font);
   border: none;

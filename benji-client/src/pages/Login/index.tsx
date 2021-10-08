@@ -10,6 +10,9 @@ import Button from '../../components/Button/Button';
 const DISCORD_AUTH_URL =
   'https://discord.com/api/oauth2/authorize?client_id=712958072007688232&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&response_type=code&scope=identify%20guilds';
 
+const BOT_INVITE_URL =
+  'https://discord.com/oauth2/authorize?client_id=712958072007688232&scope=bot';
+
 const Login = () => {
   const history = useHistory();
   const { accessToken } = useAppSelector(selectAuth);
@@ -45,16 +48,30 @@ const Login = () => {
         <h1>Benji.</h1>
       </header>
       <section>
-        <h1>Login</h1>
-        <p>Use your discord account to log into your bot</p>
-        <Button
-          isActive={() => !loading}
-          action={() => {
-            window.location.href = DISCORD_AUTH_URL;
-          }}
-        >
-          Login using Discord!
-        </Button>
+        <div>
+          <h1>New Here?</h1>
+          <p>Start by adding Benji to your server!</p>
+          <Button
+            isActive={() => !loading}
+            action={() => {
+              window.location.href = BOT_INVITE_URL;
+            }}
+          >
+            Add to Server!
+          </Button>
+        </div>
+        <div>
+          <h1>Login</h1>
+          <p>Use your discord account to log into your bot</p>
+          <Button
+            isActive={() => !loading}
+            action={() => {
+              window.location.href = DISCORD_AUTH_URL;
+            }}
+          >
+            Login using Discord!
+          </Button>
+        </div>
       </section>
     </div>
   );
