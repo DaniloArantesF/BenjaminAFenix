@@ -82,7 +82,8 @@ class DiscordClient extends Client {
     this.server.on('connection', (socket: Socket) => {
       socket.on('get_player', (payload) => {
 
-        const { guildId } = payload;
+        console.log("get_player")
+        const { id: guildId } = payload;
         const client = this.webClients.get(socket.id);
 
 
@@ -99,7 +100,7 @@ class DiscordClient extends Client {
           socket.leave(client.guildId);
         }
 
-        console.log(`Disconnecting ${socket.id} to ${client.guildId}`)
+        console.log(`Disconnecting ${socket.id} to ${guildId}`)
         socket.join(guildId);
 
         // Check if bot is active in this guild
@@ -114,8 +115,10 @@ class DiscordClient extends Client {
 
       socket.on('disconnect', (reason) => {
         // Remove socket from guild room and delete entry in clients map
-        socket.leave(this.webClients.get(socket.id).guildId);
-        this.webClients.delete(socket.id);
+        if (this.webClients.get(socket.id)) {
+          socket.leave(this.webClients.get(socket.id).guildId);
+          this.webClients.delete(socket.id);
+        }
       });
     });
   }

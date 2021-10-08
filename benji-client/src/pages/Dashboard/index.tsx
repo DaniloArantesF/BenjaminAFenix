@@ -9,7 +9,7 @@ import { selectItems, setQueue, selectPosition } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import axios, { AxiosResponse } from 'axios';
 import { selectAuth, setUser, setCredentials } from '../../app/authSlice';
-import type { Guild } from '../../app/dashboardSlice';
+import { Guild, setCurrentGuild } from '../../app/dashboardSlice';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
@@ -28,14 +28,14 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
   const position = useAppSelector(selectPosition);
-  const auth = useAppSelector(selectAuth);
+  const { accessToken } = useAppSelector(selectAuth);
   const [windowWidth, setWindowWidth] = useState<number>();
   const [active, setActive] = useState(false);
   const history = useHistory();
   const socket = useSocket();
 
   useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
+    if (!accessToken) {
       history.push('/login');
     }
 
@@ -52,7 +52,6 @@ const Dashboard = () => {
     init();
     // TODO: Add socket.off on unmount
   }, []);
-
 
   const getUserData = async (accessToken: string) => {
     try {
@@ -84,7 +83,14 @@ const Dashboard = () => {
       );
 
       const guilds: Guild[] = res.data.guilds;
-      console.log(guilds);
+      //console.log(guilds);
+
+      // TODO: maybe sort guilds by relevance ?
+      guilds.sort((item1, item2) => {
+        if (item1.name < item2.name) return -1;
+        if (item1.name > item2.name) return 1;
+        return 0;
+      });
       return dispatch(setUserGuilds(guilds));
     } catch (error) {
       console.error('Error getting user guilds');
@@ -118,6 +124,10 @@ const Dashboard = () => {
 
     // Get user guilds
     getUserGuilds(accessToken);
+
+    // Restore guild from last session
+    const guild: Guild = JSON.parse(localStorage.getItem('guild') || '{}');
+    if (guild?.id) dispatch(setCurrentGuild(guild));
   };
 
   return (

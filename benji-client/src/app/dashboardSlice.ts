@@ -28,6 +28,7 @@ export const dashboardSlice = createSlice({
     },
     setCurrentGuild: (state, { payload }) => {
       state.currentGuild = payload;
+      localStorage.setItem('guild', JSON.stringify(payload));
       return state;
     }
   },

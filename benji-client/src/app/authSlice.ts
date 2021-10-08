@@ -13,11 +13,11 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-  id: '',
-  avatar: '',
-  username: '',
-  accessToken: '',
-  refreshToken: '',
+  id: localStorage.getItem('id') || '',
+  avatar: localStorage.getItem('avatar') || '',
+  username: localStorage.getItem('username') || '',
+  accessToken: localStorage.getItem('accessToken') || '',
+  refreshToken: localStorage.getItem('refreshToken') || '',
   refreshInterval: 0,
   error: null,
 }

@@ -34,7 +34,6 @@ const useSocket = () => {
   }, [currentGuild, socket]);
 
   const setUpEvents = () => {
-    //console.log("Setting up socket events...")
     socket?.on('connect', () => {
       console.info('Connected to server!');
     });
