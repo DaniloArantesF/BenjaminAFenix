@@ -13,6 +13,7 @@ import { Guild, setCurrentGuild } from '../../app/dashboardSlice';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
+import Button from '../../components/Button/Button';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -78,7 +79,7 @@ const Dashboard = () => {
         }
       );
 
-      const guilds: Guild[] = res.data.guilds
+      const guilds: Guild[] = res.data.guilds;
       return dispatch(setUserGuilds(guilds));
     } catch (error) {
       console.error('Error getting user guilds');
@@ -123,13 +124,18 @@ const Dashboard = () => {
       <Navbar />
       <div className={classes.dashboard__body}>
         <section>
-          {items?.length > 0 && position >= 0 && (
+          {active && items?.length > 0 && position >= 0 && (
             <YoutubeEmbed embedId={items[position].id} />
           )}
+          {!active && (
+            <div className={classes.inactive_btn}>
+              <Button isActive={() => true} onClick={ () => { console.log("click")}}>
+                Enable it!
+              </Button>
+            </div>
+          )}
         </section>
-        <section>
-          <Queue items={items} />
-        </section>
+        <section>{active && <Queue items={items} />}</section>
         <section>
           <Search youtube={youtube} />{' '}
         </section>

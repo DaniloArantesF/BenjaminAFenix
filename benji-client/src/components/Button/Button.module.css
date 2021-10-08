@@ -24,7 +24,7 @@
 }
 
 .btn_border {
-  box-shadow: inset 0 0 0 var(--border-width) var(--clr-surface2);
+  box-shadow:  0 0 0 var(--border-width) var(--clr-surface2);
   color: var(--clr-surface2);
   font-weight: 900;
   transition: color var(--duration) calc(var(--duration) / 3);

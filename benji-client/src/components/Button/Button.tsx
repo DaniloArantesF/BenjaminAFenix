@@ -6,20 +6,24 @@ import { ActionCreator } from 'redux';
 import type { InputHandler } from '../../types/types';
 import { togglePlayer } from '../../app/playerSlice';
 
-
 interface ButtonProps {
   children: React.ReactNode;
-  action: ActionCreator<any>;
+  action?: ActionCreator<any>;
   isActive: () => boolean;
+  onClick?: () => any;
 }
 
-const Button = ({ children, action, isActive }: ButtonProps) => {
+const Button = ({ children, action, isActive, onClick }: ButtonProps) => {
   const dispatch = useAppDispatch();
   const active = isActive();
 
   const clickHandler: InputHandler = (event) => {
     if (!active) return;
-    dispatch(action());
+
+    if (action) dispatch(action());
+
+    if (onClick) onClick();
+
     event.target.blur();
   };
 

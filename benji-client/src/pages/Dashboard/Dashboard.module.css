@@ -20,6 +20,7 @@
 }
 
 .dashboard__body > section {
+  position: relative;
   background-color: var(--clr-surface1);
   display: inline-flex;
   padding: 1em 0;
@@ -28,7 +29,6 @@
 .dashboard__body > section:nth-child(1) {
   grid-area: vid;
   grid-row: span 1;
-  background: none;
 }
 
 .dashboard__body > section:nth-child(2) {
@@ -45,4 +45,12 @@
 }
 
 @media screen and (max-width: 1150px) {
+}
+
+
+.inactive_btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
