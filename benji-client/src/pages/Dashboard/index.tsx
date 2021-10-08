@@ -7,13 +7,12 @@ import { useEffect, useState } from 'react';
 import Youtube from '../../libs/Youtube';
 import { selectItems, setQueue, selectPosition } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import type { QueueState } from '../../app/queueSlice';
-import socketIOClient, { Socket } from 'socket.io-client';
 import axios, { AxiosResponse } from 'axios';
 import { selectAuth, setUser, setCredentials } from '../../app/authSlice';
 import type { Guild } from '../../app/dashboardSlice';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
+import useSocket from '../../app/useSocket';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -31,18 +30,14 @@ const Dashboard = () => {
   const position = useAppSelector(selectPosition);
   const auth = useAppSelector(selectAuth);
   const [windowWidth, setWindowWidth] = useState<number>();
-  const [socket, setSocket] = useState<Socket>();
-  const [guildId, setGuildId] = useState('817654492782657566');
   const [active, setActive] = useState(false);
   const history = useHistory();
+  const socket = useSocket();
 
   useEffect(() => {
     if (!localStorage.getItem('accessToken')) {
       history.push('/login');
     }
-    /* Connect to bot socket */
-    const endpoint = `localhost:8000/bot`;
-    setSocket(socketIOClient(endpoint));
 
     if (window) {
       // Window resizes should affect the sidebar position
@@ -58,30 +53,10 @@ const Dashboard = () => {
     // TODO: Add socket.off on unmount
   }, []);
 
-  /* Handle bot socket events */
-  useEffect(() => {
-    if (!socket) return;
-    socket.on('connect', () => {
-      console.info('Connected to server!');
-      socket.emit('get_player', { guildId });
-    });
-
-    socket.on('not_active', () => {});
-
-    socket.on('player_update', (payload: any) => {
-      const queue = payload.queue as QueueState;
-      console.info('Client Queue Update');
-      dispatch(setQueue(queue));
-    });
-
-    socket.on('playback_state', (payload: any) => {
-      console.log(payload);
-    });
-  }, [socket]);
 
   const getUserData = async (accessToken: string) => {
     try {
-      console.info('Fetching user data...');
+      //console.info('Fetching user data...');
       const res: AxiosResponse<any> = await axios.get(
         'http://localhost:8000/discord/user',
         {
@@ -100,7 +75,7 @@ const Dashboard = () => {
 
   const getUserGuilds = async (accessToken: string) => {
     try {
-      console.info('Fetching user guilds...');
+      //console.info('Fetching user guilds...');
       const res: AxiosResponse<any> = await axios.get(
         'http://localhost:8000/discord/guilds',
         {

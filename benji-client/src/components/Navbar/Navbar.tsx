@@ -30,6 +30,7 @@ const Navbar = () => {
   };
 
   const handleGuildUpdate = (newGuild: Guild) => {
+    console.log("Switching guilds")
     dispatch(setCurrentGuild(newGuild));
   };
 
@@ -41,12 +42,15 @@ const Navbar = () => {
       <section className={classes.guilds_container}>
         {guilds.map((guild, index) => {
           return (
-            <div className={classes.guildIcon} key={index}>
+            <div className={classes.guildIcon}
+              key={index}
+              onClick={() => handleGuildUpdate(guild)}
+            >
               {guild.icon ? (
                 <img
                   src={getDiscordAvatar('guild', guild.id, guild.icon)}
                   alt={guild.name}
-                  onClick={() => handleGuildUpdate(guild)}
+
                 />
               ) : (
                 <h2>{guild.name.substring(0, 1)}</h2>

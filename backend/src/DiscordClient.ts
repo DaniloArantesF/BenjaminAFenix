@@ -4,8 +4,6 @@ import { joinVoiceChannel, VoiceConnection } from '@discordjs/voice';
 import type { ClientOptions } from 'discord.js';
 import { CommandInteraction } from 'discord.js';
 import PlayerController from './PlayerController';
-import type { YoutubeItem } from './lib/Youtube.d';
-import { APIMessage } from 'discord-api-types';
 import { Namespace, Server, Socket } from 'socket.io';
 
 export interface Command {
@@ -42,12 +40,22 @@ export interface DiscordConnection {
   player: PlayerController;
 }
 
+// Web clients are created in the connection event handler
+// Each web client is connected to one guild at a time
+// On get_player event handler you should check if that client is
+// already connected and if so leave the previous guild
+export interface WebClient {
+  socket: Socket;
+  guildId: string;
+}
+
 class DiscordClient extends Client {
   static commands = new Collection<string, Command>();
   connections: Map<string, DiscordConnection | null>;
   ready: boolean;
   server: Namespace;
-  webClients: Map<string, Socket[]>; // Holds clients connected to guild
+  webClients: Map<string, WebClient>; // Maps socket.id to web client
+
   constructor(props: ClientOptions, io: Server) {
     super(props);
     this.ready = false;
@@ -57,15 +65,14 @@ class DiscordClient extends Client {
     this.setUpCommands();
     // this.setUpEvents();
 
+    /* Discord Events */
     this.on('ready', () => {
       console.log('Bot is ready!');
 
-      // Init data structures for all guilds
+      // create empty connections to avoid errors
       const guildIds = this.guilds.cache.map((guild) => guild.id);
-
       guildIds.forEach((guildId) => {
         this.connections.set(guildId, null);
-        this.webClients.set(guildId, []);
       });
 
       this.ready = true;
@@ -73,17 +80,26 @@ class DiscordClient extends Client {
 
     /* Socket.io Events */
     this.server.on('connection', (socket: Socket) => {
-      // console.info(`WebClient ${socket.id} connected`);
       socket.on('get_player', (payload) => {
-        const { guildId } = payload;
-        const guildClients = this.webClients.get(guildId);
 
-        if (!guildClients) {
-          return console.info('Client connected to non-existent guild');
+        const { guildId } = payload;
+        const client = this.webClients.get(socket.id);
+
+
+        // New client
+        if (!client) {
+          console.log(`Creating new client in ${guildId}`)
+          this.webClients.set(socket.id, {
+            socket,
+            guildId,
+          });
+        } else {
+          // Disconnect client from previous room before joining
+          console.log(`Disconnecting ${socket.id} from ${client.guildId}`)
+          socket.leave(client.guildId);
         }
 
-        // Save new socket and join user to room
-        guildClients.push(socket);
+        console.log(`Disconnecting ${socket.id} to ${client.guildId}`)
         socket.join(guildId);
 
         // Check if bot is active in this guild
@@ -97,8 +113,9 @@ class DiscordClient extends Client {
       });
 
       socket.on('disconnect', (reason) => {
-        // Remove disconnected client
-        // console.info(`WebClient ${socket.id} disconnected for ${reason}`);
+        // Remove socket from guild room and delete entry in clients map
+        socket.leave(this.webClients.get(socket.id).guildId);
+        this.webClients.delete(socket.id);
       });
     });
   }
@@ -150,7 +167,6 @@ class DiscordClient extends Client {
         connection,
         player,
       });
-      this.webClients.set(guild.id, []);
       return { connection, player };
     } catch (error) {
       console.error(error);
