@@ -81,15 +81,13 @@ class DiscordClient extends Client {
     /* Socket.io Events */
     this.server.on('connection', (socket: Socket) => {
       socket.on('get_player', (payload) => {
-
-        console.log("get_player")
         const { id: guildId } = payload;
         const client = this.webClients.get(socket.id);
 
 
         // New client
         if (!client) {
-          console.log(`Creating new client in ${guildId}`)
+          console.log(`Creating new client ${socket.id}.`)
           this.webClients.set(socket.id, {
             socket,
             guildId,
@@ -100,7 +98,7 @@ class DiscordClient extends Client {
           socket.leave(client.guildId);
         }
 
-        console.log(`Disconnecting ${socket.id} to ${guildId}`)
+        console.log(`Connecting ${socket.id} to ${guildId}`)
         socket.join(guildId);
 
         // Check if bot is active in this guild

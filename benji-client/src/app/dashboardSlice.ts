@@ -23,6 +23,13 @@ export const dashboardSlice = createSlice({
   initialState,
   reducers: {
     setUserGuilds: (state, { payload }) => {
+      // TODO: maybe sort guilds by relevance ?
+      payload.sort((item1: Guild, item2: Guild) => {
+        if (item1.name < item2.name) return -1;
+        if (item1.name > item2.name) return 1;
+        return 0;
+      });
+
       state.guilds = payload;
       return state;
     },

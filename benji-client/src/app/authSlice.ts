@@ -38,6 +38,9 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, { payload }) => {
+      localStorage.setItem('id', payload.id);
+      localStorage.setItem('avatar', payload.avatar);
+      localStorage.setItem('username', payload.username);
       return { ...state, ...payload };
     },
     setCredentials: (state, { payload }) => {

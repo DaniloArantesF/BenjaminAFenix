@@ -50,7 +50,6 @@ const Dashboard = () => {
     }
 
     init();
-    // TODO: Add socket.off on unmount
   }, []);
 
   const getUserData = async (accessToken: string) => {
@@ -63,9 +62,6 @@ const Dashboard = () => {
         }
       );
       const { id, username, avatar } = res.data;
-      localStorage.setItem('id', id);
-      localStorage.setItem('avatar', avatar);
-      localStorage.setItem('username', username);
       return dispatch(setUser({ id, username, avatar }));
     } catch (error) {
       console.error('Error getting user');
@@ -82,15 +78,7 @@ const Dashboard = () => {
         }
       );
 
-      const guilds: Guild[] = res.data.guilds;
-      //console.log(guilds);
-
-      // TODO: maybe sort guilds by relevance ?
-      guilds.sort((item1, item2) => {
-        if (item1.name < item2.name) return -1;
-        if (item1.name > item2.name) return 1;
-        return 0;
-      });
+      const guilds: Guild[] = res.data.guilds
       return dispatch(setUserGuilds(guilds));
     } catch (error) {
       console.error('Error getting user guilds');
