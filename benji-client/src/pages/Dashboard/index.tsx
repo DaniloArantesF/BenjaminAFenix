@@ -9,11 +9,12 @@ import { selectItems, setQueue, selectPosition } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import axios, { AxiosResponse } from 'axios';
 import { selectAuth, setUser, setCredentials } from '../../app/authSlice';
-import { Guild, setCurrentGuild } from '../../app/dashboardSlice';
+import { Channel, Guild, selectDashboard, setCurrentGuild } from '../../app/dashboardSlice';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
 import Button from '../../components/Button/Button';
+import { getGuildVoiceChannels } from '../../libs/Discord';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -21,6 +22,53 @@ export enum breakpoints {
   MEDIUM = 850,
   SMALL = 0,
 }
+
+interface InactiveGuildProps {
+  guildId: string;
+}
+
+const InactiveGuild = (props: InactiveGuildProps) => {
+  const [channels, setChannels] = useState<Channel[]>();
+  const { currentGuild } = useAppSelector(selectDashboard);
+
+  const joinChannel = (channel: Channel) => {
+    console.log(props);
+  };
+
+  useEffect(() => {
+    if (!currentGuild) return;
+    getChannels(currentGuild.id);
+  }, [currentGuild]);
+
+  const getChannels = async (guildId: string) => {
+    const channels = await getGuildVoiceChannels(guildId);
+    setChannels(channels);
+  }
+
+  return (
+    <div className={classes.dashboard_container}>
+      <Navbar />
+      <div className={classes.dashboard__body}>
+        <section>
+          {channels?.map((channel) => {
+            return (
+              <div>
+                <Button
+                  isActive={() => true}
+                  onClick={() => joinChannel(channel)}
+                >
+                  {channel.name}
+                </Button>
+              </div>
+            );
+          })}
+        </section>
+        <section></section>
+        <section></section>
+      </div>
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const [youtube, setYoutube] = useState(
@@ -34,6 +82,7 @@ const Dashboard = () => {
   const [active, setActive] = useState(false);
   const history = useHistory();
   const socket = useSocket();
+  const { currentGuild } = useAppSelector(selectDashboard);
 
   useEffect(() => {
     if (!accessToken) {
@@ -119,6 +168,8 @@ const Dashboard = () => {
     if (guild?.id) dispatch(setCurrentGuild(guild));
   };
 
+  if (!active) return <InactiveGuild guildId={currentGuild?.id || ''} />;
+
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
@@ -127,9 +178,14 @@ const Dashboard = () => {
           {active && items?.length > 0 && position >= 0 && (
             <YoutubeEmbed embedId={items[position].id} />
           )}
-          {!active && (
+          {!active && ( // Inactive Guild
             <div className={classes.inactive_btn}>
-              <Button isActive={() => false} onClick={ () => { console.log("todo")}}>
+              <Button
+                isActive={() => false}
+                onClick={() => {
+                  console.log('todo');
+                }}
+              >
                 Enable it!
               </Button>
             </div>

@@ -78,14 +78,14 @@ class DiscordAPI {
   }
 
   public async getGuildVoiceChannels(req: Request, res: Response) {
-    const { guild_id: guildId } = req.query;
+    const { guildId } = req.query;
     if (!guildId) return res.sendStatus(400);
     if (!this.client) return res.sendStatus(500);
 
-    const channels = this.client.guilds.cache.get(guildId as string).channels
+    const channels = this.client.guilds.cache.get(guildId as string)?.channels
       .cache;
     const data = [];
-
+    if (!channels) return res.sendStatus(404);
     for (const channelId of channels.keys()) {
       const { type, id, name } = channels.get(channelId);
       if (type === 'GUILD_VOICE') data.push({ type, id, name });

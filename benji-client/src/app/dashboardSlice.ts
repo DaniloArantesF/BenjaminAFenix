@@ -8,13 +8,22 @@ export interface Guild {
   owner: boolean;
 }
 
+export interface Channel {
+  type: string;
+  id: string;
+  name: string;
+}
+
 export interface DashboardState {
   currentGuild: Guild | null;
   guilds: Guild[];
+  channel: Channel | null;
 }
+
 
 const initialState: DashboardState = {
   currentGuild: null,
+  channel: null,
   guilds: [],
 }
 
