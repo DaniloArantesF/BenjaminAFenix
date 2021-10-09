@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import axios, { AxiosResponse } from 'axios';
+import DiscordClient from '../DiscordClient';
 require('dotenv').config();
 
 const clientId = process.env.DISCORD_CLIENT_ID;
@@ -31,11 +32,18 @@ interface GuildData {
 
 class DiscordAPI {
   router: Router;
+  client: DiscordClient;
 
   constructor() {
     this.router = Router();
-    this.router.get('/user', this.getDiscordUser);
-    this.router.get('/guilds', this.getUserGuilds);
+    this.router.get('/user', this.getDiscordUser.bind(this));
+    this.router.get('/guilds', this.getUserGuilds.bind(this));
+    this.router.get('/channels', this.getGuildVoiceChannels.bind(this));
+    this.client = null;
+  }
+
+  public setClient(client: DiscordClient) {
+    this.client = client;
   }
 
   public async getDiscordUser(req: Request, res: Response) {
@@ -67,6 +75,25 @@ class DiscordAPI {
       }
     );
     return res.send({ guilds: guildsRes.data });
+  }
+
+  public async getGuildVoiceChannels(req: Request, res: Response) {
+    const { guild_id: guildId } = req.query;
+    if (!guildId) return res.sendStatus(400);
+    if (!this.client) return res.sendStatus(500);
+
+    const channels = this.client.guilds.cache.get(guildId as string).channels
+      .cache;
+    const data = [];
+
+    for (const channelId of channels.keys()) {
+      const { type, id, name } = channels.get(channelId);
+      if (type === 'GUILD_VOICE') data.push({ type, id, name });
+    }
+
+    return res.send({
+      channels: data,
+    });
   }
 }
 

@@ -21,7 +21,10 @@ class App {
 
     // Set up web server to use with socket.io
     this.server = http.createServer(this.express);
+
+    // Create bot client and pass it to API
     this.bot = Bot(this.server);
+    DiscordAPI.setClient(this.bot);
 
     this.server.listen(PORT, () => {
       console.log(`Server listening at ${PORT}`);
