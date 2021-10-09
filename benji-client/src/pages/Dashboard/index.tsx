@@ -137,7 +137,7 @@ const Dashboard = () => {
         </section>
         <section>{active && <Queue items={items} />}</section>
         <section>
-          <Search youtube={youtube} />{' '}
+          <Search youtube={youtube} />
         </section>
       </div>
     </div>

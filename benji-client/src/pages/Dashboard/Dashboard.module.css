@@ -16,7 +16,7 @@
   grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr 0.4fr;
   gap: 1em;
-  padding: 2em 2em 2em 0em;
+  padding: 5% 2em;
 }
 
 .dashboard__body > section {

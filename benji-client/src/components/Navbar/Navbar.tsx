@@ -59,8 +59,10 @@ const Navbar = () => {
           );
         })}
       </section>
-      <div className={classes.navLink}>Help</div>
-      <div className={classes.navLink}>Logout</div>
+      <section className={classes.navbar__footer}>
+        <div className={classes.navLink}>Help</div>
+        <div className={classes.navLink}>Logout</div>
+      </section>
     </div>
   );
 };
