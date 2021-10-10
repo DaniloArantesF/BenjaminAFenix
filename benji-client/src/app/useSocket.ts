@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './hooks';
 import socketIOClient, { Socket } from 'socket.io-client';
-import { selectDashboard } from './dashboardSlice';
+import { selectDashboard, setActive } from './dashboardSlice';
 import { QueueState, setQueue } from './queueSlice';
 
 const endpoint = `localhost:8000/bot`;
@@ -15,7 +15,7 @@ interface PlaybackState {
 
 const useSocket = () => {
   const dispatch = useAppDispatch();
-  const { currentGuild } = useAppSelector(selectDashboard);
+  const { currentGuild, active } = useAppSelector(selectDashboard);
   const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
@@ -53,6 +53,9 @@ const useSocket = () => {
     socket?.on('player_update', (payload: any) => {
       const queue = payload.queue as QueueState;
       dispatch(setQueue(queue));
+      if (!active) {
+        dispatch(setActive(true));
+      }
     });
 
     // Triggered periodically to update state of playback

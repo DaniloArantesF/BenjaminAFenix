@@ -84,21 +84,20 @@ class DiscordClient extends Client {
         const { id: guildId } = payload;
         const client = this.webClients.get(socket.id);
 
-
         // New client
         if (!client) {
-          console.log(`Creating new client ${socket.id}.`)
+          console.log(`Creating new client ${socket.id}.`);
           this.webClients.set(socket.id, {
             socket,
             guildId,
           });
         } else {
           // Disconnect client from previous room before joining
-          console.log(`Disconnecting ${socket.id} from ${client.guildId}`)
+          console.log(`Disconnecting ${socket.id} from ${client.guildId}`);
           socket.leave(client.guildId);
         }
 
-        console.log(`Connecting ${socket.id} to ${guildId}`)
+        console.log(`Connecting ${socket.id} to ${guildId}`);
         socket.join(guildId);
 
         // Check if bot is active in this guild
@@ -111,7 +110,12 @@ class DiscordClient extends Client {
         socket.emit('player_update', player.getPlayerState());
       });
 
-      socket.on('join_guild', (payload) => {
+      socket.on('join_channel', async (payload) => {
+        const { guildId, channelId } = payload;
+
+        const guild = this.guilds.cache.get(guildId);
+        const { player } = await this.joinChannel(guild, channelId);
+        socket.emit('player_update', player.getPlayerState());
       });
 
       socket.on('disconnect', (reason) => {

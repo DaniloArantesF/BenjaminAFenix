@@ -9,7 +9,12 @@ import { selectItems, setQueue, selectPosition } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import axios, { AxiosResponse } from 'axios';
 import { selectAuth, setUser, setCredentials } from '../../app/authSlice';
-import { Channel, Guild, selectDashboard, setCurrentGuild } from '../../app/dashboardSlice';
+import {
+  Channel,
+  Guild,
+  selectDashboard,
+  setCurrentGuild,
+} from '../../app/dashboardSlice';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
@@ -24,16 +29,12 @@ export enum breakpoints {
 }
 
 interface InactiveGuildProps {
-  guildId: string;
+  joinChannel: (guildId: string, channelId: string) => void;
 }
 
-const InactiveGuild = (props: InactiveGuildProps) => {
+const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
   const [channels, setChannels] = useState<Channel[]>();
   const { currentGuild } = useAppSelector(selectDashboard);
-
-  const joinChannel = (channel: Channel) => {
-    console.log(props);
-  };
 
   useEffect(() => {
     if (!currentGuild) return;
@@ -43,7 +44,7 @@ const InactiveGuild = (props: InactiveGuildProps) => {
   const getChannels = async (guildId: string) => {
     const channels = await getGuildVoiceChannels(guildId);
     setChannels(channels);
-  }
+  };
 
   return (
     <div className={classes.dashboard_container}>
@@ -55,7 +56,9 @@ const InactiveGuild = (props: InactiveGuildProps) => {
               <div>
                 <Button
                   isActive={() => true}
-                  onClick={() => joinChannel(channel)}
+                  onClick={() =>
+                    joinChannel(currentGuild?.id || '', channel.id)
+                  }
                 >
                   {channel.name}
                 </Button>
@@ -79,10 +82,9 @@ const Dashboard = () => {
   const position = useAppSelector(selectPosition);
   const { accessToken } = useAppSelector(selectAuth);
   const [windowWidth, setWindowWidth] = useState<number>();
-  const [active, setActive] = useState(false);
   const history = useHistory();
-  const socket = useSocket();
-  const { currentGuild } = useAppSelector(selectDashboard);
+  const { socket } = useSocket();
+  const { currentGuild, active } = useAppSelector(selectDashboard);
 
   useEffect(() => {
     if (!accessToken) {
@@ -168,7 +170,17 @@ const Dashboard = () => {
     if (guild?.id) dispatch(setCurrentGuild(guild));
   };
 
-  if (!active) return <InactiveGuild guildId={currentGuild?.id || ''} />;
+  const joinChannel = (guildId: string, channelId: string) => {
+    if (!guildId || !socket) return;
+    socket?.emit('join_channel', { guildId, channelId });
+  };
+
+  if (!active)
+    return (
+      <InactiveGuild
+        joinChannel={joinChannel}
+      />
+    );
 
   return (
     <div className={classes.dashboard_container}>

@@ -6,7 +6,7 @@
     * ~~Create page for inactive guild~~
     * ~~Redirect users to add bot to other servers~~
     * Add alt text to guilds
-    * Make bot join channels through UI
+    * ~~Make bot join channels through UI~~
   - Errors
     * Redirect users on failed requests
 
