@@ -1,12 +1,13 @@
 .search_container {
   --thumb-width: 120px;
   --thumb-height: 90px;
+  position: relative;
   display: inline-grid;
-  max-width: 900px;
-  grid-template-columns: 100%;
+  width: 100%;
   grid-template-rows: 50px 1fr;
   gap: 1em;
   padding: 0.5em;
+  justify-content: center;
 }
 
 .search_container > ul {
@@ -53,7 +54,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: fit-content;
+  width: auto;
+  max-width: 300px;
   height: 3rem;
   background-color: var(--clr-surface2);
   padding: 0.1em 0.5em;
