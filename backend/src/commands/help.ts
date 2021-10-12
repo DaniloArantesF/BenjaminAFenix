@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Track, Command } from '../DiscordClient';
-import { getYoutubeUrl } from '../lib/Youtube';
+import { getYoutubeUrl } from '../apis/Youtube';
 import { MessageEmbed } from 'discord.js';
 import DiscordClient from '../DiscordClient';
 

@@ -41,7 +41,6 @@
   grid-area: info;
   height: 100%;
   display: inline-grid;
-  grid-template-rows: minmax(100px, 30%) 1fr;
 }
 
 @media screen and (max-width: 1150px) {

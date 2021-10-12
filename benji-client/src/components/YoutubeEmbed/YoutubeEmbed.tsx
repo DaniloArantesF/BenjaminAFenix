@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import classes from './Youtube.module.css';
+import classes from './YoutubeEmbed.module.css';
 import { YoutubeProps } from '../../types/youtube';
 import YouTube from 'react-youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';

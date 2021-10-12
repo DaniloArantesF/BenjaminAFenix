@@ -7,7 +7,7 @@ import {
   getYoutubeItem,
   getYoutubeUrl,
   searchYoutube,
-} from '../lib/Youtube';
+} from '../apis/Youtube';
 import { MessageEmbed } from 'discord.js';
 
 export const PlayEmbed = (topItems: Track[]) => {

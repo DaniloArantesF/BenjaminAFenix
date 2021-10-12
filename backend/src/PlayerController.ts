@@ -9,7 +9,7 @@ import {
 import ytdl from 'ytdl-core';
 import type { Track } from './DiscordClient';
 import QueueController from './QueueController';
-import { getYoutubeUrl } from './lib/Youtube';
+import { getYoutubeUrl } from './apis/Youtube';
 import { Message } from 'discord.js';
 import { Namespace } from 'socket.io';
 

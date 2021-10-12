@@ -1,10 +1,9 @@
 import classes from './Dashboard.module.css';
 import Queue from '../../components/Queue/Queue';
-import YoutubeEmbed from '../../components/YoutubeEmbed/Youtube';
+import YoutubeEmbed from '../../components/YoutubeEmbed/YoutubeEmbed';
 import Navbar from '../../components/Navbar/Navbar';
 import Search from '../../components/Search/Search';
 import { useEffect, useState } from 'react';
-import Youtube from '../../libs/Youtube';
 import { selectItems, setQueue, selectPosition } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import axios, { AxiosResponse } from 'axios';
@@ -74,9 +73,6 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
 };
 
 const Dashboard = () => {
-  const [youtube, setYoutube] = useState(
-    new Youtube(process.env.NEXT_PUBLIC_YOUTUBE_KEY || '')
-  );
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
   const position = useAppSelector(selectPosition);
@@ -205,7 +201,7 @@ const Dashboard = () => {
         </section>
         <section>{active && <Queue items={items} />}</section>
         <section>
-          <Search youtube={youtube} />
+          <Search />
         </section>
       </div>
     </div>

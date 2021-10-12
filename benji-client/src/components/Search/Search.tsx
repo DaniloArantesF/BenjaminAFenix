@@ -3,20 +3,16 @@ import classes from './Search.module.css';
 import SearchBar from './SearchBar';
 import { YoutubeItem } from '../../types/youtube';
 import type { InputHandler, Track } from '../../types/types';
-import Youtube from '../../libs/Youtube';
 import { useAppDispatch } from '../../app/hooks';
 import { pushTrack } from '../../app/queueSlice';
-
-type SearchProps = {
-  youtube: Youtube;
-};
+import { getYoutubeItem, searchYoutube } from '../../libs/Youtube';
 
 type SearchItemProps = {
   item: YoutubeItem;
   selectItem: (item: YoutubeItem) => void;
 };
 
-const Search = ({ youtube }: SearchProps) => {
+const Search = () => {
   const dispatch = useAppDispatch();
   const [query, setQuery] = useState('');
   const [items, setItems] = useState<Array<YoutubeItem>>([]);
@@ -25,7 +21,7 @@ const Search = ({ youtube }: SearchProps) => {
   // search items dont contain some info to construct track
   // fetch new data
   const getTrackFromItem = async (item: YoutubeItem) => {
-    const res = await youtube.getItemFromId(item.id);
+    const res = await getYoutubeItem(item.id);
     return {
       channelTitle: res.channelTitle,
       duration: res.duration,
@@ -56,7 +52,7 @@ const Search = ({ youtube }: SearchProps) => {
     event.preventDefault();
     setLoading(true);
     setQuery('');
-    const data = await youtube.search(query);
+    const data = await searchYoutube(query);
     setItems(data || []);
     setLoading(false);
     return 0;

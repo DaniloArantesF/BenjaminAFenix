@@ -3,8 +3,9 @@ import Bot from './Bot';
 import http from 'http';
 import cors from 'cors';
 import DiscordClient from './DiscordClient';
-import Auth from './lib/Auth';
-import DiscordAPI from './lib/Discord';
+import Auth from './apis/Auth';
+import DiscordAPI from './apis/Discord';
+import YoutubeAPI from './apis/Youtube';
 import rateLimit from 'express-rate-limit';
 
 const PORT = 8000;
@@ -49,6 +50,7 @@ class App {
   private routes() {
     this.express.use('/auth', Auth.router);
     this.express.use('/discord', DiscordAPI.router);
+    this.express.use('/youtube', YoutubeAPI.router);
   }
 }
 

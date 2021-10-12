@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { AudioPlayerStatus } from '@discordjs/voice';
 import ytdl from 'ytdl-core';
 import { Track, Command } from '../DiscordClient';
-import { getYoutubeUrl } from '../lib/Youtube';
+import { getYoutubeUrl } from '../apis/Youtube';
 import { MessageEmbed } from 'discord.js';
 
 export const QueueEmbed = (queue: Track[]) => {
