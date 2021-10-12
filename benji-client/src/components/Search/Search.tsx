@@ -4,7 +4,6 @@ import SearchBar from './SearchBar';
 import { YoutubeItem } from '../../types/youtube';
 import type { InputHandler, Track } from '../../types/types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { pushTrack } from '../../app/queueSlice';
 import { getYoutubeItem, searchYoutube } from '../../libs/Youtube';
 import { selectAuth } from '../../app/authSlice';
 
