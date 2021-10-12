@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from './hooks';
 import socketIOClient, { Socket } from 'socket.io-client';
 import { selectDashboard, setActive } from './dashboardSlice';
 import { QueueState, setQueue } from './queueSlice';
+import { Track } from '../types/types';
 
 const endpoint = `localhost:8000/bot`;
 
@@ -69,9 +70,18 @@ const useSocket = () => {
     socket?.emit('get_player', { id: currentGuild.id });
   };
 
+  const requestTrack = (track: Track) => {
+    if (!currentGuild) return;
+
+    socket?.emit('request_track', {
+      track,
+    });
+  };
+
   return {
     socket,
     setSocket,
+    requestTrack
   };
 };
 

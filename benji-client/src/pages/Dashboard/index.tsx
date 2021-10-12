@@ -79,7 +79,7 @@ const Dashboard = () => {
   const { accessToken } = useAppSelector(selectAuth);
   const [windowWidth, setWindowWidth] = useState<number>();
   const history = useHistory();
-  const { socket } = useSocket();
+  const { socket, requestTrack } = useSocket();
   const { currentGuild, active } = useAppSelector(selectDashboard);
 
   useEffect(() => {
@@ -201,7 +201,7 @@ const Dashboard = () => {
         </section>
         <section>{active && <Queue items={items} />}</section>
         <section>
-          <Search />
+          <Search requestTrack={requestTrack} />
         </section>
       </div>
     </div>

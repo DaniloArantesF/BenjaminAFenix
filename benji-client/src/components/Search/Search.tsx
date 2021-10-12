@@ -3,20 +3,26 @@ import classes from './Search.module.css';
 import SearchBar from './SearchBar';
 import { YoutubeItem } from '../../types/youtube';
 import type { InputHandler, Track } from '../../types/types';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { pushTrack } from '../../app/queueSlice';
 import { getYoutubeItem, searchYoutube } from '../../libs/Youtube';
+import { selectAuth } from '../../app/authSlice';
 
 type SearchItemProps = {
   item: YoutubeItem;
   selectItem: (item: YoutubeItem) => void;
 };
 
-const Search = () => {
+interface SearchProps {
+  requestTrack: (track: Track) => void;
+}
+
+const Search = ({ requestTrack }: SearchProps) => {
   const dispatch = useAppDispatch();
   const [query, setQuery] = useState('');
   const [items, setItems] = useState<Array<YoutubeItem>>([]);
   const [loading, setLoading] = useState(false);
+  const { username } = useAppSelector(selectAuth);
 
   // search items dont contain some info to construct track
   // fetch new data
@@ -27,7 +33,7 @@ const Search = () => {
       duration: res.duration,
       title: res.title,
       id: res.id,
-      user: 'gepeto420',
+      user: username,
       service: 1,
     };
   };
@@ -60,7 +66,7 @@ const Search = () => {
 
   const selectItem = async (item: YoutubeItem) => {
     const track = await getTrackFromItem(item);
-    dispatch(pushTrack(track));
+    requestTrack(track);
     resetSearch();
   };
 

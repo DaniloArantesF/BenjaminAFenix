@@ -118,6 +118,16 @@ class DiscordClient extends Client {
         socket.emit('player_update', player.getPlayerState());
       });
 
+      socket.on('request_track', (payload) => {
+        const track: Track = payload.track;
+        const guildId = this.webClients.get(socket.id)?.guildId;
+        if (!guildId) return console.error('Web client not found', payload);
+
+        console.info(`Pushing ${JSON.stringify(track, null, 2)} to ${guildId}`);
+        const { player } = this.connections.get(guildId);
+        player.queueController.pushItem(track);
+      });
+
       socket.on('disconnect', (reason) => {
         // Remove socket from guild room and delete entry in clients map
         if (this.webClients.get(socket.id)) {

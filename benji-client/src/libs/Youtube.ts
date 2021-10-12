@@ -22,7 +22,6 @@ export const searchYoutube = async (query: string, resultsCount=5) => {
         resultsCount
       }
     })
-    console.log(res.data);
     return res.data.items;
   } catch (error) {
     console.error("Error searching youtube");
