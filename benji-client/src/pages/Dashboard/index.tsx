@@ -14,6 +14,7 @@ import {
   selectDashboard,
   setCurrentGuild,
 } from '../../app/dashboardSlice';
+import Slider from '../../components/Slider/Slider';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
@@ -201,6 +202,7 @@ const Dashboard = () => {
         </section>
         <section>{active && <Queue items={items} />}</section>
         <section>
+          <Slider />
           <Search requestTrack={requestTrack} />
         </section>
       </div>
