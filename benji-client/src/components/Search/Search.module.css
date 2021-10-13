@@ -6,7 +6,7 @@
   width: 100%;
   grid-template-rows: 50px 1fr;
   gap: 1em;
-  padding: 0.5em;
+  padding: 1em;
   justify-content: center;
 }
 

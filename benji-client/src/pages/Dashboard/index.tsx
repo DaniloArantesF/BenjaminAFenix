@@ -20,6 +20,7 @@ import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
 import Button from '../../components/Button/Button';
 import { getGuildVoiceChannels } from '../../libs/Discord';
+import PlayerController from '../../components/PlayerController';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -172,38 +173,25 @@ const Dashboard = () => {
     socket?.emit('join_channel', { guildId, channelId });
   };
 
-  if (!active)
-    return (
-      <InactiveGuild
-        joinChannel={joinChannel}
-      />
-    );
+  if (!active) return <InactiveGuild joinChannel={joinChannel} />;
 
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
       <div className={classes.dashboard__body}>
-        <section>
-          {active && items?.length > 0 && position >= 0 && (
+        <section id={classes.video} className={classes.dashboard__component}>
+          {items?.length > 0 && position >= 0 && (
             <YoutubeEmbed embedId={items[position].id} />
           )}
-          {!active && ( // Inactive Guild
-            <div className={classes.inactive_btn}>
-              <Button
-                isActive={() => false}
-                onClick={() => {
-                  console.log('todo');
-                }}
-              >
-                Enable it!
-              </Button>
-            </div>
-          )}
         </section>
-        <section>{active && <Queue items={items} />}</section>
-        <section>
-          <Slider />
+        <section id={classes.queue} className={classes.dashboard__component}>
+          <Queue items={items} />
+        </section>
+        <section id={classes.search} className={classes.dashboard__component}>
           <Search requestTrack={requestTrack} />
+        </section>
+        <section id={classes.player_controls} className={classes.dashboard__component}>
+          <PlayerController />
         </section>
       </div>
     </div>

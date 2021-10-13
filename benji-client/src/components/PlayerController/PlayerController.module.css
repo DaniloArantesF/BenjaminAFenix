@@ -1,0 +1,24 @@
+
+
+.player_container {
+  display: grid;
+  height: 120px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  background-color: var(--clr-surface2);
+  align-items: center;
+  box-shadow: var(--shadow-light);
+  padding: 1em 0.5em;
+}
+
+.player_container > * {
+  margin: 0 auto;
+  transform: scale(0.7);
+}
+
+.sound_controller {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1em;
+}
