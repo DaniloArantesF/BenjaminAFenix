@@ -123,29 +123,37 @@ class DiscordClient extends Client {
         const guildId = this.webClients.get(socket.id)?.guildId;
         if (!guildId) return console.error('Web client not found', payload);
 
-        console.info(`Pushing ${JSON.stringify(track, null, 2)} to ${guildId}`);
+        //console.info(`Pushing ${JSON.stringify(track, null, 2)} to ${guildId}`);
         const { player } = this.connections.get(guildId);
         player.queueController.pushItem(track);
       });
 
       socket.on('unpause', (payload) => {
         const user = payload;
-        console.log("unpause");
+        const guildId = this.webClients.get(socket.id)?.guildId;
+        const { player } = this.connections.get(guildId);
+        player.unpause();
       });
 
       socket.on('pause', (payload) => {
         const user = payload;
-        console.log("pause");
+        const guildId = this.webClients.get(socket.id)?.guildId;
+        const { player } = this.connections.get(guildId);
+        player.pause();
       });
 
       socket.on('next', (payload) => {
         const user = payload;
-        console.log("next");
+        const guildId = this.webClients.get(socket.id)?.guildId;
+        const { player } = this.connections.get(guildId);
+        player.queueController.next();
       });
 
       socket.on('prev', (payload) => {
         const user = payload;
-        console.log("prev");
+        const guildId = this.webClients.get(socket.id)?.guildId;
+        const { player } = this.connections.get(guildId);
+        player.queueController.previous();
       });
 
       socket.on('shuffle', (payload) => {

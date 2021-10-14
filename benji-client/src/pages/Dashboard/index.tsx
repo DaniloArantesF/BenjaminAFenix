@@ -6,7 +6,6 @@ import Search from '../../components/Search/Search';
 import { useEffect, useState } from 'react';
 import { selectItems, setQueue, selectPosition } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import axios, { AxiosResponse } from 'axios';
 import { selectAuth, setUser, setCredentials } from '../../app/authSlice';
 import {
   Channel,
@@ -14,13 +13,13 @@ import {
   selectDashboard,
   setCurrentGuild,
 } from '../../app/dashboardSlice';
-import Slider from '../../components/Slider/Slider';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
 import Button from '../../components/Button/Button';
 import { getGuildVoiceChannels } from '../../libs/Discord';
 import PlayerController from '../../components/PlayerController';
+import { getUserData, getUserGuilds } from '../../libs/Discord';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -92,13 +91,12 @@ const Dashboard = () => {
     toggleShuffle,
     setVolume,
   } = useSocket();
-  const { currentGuild, active } = useAppSelector(selectDashboard);
+  const { active } = useAppSelector(selectDashboard);
 
   useEffect(() => {
     if (!accessToken) {
       history.push('/login');
     }
-
     if (window) {
       // Window resizes should affect the sidebar position
       window.addEventListener('resize', function (event: UIEvent) {
@@ -108,45 +106,10 @@ const Dashboard = () => {
           setWindowWidth(win.innerWidth);
       });
     }
-
     init();
   }, []);
 
-  const getUserData = async (accessToken: string) => {
-    try {
-      //console.info('Fetching user data...');
-      const res: AxiosResponse<any> = await axios.get(
-        'http://localhost:8000/discord/user',
-        {
-          params: { accessToken },
-        }
-      );
-      const { id, username, avatar } = res.data;
-      return dispatch(setUser({ id, username, avatar }));
-    } catch (error) {
-      console.error('Error getting user');
-    }
-  };
-
-  const getUserGuilds = async (accessToken: string) => {
-    try {
-      //console.info('Fetching user guilds...');
-      const res: AxiosResponse<any> = await axios.get(
-        'http://localhost:8000/discord/guilds',
-        {
-          params: { accessToken },
-        }
-      );
-
-      const guilds: Guild[] = res.data.guilds;
-      return dispatch(setUserGuilds(guilds));
-    } catch (error) {
-      console.error('Error getting user guilds');
-    }
-  };
-
-  const init = () => {
-    console.log('Initializing Client...');
+  const init = async () => {
     // Check that token is present
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -167,11 +130,13 @@ const Dashboard = () => {
       const username = localStorage.getItem('username');
       dispatch(setUser({ id, avatar, username }));
     } else {
-      getUserData(accessToken);
+      const userData = await getUserData(accessToken);
+      dispatch(setUser(userData));
     }
 
     // Get user guilds
-    getUserGuilds(accessToken);
+    const userGuilds = await getUserGuilds(accessToken);
+    dispatch(setUserGuilds(userGuilds));
 
     // Restore guild from last session
     const guild: Guild = JSON.parse(localStorage.getItem('guild') || '{}');
