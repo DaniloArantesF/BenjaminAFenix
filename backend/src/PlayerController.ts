@@ -124,7 +124,7 @@ class PlayerController extends AudioPlayer {
   }
 
   /**
-   * Periodically playback state to all web clients connected to this player instance.
+   * Periodically broadcast playback state to all web clients connected to this player instance.
    */
   private broadcastPlaybackState() {
     const state = this.state as AudioPlayerPlayingState;

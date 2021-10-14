@@ -29,11 +29,8 @@ const Slider = ({ changeCb }: SliderProps) => {
    * and unset on mouse up or mouse leave
    */
   useEffect(() => {
-    console.log({ active: active });
-
     if (active === false) {
-      console.log('change callback');
-      console.log(value);
+      console.log(`Volume change callback ${value}`);
       //changeCb(value);
       updateSlider();
     }

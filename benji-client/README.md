@@ -1,5 +1,3 @@
-
-
 [TODOS]
   - Navbar
     * ~~Redirect user to guild's dashboard~~

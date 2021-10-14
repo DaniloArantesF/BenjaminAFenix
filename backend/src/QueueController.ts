@@ -58,8 +58,9 @@ class QueueController extends EventEmitter {
       // new pos is out of bounds
       return null;
     }
+    this.position--;
     this.emit('queue_update');
-    return this.items[--this.position];
+    return this.items[this.position];
   }
 
   // TODO: public insertTrack() {}
