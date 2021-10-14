@@ -34,6 +34,7 @@ export const dashboardSlice = createSlice({
   initialState,
   reducers: {
     setUserGuilds: (state, { payload }) => {
+      if (!payload) return state;
       // TODO: maybe sort guilds by relevance ?
       payload.sort((item1: Guild, item2: Guild) => {
         if (item1.name < item2.name) return -1;

@@ -62,6 +62,10 @@
   overflow: hidden;
 }
 
+.searchBar_container input {
+  border: none;
+}
+
 .searchBar_container > span {
   position: absolute;
   display: block;

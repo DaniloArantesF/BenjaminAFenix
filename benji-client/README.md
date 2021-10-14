@@ -6,7 +6,7 @@
     * Add alt text to guilds
     * ~~Make bot join channels through UI~~
   - Player
-    * Set up player with play/pause/previous/next
+    * ~~Set up player with play/pause/previous/next~~
     * Setup shuffle & repeat
   - Search
     * Accept straight urls from input
