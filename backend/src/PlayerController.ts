@@ -108,7 +108,6 @@ class PlayerController extends AudioPlayer {
       track = this.queueController.getTrack();
     }
 
-    console.log(`Playing track ${track.title}`)
     if (!track) {
       // Return to avoid error
       return;

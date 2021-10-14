@@ -7,7 +7,7 @@ export const command: Command = {
     .setName('pause')
     .setDescription('Pauses current playback'),
   async execute(client, interaction) {
-    // Get guild to disconnect
+    // Get guild to pause player
     const guildId = interaction.guild.id;
     const { player } = client.connections.get(guildId);
 

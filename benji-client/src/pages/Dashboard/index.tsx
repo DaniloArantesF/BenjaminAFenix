@@ -51,9 +51,9 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
       <Navbar />
       <div className={classes.dashboard__body}>
         <section>
-          {channels?.map((channel) => {
+          {channels?.map((channel, index) => {
             return (
-              <div>
+              <div key={index}>
                 <Button
                   isActive={() => true}
                   onClick={() =>

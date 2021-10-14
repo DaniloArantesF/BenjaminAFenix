@@ -19,7 +19,7 @@ class QueueController extends EventEmitter {
   }
 
   public pushItem(item: Track) {
-    console.log(JSON.stringify(item, null, 2));
+    //console.log(JSON.stringify(item, null, 2));
     this.items = [...this.items, item];
     this.emit('queue_update');
   }
