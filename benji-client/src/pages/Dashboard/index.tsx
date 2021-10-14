@@ -117,7 +117,6 @@ const Dashboard = () => {
     // Redirect to login if not
     if (!accessToken || !refreshToken) {
       return history.push('/login');
-      return;
     }
 
     // Set credentials

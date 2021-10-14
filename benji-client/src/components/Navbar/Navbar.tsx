@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { BaseSyntheticEvent } from 'react';
+import { useHistory } from 'react-router';
 import classes from './Navbar.module.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
@@ -7,10 +8,12 @@ import {
   selectDashboard,
   setCurrentGuild,
 } from '../../app/dashboardSlice';
+import { clearCredentials } from '../../app/authSlice';
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
   const { guilds } = useAppSelector(selectDashboard);
+  const history = useHistory();
 
   const getDiscordAvatar = (
     type = 'user',
@@ -33,6 +36,17 @@ const Navbar = () => {
     console.log("Switching guilds")
     dispatch(setCurrentGuild(newGuild));
   };
+
+  /**
+   * Clears auth state and local storage
+   * Redirects user to login page
+   * @param event
+   */
+  const logout = (event: BaseSyntheticEvent) => {
+    localStorage.clear();
+    dispatch(clearCredentials());
+    history.push('/login');
+  }
 
   return (
     <div className={classes.navbar_container}>
@@ -61,7 +75,10 @@ const Navbar = () => {
       </section>
       <section className={classes.navbar__footer}>
         <div className={classes.navLink}>Help</div>
-        <div className={classes.navLink}>Logout</div>
+        <div
+          className={classes.navLink}
+          onClick={logout}
+        >Logout</div>
       </section>
     </div>
   );
