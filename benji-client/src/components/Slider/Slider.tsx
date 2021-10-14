@@ -1,19 +1,27 @@
 import React, { MouseEvent, useEffect, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectStatus } from '../../app/playerSlice';
+import { useAppSelector } from '../../app/hooks';
+import { selectPlayerState } from '../../app/playerSlice';
 import classes from './Slider.module.css';
 
-const Slider = ({ range = { min: 0, max: 100 }, initialValue = 50 }) => {
-  const [value, setValue] = useState(initialValue);
-  const [active, setActive] = useState(false);
+interface SliderProps {
+  changeCb: (value: number) => void;
+}
+
+const Slider = ({ changeCb }: SliderProps) => {
+  const [value, setValue] = useState(100);
+  const [active, setActive] = useState<boolean>();
   const activeTrackRef = useRef<HTMLSpanElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
-  const dispatch = useAppDispatch();
-  const playerStatus = useAppSelector(selectStatus);
+  const { volume } = useAppSelector(selectPlayerState);
+
+  useEffect(() => {
+    if (!volume) return;
+    setValue(volume * 100);
+  }, [volume]);
 
   useEffect(() => {
     if (!activeTrackRef?.current || !active) return;
-    activeTrackRef.current.style.width = `${value}%`;
+    updateSlider();
   }, [value]);
 
   /**
@@ -21,23 +29,31 @@ const Slider = ({ range = { min: 0, max: 100 }, initialValue = 50 }) => {
    * and unset on mouse up or mouse leave
    */
   useEffect(() => {
-    if (!active && activeTrackRef?.current) {
-      //setPlayerVolume(value / 100);
-      activeTrackRef.current.style.width = `${value}%`;
+    console.log({ active: active });
+
+    if (active === false) {
+      console.log('change callback');
+      console.log(value);
+      //changeCb(value);
+      updateSlider();
     }
   }, [active]);
+
+  const updateSlider = () => {
+    if (!activeTrackRef?.current) return;
+    activeTrackRef.current.style.width = `${value}%`;
+  };
 
   /**
    * Used to calculate value of slider based on mouse position
    * @param event
    */
   const handleUpdate = (event: MouseEvent) => {
-    if (!sliderRef?.current) return;
+    if (!sliderRef?.current) return 0;
     let slider = sliderRef.current.getBoundingClientRect();
     let mouseX = event.clientX - slider.x;
-    setValue(
-      Math.max(0, Math.min(100, Math.ceil((mouseX * 100) / slider.width)))
-    );
+    const newValue = Math.max(0, Math.min(100, Math.ceil((mouseX * 100) / slider.width)));
+    return newValue;
   };
 
   return (
@@ -46,10 +62,14 @@ const Slider = ({ range = { min: 0, max: 100 }, initialValue = 50 }) => {
       className={classes.slider}
       onMouseDown={(event) => {
         setActive(true);
-        handleUpdate(event);
+        const newValue = handleUpdate(event);
+        setValue(newValue);
+      }}
+      onMouseMove={(event) => {
+        const newValue = handleUpdate(event);
+        setValue(newValue);
       }}
       onMouseUp={() => setActive(false)}
-      onMouseMove={(event) => handleUpdate(event)}
       onMouseLeave={() => setActive(false)}
     >
       <div className={classes.slider__track}>

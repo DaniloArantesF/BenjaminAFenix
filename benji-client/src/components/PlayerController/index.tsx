@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { ReactComponent as BackIcon } from '../../assets/back.svg';
 import { ReactComponent as SkipIcon } from '../../assets/skip.svg';
 import { ReactComponent as PlayIcon } from '../../assets/play.svg';
@@ -11,18 +11,55 @@ import { selectStatus } from '../../app/playerSlice';
 import { useAppSelector } from '../../app/hooks';
 import Slider from '../Slider/Slider';
 
-const PlayerController = () => {
+interface PlayerControllerProps {
+  unpausePlayer: () => void;
+  pausePlayer: () => void;
+  nextTrack: () => void;
+  prevTrack: () => void;
+  toggleRepeat: () => void;
+  toggleShuffle: () => void;
+  setVolume: (vol: number) => void;
+}
+const PlayerController = (props: PlayerControllerProps) => {
+  const {
+    unpausePlayer,
+    pausePlayer,
+    nextTrack,
+    prevTrack,
+    toggleRepeat,
+    toggleShuffle,
+    setVolume,
+  } = props;
   const status = useAppSelector(selectStatus);
+
   return (
     <div className={classes.player_container}>
-      <ShuffleIcon />
-      <BackIcon />
-      {status === 'playing' ? <PauseIcon /> : <PlayIcon />}
-      <SkipIcon />
-      <RepeatIcon />
+      <button>
+        <ShuffleIcon onClick={toggleShuffle} />
+      </button>
+      <button>
+        <BackIcon onClick={prevTrack} />
+      </button>
+      {status === 'playing' ? (
+        <button>
+          <PauseIcon onClick={pausePlayer} />
+        </button>
+      ) : (
+        <button>
+          <PlayIcon onClick={unpausePlayer} />
+        </button>
+      )}
+      <button>
+        <SkipIcon onClick={nextTrack} />
+      </button>
+      <button>
+        <RepeatIcon onClick={toggleRepeat} />
+      </button>
       <div className={classes.sound_controller}>
-        <SoundIcon />
-        <Slider />
+        <button>
+          <SoundIcon />
+        </button>
+        <Slider changeCb={setVolume}/>
       </div>
     </div>
   );

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classes from './Button.module.css';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { previous, next, selectQueue } from '../../app/queueSlice';
+import { useAppDispatch } from '../../app/hooks';
 import { ActionCreator } from 'redux';
-import type { InputHandler } from '../../types/types';
-import { togglePlayer } from '../../app/playerSlice';
+import type { InputHandler } from '../../types';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -19,11 +17,8 @@ const Button = ({ children, action, isActive, onClick }: ButtonProps) => {
 
   const clickHandler: InputHandler = (event) => {
     if (!active) return;
-
     if (action) dispatch(action());
-
     if (onClick) onClick();
-
     event.target.blur();
   };
 

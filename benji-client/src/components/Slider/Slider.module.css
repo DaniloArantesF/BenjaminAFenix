@@ -1,7 +1,7 @@
 
 
 :root {
-  --bar-height: 10px;
+  --bar-height: 1em;
 }
 
 .slider {
@@ -18,7 +18,7 @@
   width: 100%;
   height: var(--bar-height);
   border-radius: calc(var(--bar-height) / 2);
-  background: var(--clr-surface2);
+  background: var(--clr-surface3);
 }
 
 .track__left {
@@ -38,5 +38,7 @@
   width: calc(var(--bar-height) + calc(1em / 4));
   height: calc(var(--bar-height) + calc(1em / 4));
   border-radius: calc((var(--bar-height) + calc(1em / 4)) / 2);
-  background-color: var(--clr-surface3);
+  background-color: var(--clr-surface2);
+  outline: 1px solid var(--clr-accent);
+  box-shadow: var(--shadow-light);
 }

@@ -1,12 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppState } from './store';
-import { Track } from '../types/types';
+import { Track } from '../types';
 
-export interface PlayerState {
-  currentTrack: Track | null;
+export interface PlaybackState {
   progress: number;
   status: string;
   volume: number;
+}
+
+export interface PlayerState extends PlaybackState {
+  currentTrack: Track | null;
 }
 
 const initialState: PlayerState = {
@@ -29,20 +32,13 @@ export const playerSlice = createSlice({
         },
       };
     },
-    togglePlayer: (state) => {
-      if (state.status === 'playing') {
-        state.status = 'paused';
-      } else if (state.status === 'paused') {
-        state.status = 'playing';
-      } else {
-        state.status = 'idle';
-      }
-
-      return state;
+    updatePlaybackState: (state, action: PayloadAction<PlaybackState>) => {
+      return { ...state, ...action.payload };
     },
   },
 });
 
-export const { togglePlayer } = playerSlice.actions;
+export const { updatePlaybackState } = playerSlice.actions;
 export const selectStatus = (state: AppState) => state.player.status;
+export const selectPlayerState = (state: AppState) => state.player;
 export default playerSlice.reducer;

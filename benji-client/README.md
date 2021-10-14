@@ -10,9 +10,11 @@
   - Player
     * Set up player with play/pause/previous/next
     * Setup shuffle & repeat
+  - Search
+    * Accept straight urls from input
 
   - General
-    * Improve typography and font sizing 
+    * Improve typography and font sizing
   - Errors
     * Redirect users on failed requests
 

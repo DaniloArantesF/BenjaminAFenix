@@ -3,7 +3,9 @@ import { useAppDispatch, useAppSelector } from './hooks';
 import socketIOClient, { Socket } from 'socket.io-client';
 import { selectDashboard, setActive } from './dashboardSlice';
 import { QueueState, setQueue } from './queueSlice';
-import { Track } from '../types/types';
+import { Track } from '../types';
+import { selectAuth } from './authSlice';
+import { updatePlaybackState } from './playerSlice';
 
 const endpoint = `localhost:8000/bot`;
 
@@ -17,6 +19,7 @@ interface PlaybackState {
 const useSocket = () => {
   const dispatch = useAppDispatch();
   const { currentGuild, active } = useAppSelector(selectDashboard);
+  const { username } = useAppSelector(selectAuth);
   const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
@@ -61,7 +64,7 @@ const useSocket = () => {
 
     // Triggered periodically to update state of playback
     socket?.on('playback_state', (payload: PlaybackState) => {
-      console.log(payload);
+      dispatch(updatePlaybackState(payload));
     });
   };
 
@@ -72,16 +75,57 @@ const useSocket = () => {
 
   const requestTrack = (track: Track) => {
     if (!currentGuild) return;
-
     socket?.emit('request_track', {
       track,
     });
   };
 
+  const unpausePlayer = () => {
+    if (!currentGuild) return;
+    socket?.emit('unpause', { user: username });
+  };
+
+  const pausePlayer = () => {
+    if (!currentGuild) return;
+    socket?.emit('pause', { user: username });
+  };
+
+  const nextTrack = () => {
+    if (!currentGuild) return;
+    socket?.emit('next', { user: username });
+  };
+
+  const prevTrack = () => {
+    if (!currentGuild) return;
+    socket?.emit('prev', { user: username });
+  };
+
+  const toggleShuffle = () => {
+    if (!currentGuild) return;
+    socket?.emit('shuffle', { user: username });
+  };
+
+  const toggleRepeat = () => {
+    if (!currentGuild) return;
+    socket?.emit('repeat', { user: username });
+  };
+
+  const setVolume = (volume: number) => {
+    if (!currentGuild) return;
+    socket?.emit('volume', { volume });
+  };
+
   return {
     socket,
     setSocket,
-    requestTrack
+    requestTrack,
+    unpausePlayer,
+    pausePlayer,
+    nextTrack,
+    prevTrack,
+    toggleRepeat,
+    toggleShuffle,
+    setVolume
   };
 };
 

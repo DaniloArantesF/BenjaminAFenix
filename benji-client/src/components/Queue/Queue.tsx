@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useRef, useState } from 'react';
-import { Track } from '../../types/types';
+import { Track } from '../../types';
 import { msToMinSec } from '../../util/util';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {

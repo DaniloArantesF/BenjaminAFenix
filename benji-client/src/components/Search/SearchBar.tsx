@@ -2,7 +2,7 @@ import React, { useState, useRef, RefObject } from 'react';
 import classes from './Search.module.css';
 import { ReactComponent as Logo } from '../../assets/BenjaminAFenix.svg';
 import { ReactComponent as SearchIcon } from '../../assets/search.svg';
-import type { InputHandler } from '../../types/types';
+import type { InputHandler } from '../../types';
 
 type SearchBarProps = {
   inputCallback: InputHandler;
@@ -44,7 +44,7 @@ const SearchBar = ({
           <input
             autoComplete={'false'}
             className={classes.search_input}
-            placeholder={'Search...'}
+            placeholder={'Add a song!'}
             onChange={inputCallback}
             ref={inputRef}
           />

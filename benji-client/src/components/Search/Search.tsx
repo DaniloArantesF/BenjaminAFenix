@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classes from './Search.module.css';
 import SearchBar from './SearchBar';
 import { YoutubeItem } from '../../types/youtube';
-import type { InputHandler, Track } from '../../types/types';
+import type { InputHandler, Track } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getYoutubeItem, searchYoutube } from '../../libs/Youtube';
 import { selectAuth } from '../../app/authSlice';

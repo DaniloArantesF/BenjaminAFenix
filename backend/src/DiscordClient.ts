@@ -128,6 +128,41 @@ class DiscordClient extends Client {
         player.queueController.pushItem(track);
       });
 
+      socket.on('unpause', (payload) => {
+        const user = payload;
+        console.log("unpause");
+      });
+
+      socket.on('pause', (payload) => {
+        const user = payload;
+        console.log("pause");
+      });
+
+      socket.on('next', (payload) => {
+        const user = payload;
+        console.log("next");
+      });
+
+      socket.on('prev', (payload) => {
+        const user = payload;
+        console.log("prev");
+      });
+
+      socket.on('shuffle', (payload) => {
+        const user = payload;
+        console.log("shuffle");
+      });
+
+      socket.on('repeat', (payload) => {
+        const user = payload;
+        console.log("repeat");
+      });
+
+      socket.on('volume', (payload) => {
+        const volume = payload.volume;
+        console.log("volume", volume);
+      });
+
       socket.on('disconnect', (reason) => {
         // Remove socket from guild room and delete entry in clients map
         if (this.webClients.get(socket.id)) {

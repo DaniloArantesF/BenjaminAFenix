@@ -81,7 +81,17 @@ const Dashboard = () => {
   const { accessToken } = useAppSelector(selectAuth);
   const [windowWidth, setWindowWidth] = useState<number>();
   const history = useHistory();
-  const { socket, requestTrack } = useSocket();
+  const {
+    socket,
+    requestTrack,
+    unpausePlayer,
+    pausePlayer,
+    nextTrack,
+    prevTrack,
+    toggleRepeat,
+    toggleShuffle,
+    setVolume,
+  } = useSocket();
   const { currentGuild, active } = useAppSelector(selectDashboard);
 
   useEffect(() => {
@@ -190,8 +200,19 @@ const Dashboard = () => {
         <section id={classes.search} className={classes.dashboard__component}>
           <Search requestTrack={requestTrack} />
         </section>
-        <section id={classes.player_controls} className={classes.dashboard__component}>
-          <PlayerController />
+        <section
+          id={classes.player_controls}
+          className={classes.dashboard__component}
+        >
+          <PlayerController
+            unpausePlayer={unpausePlayer}
+            pausePlayer={pausePlayer}
+            nextTrack={nextTrack}
+            prevTrack={prevTrack}
+            toggleRepeat={toggleRepeat}
+            toggleShuffle={toggleShuffle}
+            setVolume={setVolume}
+          />
         </section>
       </div>
     </div>
