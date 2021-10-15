@@ -9,6 +9,7 @@ import {
 } from '../../app/queueSlice';
 import classes from './Queue.module.css';
 import { ReactComponent as DraggableIcon } from '../../assets/draggable.svg';
+import { selectPlayerState } from '../../app/playerSlice';
 
 export interface QItem extends Track {
   itemPosition: number;
@@ -136,23 +137,27 @@ const Queue = ({ items }: QProps) => {
   };
 
   return (
-    <div
-      ref={queueRef}
-      className={classes.queue_component}
-      onMouseLeave={() => setDragging(false)}
-      onMouseUp={endDrag}
-    >
-      <QueueHeader />
-      {items.map((item, index) => {
-        return (
-          <QueueItem
-            dragCallback={(event: SyntheticEvent) => dragHandler(index, event)}
-            mouseDownCb={(event: SyntheticEvent) => {}}
-            key={index}
-            item={item}
-          />
-        );
-      })}
+    <div className={classes.queue_container}>
+      <div
+        ref={queueRef}
+        className={classes.queue_component}
+        onMouseLeave={() => setDragging(false)}
+        onMouseUp={endDrag}
+      >
+        <QueueHeader />
+        {items.map((item, index) => {
+          return (
+            <QueueItem
+              dragCallback={(event: SyntheticEvent) =>
+                dragHandler(index, event)
+              }
+              mouseDownCb={(event: SyntheticEvent) => {}}
+              key={index}
+              item={item}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

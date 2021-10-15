@@ -7,7 +7,7 @@ import { ReactComponent as ShuffleIcon } from '../../assets/shuffle.svg';
 import { ReactComponent as SoundIcon } from '../../assets/sound.svg';
 import { ReactComponent as PauseIcon } from '../../assets/pause.svg';
 import classes from './PlayerController.module.css';
-import { selectStatus } from '../../app/playerSlice';
+import { selectPlayerState, selectStatus } from '../../app/playerSlice';
 import { useAppSelector } from '../../app/hooks';
 import Slider from '../Slider/Slider';
 
@@ -20,6 +20,24 @@ interface PlayerControllerProps {
   toggleShuffle: () => void;
   setVolume: (vol: number) => void;
 }
+
+const CurrentlyPlaying = () => {
+  const { currentTrack } = useAppSelector(selectPlayerState);
+  if (!currentTrack) return <div></div>;
+
+  return (
+    <div className={classes.currently_playing}>
+      <div className={classes.track__thumbnail}>
+        <img src={currentTrack.thumbnail} />
+      </div>
+      <div className={classes.track__info}>
+        <h1>{currentTrack.title}</h1>
+        <h2>{currentTrack.channelTitle}</h2>
+      </div>
+    </div>
+  );
+};
+
 const PlayerController = (props: PlayerControllerProps) => {
   const {
     unpausePlayer,
@@ -33,35 +51,38 @@ const PlayerController = (props: PlayerControllerProps) => {
   const status = useAppSelector(selectStatus);
 
   return (
-    <div className={classes.player_container}>
-      <button>
-        <ShuffleIcon onClick={toggleShuffle} />
-      </button>
-      <button>
-        <BackIcon onClick={prevTrack} />
-      </button>
-      {status === 'playing' ? (
+    <>
+      <CurrentlyPlaying />
+      <div className={classes.player_container}>
         <button>
-          <PauseIcon onClick={pausePlayer} />
+          <ShuffleIcon onClick={toggleShuffle} />
         </button>
-      ) : (
         <button>
-          <PlayIcon onClick={unpausePlayer} />
+          <BackIcon onClick={prevTrack} />
         </button>
-      )}
-      <button>
-        <SkipIcon onClick={nextTrack} />
-      </button>
-      <button>
-        <RepeatIcon onClick={toggleRepeat} />
-      </button>
-      <div className={classes.sound_controller}>
+        {status === 'playing' ? (
+          <button>
+            <PauseIcon onClick={pausePlayer} />
+          </button>
+        ) : (
+          <button>
+            <PlayIcon onClick={unpausePlayer} />
+          </button>
+        )}
         <button>
-          <SoundIcon />
+          <SkipIcon onClick={nextTrack} />
         </button>
-        <Slider changeCb={setVolume}/>
+        <button>
+          <RepeatIcon onClick={toggleRepeat} />
+        </button>
+        <div className={classes.sound_controller}>
+          <button>
+            <SoundIcon />
+          </button>
+          <Slider changeCb={setVolume} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -4,10 +4,9 @@
   display: grid;
   height: 120px;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  background-color: var(--clr-surface2);
   align-items: center;
-  box-shadow: var(--shadow-light);
-  padding: 1em 0.5em;
+  padding: 1em 2em;
+  margin-right: auto;
 }
 
 .player_container button {
@@ -27,4 +26,45 @@
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 1em;
+}
+
+.currently_playing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 120px;
+  width: 450px;
+}
+
+.track__thumbnail {
+  height: 100%;
+  aspect-ratio: 16/9;
+}
+
+.track__thumbnail img {
+  height: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.track__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 1em;
+}
+
+.track__info h1 {
+  font-size: 1.2em;
+  font-weight: 500;
+  word-break: normal;
+  color: var(--clr-accent);
+  padding-bottom: 0.5em;
+}
+
+.track__info h2 {
+  font-size: 1em;
+  font-weight: 500;
+  word-break: normal;
 }

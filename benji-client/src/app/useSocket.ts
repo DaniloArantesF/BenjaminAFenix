@@ -78,6 +78,11 @@ const useSocket = () => {
     socket?.emit('get_player', { id: currentGuild.id });
   };
 
+  const joinChannel = (guildId: string, channelId: string) => {
+    if (!guildId || !socket) return;
+    socket?.emit('join_channel', { guildId, channelId });
+  };
+
   const requestTrack = (track: Track) => {
     if (!currentGuild) return;
     socket?.emit('request_track', {
@@ -124,6 +129,7 @@ const useSocket = () => {
     socket,
     setSocket,
     requestTrack,
+    joinChannel,
     unpausePlayer,
     pausePlayer,
     nextTrack,

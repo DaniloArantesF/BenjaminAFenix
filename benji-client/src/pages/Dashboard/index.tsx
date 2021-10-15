@@ -22,6 +22,7 @@ import PlayerController from '../../components/PlayerController';
 import { getUserData, getUserGuilds } from '../../libs/Discord';
 import { getDiscordAvatar } from '../../libs/Discord';
 import { selectPlayerState } from '../../app/playerSlice';
+import GuildHeader from '../../components/GuildHeader';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -85,6 +86,7 @@ const Dashboard = () => {
   const {
     socket,
     requestTrack,
+    joinChannel,
     unpausePlayer,
     pausePlayer,
     nextTrack,
@@ -144,67 +146,7 @@ const Dashboard = () => {
     if (guild?.id) dispatch(setCurrentGuild(guild));
   };
 
-  const joinChannel = (guildId: string, channelId: string) => {
-    if (!guildId || !socket) return;
-    socket?.emit('join_channel', { guildId, channelId });
-  };
-
   if (!active) return <InactiveGuild joinChannel={joinChannel} />;
-
-  const CurrentlyPlaying = () => {
-    if (!currentTrack) return null;
-
-    return (
-      <div className={classes.currently_playing}>
-        <div className={classes.track__thumbnail}>
-          <img
-            src={currentTrack.thumbnail}
-          />
-        </div>
-        <div className={classes.track__info}>
-          <h1>{currentTrack.title}</h1>
-          <h2>
-            {currentTrack.channelTitle}
-          </h2>
-        </div>
-      </div>
-    );
-  };
-
-  const GuildHeader = () => {
-    if (!currentGuild) return null;
-    const onlineCount = 5;
-    const guild = currentGuild;
-    const uptime = '1:45:33';
-    return (
-      <div className={classes.guild_header}>
-        {guild.icon ? (
-          <img
-            src={getDiscordAvatar('guild', guild.id, guild.icon)}
-            alt={guild.name}
-          />
-        ) : (
-          <h2>{guild.name.substring(0, 1)}</h2>
-        )}
-
-        <div className={classes.guild_header__body}>
-          <h1>{guild.name}</h1>
-          <h2>{onlineCount} online</h2>
-          <h2>{uptime}</h2>
-        </div>
-
-        <div className={classes.guild_header__btns}>
-          <Button isActive={() => true} action={() => console.log('click')}>
-            Switch Channel
-          </Button>
-
-          <Button isActive={() => true} action={() => console.log('click')}>
-            Leave
-          </Button>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className={classes.dashboard_container}>
@@ -218,9 +160,6 @@ const Dashboard = () => {
         </section>
         <section id={classes.search} className={classes.dashboard__component}>
           <Search requestTrack={requestTrack} />
-        </section>
-        <section id={classes.preview} className={classes.dashboard__component}>
-          <CurrentlyPlaying />
         </section>
         <section
           id={classes.player_controls}

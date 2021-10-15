@@ -33,7 +33,7 @@ const Search = ({ requestTrack }: SearchProps) => {
       title: res.title,
       id: res.id,
       user: username,
-      thumbnail: res.thumbnails.default.url,
+      thumbnail: res.thumbnails.high.url,
       service: 1,
     };
   };

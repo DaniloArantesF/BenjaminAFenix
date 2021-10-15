@@ -95,7 +95,7 @@ export const command: Command = {
       title: item.title,
       id: item.id,
       user: interaction.user.tag,
-      thumbnail: item.thumbnails.default.url,
+      thumbnail: item.thumbnails.high.url,
       service: Services.Youtube,
     }
 
