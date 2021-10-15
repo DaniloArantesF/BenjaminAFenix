@@ -21,6 +21,7 @@ export interface Track {
   title: string;
   id: string;
   user: string; // user who requested track
+  thumbnail: string;
   service: Services;
 }
 

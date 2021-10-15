@@ -38,6 +38,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     clearCredentials: (state) => {
+      localStorage.clear();
       return initialState;
     },
     setUser: (state, { payload }) => {

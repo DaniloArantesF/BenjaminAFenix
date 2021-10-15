@@ -9,31 +9,19 @@ import {
   setCurrentGuild,
 } from '../../app/dashboardSlice';
 import { clearCredentials } from '../../app/authSlice';
+import { getDiscordAvatar } from '../../libs/Discord';
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
   const { guilds } = useAppSelector(selectDashboard);
   const history = useHistory();
 
-  const getDiscordAvatar = (
-    type = 'user',
-    id: string,
-    avatarHash: string,
-    size = 64
-  ) => {
-    const baseUrl = 'https://cdn.discordapp.com/';
-    const userPath = `avatars/${id}/${avatarHash}.png`;
-    const guildPath = `icons/${id}/${avatarHash}.png`;
-
-    if (type === 'user') {
-      return baseUrl + userPath + `?size=${size}`;
-    } else if (type === 'guild') {
-      return baseUrl + guildPath + `?size=${size}`;
-    }
-  };
-
+  /**
+   * Updates the current guild
+   * Called when a user clicks on a guild in the navbar
+   * @param newGuild Guild to be joined
+   */
   const handleGuildUpdate = (newGuild: Guild) => {
-    console.log("Switching guilds")
     dispatch(setCurrentGuild(newGuild));
   };
 
@@ -43,7 +31,6 @@ const Navbar = () => {
    * @param event
    */
   const logout = (event: BaseSyntheticEvent) => {
-    localStorage.clear();
     dispatch(clearCredentials());
     history.push('/login');
   }

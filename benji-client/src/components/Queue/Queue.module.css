@@ -3,16 +3,16 @@
   --header-height: 2em;
   display: inline-grid;
   position: relative;
+  width: 100%;
   max-height: 45vh;
   overflow-y: auto;
   overflow-x: block;
-  width: 100%;
   grid-template-rows: var(--header-height) repeat(auto-fill, 4em);
   gap: 0.2em;
   transition: all 100ms ease-out;
-  padding: 0 0.5em 0.5em 0.5em;
   font-size: 100%;
   margin: 0 auto;
+  padding: 1em;
 }
 
 .queue__item {
@@ -42,7 +42,7 @@
 .queue__header {
   word-break: normal;
   color: var(--clr-title);
-  background-color: #454a4d;
+  background-color: var(--clr-surface3);
   position: sticky;
   top: 0;
   left: 0;

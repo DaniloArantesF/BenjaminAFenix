@@ -20,6 +20,8 @@ import Button from '../../components/Button/Button';
 import { getGuildVoiceChannels } from '../../libs/Discord';
 import PlayerController from '../../components/PlayerController';
 import { getUserData, getUserGuilds } from '../../libs/Discord';
+import { getDiscordAvatar } from '../../libs/Discord';
+import { selectPlayerState } from '../../app/playerSlice';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -76,8 +78,8 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
-  const position = useAppSelector(selectPosition);
   const { accessToken } = useAppSelector(selectAuth);
+  const { currentTrack } = useAppSelector(selectPlayerState);
   const [windowWidth, setWindowWidth] = useState<number>();
   const history = useHistory();
   const {
@@ -91,7 +93,7 @@ const Dashboard = () => {
     toggleShuffle,
     setVolume,
   } = useSocket();
-  const { active } = useAppSelector(selectDashboard);
+  const { active, currentGuild } = useAppSelector(selectDashboard);
 
   useEffect(() => {
     if (!accessToken) {
@@ -149,20 +151,76 @@ const Dashboard = () => {
 
   if (!active) return <InactiveGuild joinChannel={joinChannel} />;
 
+  const CurrentlyPlaying = () => {
+    if (!currentTrack) return null;
+
+    return (
+      <div className={classes.currently_playing}>
+        <div className={classes.track__thumbnail}>
+          <img
+            src={currentTrack.thumbnail}
+          />
+        </div>
+        <div className={classes.track__info}>
+          <h1>{currentTrack.title}</h1>
+          <h2>
+            {currentTrack.channelTitle}
+          </h2>
+        </div>
+      </div>
+    );
+  };
+
+  const GuildHeader = () => {
+    if (!currentGuild) return null;
+    const onlineCount = 5;
+    const guild = currentGuild;
+    const uptime = '1:45:33';
+    return (
+      <div className={classes.guild_header}>
+        {guild.icon ? (
+          <img
+            src={getDiscordAvatar('guild', guild.id, guild.icon)}
+            alt={guild.name}
+          />
+        ) : (
+          <h2>{guild.name.substring(0, 1)}</h2>
+        )}
+
+        <div className={classes.guild_header__body}>
+          <h1>{guild.name}</h1>
+          <h2>{onlineCount} online</h2>
+          <h2>{uptime}</h2>
+        </div>
+
+        <div className={classes.guild_header__btns}>
+          <Button isActive={() => true} action={() => console.log('click')}>
+            Switch Channel
+          </Button>
+
+          <Button isActive={() => true} action={() => console.log('click')}>
+            Leave
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
       <div className={classes.dashboard__body}>
-        <section id={classes.video} className={classes.dashboard__component}>
-          {items?.length > 0 && position >= 0 && (
-            <YoutubeEmbed embedId={items[position].id} />
-          )}
+        <section id={classes.info} className={classes.dashboard__component}>
+          <GuildHeader />
         </section>
         <section id={classes.queue} className={classes.dashboard__component}>
           <Queue items={items} />
         </section>
         <section id={classes.search} className={classes.dashboard__component}>
           <Search requestTrack={requestTrack} />
+        </section>
+        <section id={classes.preview} className={classes.dashboard__component}>
+          <CurrentlyPlaying />
         </section>
         <section
           id={classes.player_controls}

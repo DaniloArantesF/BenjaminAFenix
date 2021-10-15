@@ -1,9 +1,7 @@
-
-
 export type YoutubeProps = {
   embedId?: string;
   url?: string;
-}
+};
 
 /* Used to represent a resource from youtube inside app */
 export interface YoutubeItem {
@@ -12,9 +10,10 @@ export interface YoutubeItem {
   description: string;
   id: string;
   publishedAt: string;
-  publishTime: string;
+  publishTime?: string;
   thumbnails: Thumbnails;
   title: string;
+  duration: number;
 }
 
 export interface YoutubeSearchResult {
@@ -23,7 +22,7 @@ export interface YoutubeSearchResult {
   nextPageToken: string;
   regionCode: string;
   pageInfo: PageInfo;
-  items?: (ItemsEntity)[] | null;
+  items?: ItemsEntity[] | null;
 }
 export interface PageInfo {
   totalResults: number;
@@ -47,7 +46,7 @@ export interface Snippet {
   thumbnails: Thumbnails;
   channelTitle: string;
   liveBroadcastContent: string;
-  publishTime: string;
+  publishTime?: string;
 }
 export interface Thumbnails {
   default: Thumbnail;

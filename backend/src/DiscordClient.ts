@@ -32,6 +32,7 @@ export interface Track {
   title: string;
   id: string;
   user: string;
+  thumbnail: string;
   service: Services;
 }
 

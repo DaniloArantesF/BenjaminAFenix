@@ -5,7 +5,7 @@ import { selectDashboard, setActive } from './dashboardSlice';
 import { QueueState, setQueue } from './queueSlice';
 import { Track } from '../types';
 import { selectAuth } from './authSlice';
-import { updatePlaybackState } from './playerSlice';
+import { selectPlayerState, setCurrentTrack, updatePlaybackState } from './playerSlice';
 
 const endpoint = `localhost:8000/bot`;
 
@@ -19,6 +19,7 @@ interface PlaybackState {
 const useSocket = () => {
   const dispatch = useAppDispatch();
   const { currentGuild, active } = useAppSelector(selectDashboard);
+  const { currentTrack } = useAppSelector(selectPlayerState);
   const { username } = useAppSelector(selectAuth);
   const [socket, setSocket] = useState<Socket>();
 
@@ -56,6 +57,10 @@ const useSocket = () => {
 
     socket?.on('player_update', (payload: any) => {
       const queue = payload.queue as QueueState;
+      const curTrack = queue.items[queue.position];
+      if (!currentTrack || curTrack !== currentTrack) {
+        dispatch(setCurrentTrack(curTrack));
+      }
       dispatch(setQueue(queue));
       if (!active) {
         dispatch(setActive(true));

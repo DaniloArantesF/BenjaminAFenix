@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
+import { YoutubeItem } from '../types/youtube';
 
 export const getYoutubeItem = async (itemId: string) => {
   try {
-    const res: AxiosResponse<any> = await axios.get(
+    const res: AxiosResponse<{ item: YoutubeItem }> = await axios.get(
       'http://localhost:8000/youtube/',
       {
         params: { itemId },
@@ -11,19 +12,39 @@ export const getYoutubeItem = async (itemId: string) => {
     return res.data.item;
   } catch (error) {
     console.error('Error getting user guilds');
+    return {
+      channelId: '',
+      channelTitle: '',
+      description: '',
+      id: '',
+      publishedAt: '',
+      publishTime: '',
+      thumbnails: {
+        default: {
+          url: '',
+          width: 0,
+          height: 0,
+        },
+      },
+      title: '',
+      duration: 0,
+    } as YoutubeItem;
   }
 };
 
-export const searchYoutube = async (query: string, resultsCount=5) => {
+export const searchYoutube = async (query: string, resultsCount = 5) => {
   try {
-    const res: AxiosResponse<any> = await axios.get('http://localhost:8000/youtube/search', {
-      params: {
-        q: query,
-        resultsCount
+    const res: AxiosResponse<any> = await axios.get(
+      'http://localhost:8000/youtube/search',
+      {
+        params: {
+          q: query,
+          resultsCount,
+        },
       }
-    })
+    );
     return res.data.items;
   } catch (error) {
-    console.error("Error searching youtube");
+    console.error('Error searching youtube');
   }
-}
+};
