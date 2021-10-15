@@ -13,8 +13,12 @@
     * Accept straight urls from input
 
   - General
+    * Create error page to display when backend is offline
     * Improve typography and font sizing
     * Create leave guild button
+      * Create way to change channels within guild
+    * Create help page for commands
+    * *Refresh Tokens*
   - Errors
     * Redirect users on failed requests
 

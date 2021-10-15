@@ -152,7 +152,6 @@ class YoutubeAPI {
   }
 
   public async getItem(req: Request, res: Response) {
-    console.log("[getItem]")
     const itemId = req.query.itemId as string;
     if (!itemId) {
       return res.sendStatus(400);
