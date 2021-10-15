@@ -2,7 +2,7 @@
 
 .player_container {
   display: grid;
-  height: 120px;
+  height: 100%;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   align-items: center;
   padding: 1em 2em;
@@ -32,7 +32,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
-  height: 120px;
+  height: 100%;
   width: 450px;
 }
 

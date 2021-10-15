@@ -31,6 +31,7 @@
   width: 100%;
   overflow: hidden;
   box-shadow: var(--shadow-light);
+  border-radius: var(--border-radius)
 }
 
 #info {
@@ -55,7 +56,7 @@
 
 #player_controls {
   grid-area: ctrls;
-  height: 100%;
+  height: 120px;
   width: 100%;
   display: inline-flex;
   align-items: center;

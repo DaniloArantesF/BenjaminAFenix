@@ -140,7 +140,6 @@ class YoutubeAPI {
   }
 
   public async search(req: Request, res: Response) {
-    console.log(req.query);
     const searchQuery = req.query.q as string;
     let itemCount = Number(req.query.resultsCount as string) || 5;
 

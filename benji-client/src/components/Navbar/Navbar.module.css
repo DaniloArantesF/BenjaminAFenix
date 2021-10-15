@@ -57,7 +57,7 @@
   overflow: auto;
   padding: 0 1rem;
   grid-template-rows: repeat(auto-fill, 1fr);
-  gap: .4em;
+  gap: .5em;
 }
 
 .guilds_container::-webkit-scrollbar {
@@ -83,6 +83,12 @@
   border-radius: 50%;
   justify-content: center;
   align-items: center;
+  padding: 0.1em;
+  cursor: pointer;
+}
+
+.guildIcon:hover {
+  transform: scale(1.1);
 }
 
 .guildIcon img {
