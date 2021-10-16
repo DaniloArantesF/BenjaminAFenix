@@ -50,30 +50,36 @@ const PlayerController = (props: PlayerControllerProps) => {
   } = props;
   const status = useAppSelector(selectStatus);
 
+  // Used to blur icons, allowing animations to run again
+  const interceptClick = (event: BaseSyntheticEvent, next: () => void) => {
+    event.currentTarget.blur();
+    next();
+  }
+
   return (
     <>
       <CurrentlyPlaying />
       <div className={classes.player_container}>
-        <button>
-          <ShuffleIcon onClick={toggleShuffle} />
+        <button  onClick={(event) => interceptClick(event, toggleShuffle)} >
+          <ShuffleIcon/>
         </button>
-        <button>
-          <BackIcon onClick={prevTrack} />
+        <button onClick={(event) => interceptClick(event, prevTrack)}>
+          <BackIcon />
         </button>
         {status === 'playing' ? (
-          <button>
-            <PauseIcon onClick={pausePlayer} />
+          <button onClick={(event) => interceptClick(event, pausePlayer)}>
+            <PauseIcon />
           </button>
         ) : (
-          <button>
-            <PlayIcon onClick={unpausePlayer} />
+          <button onClick={(event) => interceptClick(event, unpausePlayer)}>
+            <PlayIcon />
           </button>
         )}
-        <button>
-          <SkipIcon onClick={nextTrack} />
+        <button onClick={(event) => interceptClick(event, nextTrack)}>
+          <SkipIcon />
         </button>
-        <button>
-          <RepeatIcon onClick={toggleRepeat} />
+        <button onClick={(event) => interceptClick(event, toggleRepeat)}>
+          <RepeatIcon />
         </button>
         <div className={classes.sound_controller}>
           <button>

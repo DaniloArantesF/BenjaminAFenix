@@ -37,8 +37,6 @@
 #info {
   grid-area: info;
   padding: 1em;
-  background: transparent;
-  box-shadow: none;
 }
 
 #video {
