@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classes from './Search.module.css';
 import SearchBar from './SearchBar';
 import { YoutubeItem } from '../../types/youtube';
@@ -22,6 +22,67 @@ const Search = ({ requestTrack }: SearchProps) => {
   const [items, setItems] = useState<Array<YoutubeItem>>([]);
   const [loading, setLoading] = useState(false);
   const { username } = useAppSelector(selectAuth);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<HTMLUListElement>(null);
+
+  /**
+   * This function is called for every click in the page.
+   * If search is active and click was outside search component
+   * dismiss items. otherwise do nothing
+   */
+  const checkDismiss = (event: MouseEvent) => {
+    const { x: clickX, y: clickY } = event;
+    const { y: searchBarY } = searchRef.current?.getBoundingClientRect() || {
+      x: 0,
+      y: 0,
+      width: 0,
+    };
+    const {
+      x: resultsX,
+      y: resultsY,
+      height: resultsHeight,
+      width: resultsWidth,
+    } = itemsRef.current?.getBoundingClientRect() || {
+      x: 0,
+      y: 0,
+      height: 0,
+      width: 0,
+    };
+    const lowerY = searchBarY;
+    const upperY = resultsY + resultsHeight;
+    const lowerX = resultsX;
+    const upperX = resultsX + resultsWidth;
+
+    const click = (clickX: number, clickY: number) => {
+      function isWithin(
+        lowerX: number,
+        upperX: number,
+        lowerY: number,
+        upperY: number
+      ) {
+        return (
+          clickX > lowerX &&
+          clickX < upperX &&
+          clickY > lowerY &&
+          clickY < upperY
+        );
+      }
+      return { isWithin };
+    };
+
+    if (!click(clickX, clickY).isWithin(lowerX, upperX, lowerY, upperY)) {
+      // Dont bother reset if no results
+      if (items.length > 0) setItems([]);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('click', checkDismiss);
+
+    return () => {
+      window.removeEventListener('click', checkDismiss);
+    };
+  }, []);
 
   // search items dont contain some info to construct track
   // fetch new data
@@ -75,13 +136,13 @@ const Search = ({ requestTrack }: SearchProps) => {
   };
 
   return (
-    <div className={classes.search_container}>
+    <div ref={searchRef} className={classes.search_container}>
       <SearchBar
         inputCallback={searchInputHandler}
         submitCallback={searchSubmitHandler}
         isLoading={loading}
       />
-      <ul>
+      <ul ref={itemsRef}>
         {items.map((item, index) => {
           return <SearchItem key={index} selectItem={selectItem} item={item} />;
         })}
