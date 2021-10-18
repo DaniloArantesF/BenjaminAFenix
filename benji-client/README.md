@@ -11,6 +11,7 @@
     * Setup shuffle & repeat
   - Search
     * Accept straight urls from input
+    * Click anywhere to dismiss search
 
   - General
     * Create error page to display when backend is offline

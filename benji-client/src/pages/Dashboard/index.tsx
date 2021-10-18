@@ -158,9 +158,7 @@ const Dashboard = () => {
         <section id={classes.queue} className={classes.dashboard__component}>
           <Queue items={items} />
         </section>
-        <section id={classes.search} className={classes.dashboard__component}>
-          <Search requestTrack={requestTrack} />
-        </section>
+        <Search requestTrack={requestTrack} />
         <section
           id={classes.player_controls}
           className={classes.dashboard__component}

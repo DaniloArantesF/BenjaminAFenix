@@ -1,24 +1,40 @@
 .search_container {
   --thumb-width: 120px;
   --thumb-height: 90px;
+  --search-bar-width: 450px;
+  --search-bar-height: 3rem;
   position: relative;
-  display: inline-grid;
-  width: 100%;
-  grid-template-rows: 50px 1fr;
-  gap: 1em;
-  padding: 1em;
+  left: 0;
+  height: calc(var(--search-bar-height) + 2em);
+  padding: 1em 1em 0 1em;
   justify-content: center;
+  grid-area: srch;
 }
 
 .search_container > ul {
+  position: absolute;
+  width: var(--search-bar-width);
+  top: var(--search-bar-height);
+  left: 50%;
+  transform: translateX(-50%);
   display: inline-flex;
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
+  z-index: 30;
+  background-color: var(--clr-surface2);
+  border-radius: 0 0 0.5em 0.5em;
+  padding-right: 0.2em;
+  box-shadow: var(--shadow-heavy);
 }
 
 .search__item * {
   cursor: default;
+}
+
+.search__item:first-child,
+.search__item:last-child {
+  padding-top: 1em;
 }
 
 .search__item {
@@ -31,6 +47,12 @@
   height: calc(var(--thumb-height) + 1em);
   transition: all 100ms linear;
   background-color: var(--clr-surface2);
+}
+
+.search__item > img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
 }
 
 .search__item > span {
@@ -53,17 +75,19 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: auto;
-  max-width: 300px;
+  width: var(--search-bar-width);;
   height: 3rem;
   background-color: var(--clr-surface2);
-  padding: 0.1em 0.5em;
+  padding: 0.1em 1em;
   overflow: hidden;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0.5em;
+  box-shadow: var(--shadow-heavy);
 }
 
-.searchBar_container input {
-  border: none;
+.searchBar_container form {
+  width: 100%;
 }
 
 .searchBar_container > span {
@@ -155,17 +179,18 @@
 }
 
 .search_input {
+  width: 100%;
   position: relative;
   font-weight: bold;
   padding: 0.5rem;
   font-size: 1rem;
   color: #fff;
-  border: none;
   border-top: 1px solid var(--clr-bg);
   border-bottom: 1px solid var(--clr-bg);
   outline: none;
   background: transparent;
   transition: all 100ms ease-in;
+  border: none;
 }
 
 .search_input:focus {

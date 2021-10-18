@@ -11,9 +11,10 @@
   height: 100%;
   display: grid;
   grid-template-areas:
-    'info srch'
-    'que srch'
-    'ctrls ctrls';
+    'srch srch'
+    'info info'
+    'que btns'
+    'ctrls prev';
 
   /* VIDEO STUFF, come back to it later */
   /* This is done to keep first column only as wide as video component and enforce 16/9 aspect ratio
@@ -25,13 +26,15 @@
 }
 
 .dashboard__component {
+  position: relative;
   background-color: var(--clr-surface1);
   display: flex;
   height: 100%;
   width: 100%;
   overflow: hidden;
   box-shadow: var(--shadow-light);
-  border-radius: var(--border-radius)
+  border-radius: var(--border-radius);
+  z-index: 0;
 }
 
 #info {
@@ -65,5 +68,4 @@
   grid-area: srch;
   display: grid;
   max-width: 700px;
-  overflow: auto;
 }
