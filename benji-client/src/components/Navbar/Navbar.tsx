@@ -13,7 +13,7 @@ import { getDiscordAvatar } from '../../libs/Discord';
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
-  const { guilds } = useAppSelector(selectDashboard);
+  const { guilds, currentGuild } = useAppSelector(selectDashboard);
   const history = useHistory();
 
   /**
@@ -43,7 +43,7 @@ const Navbar = () => {
       <section className={classes.guilds_container}>
         {guilds.map((guild, index) => {
           return (
-            <div className={classes.guildIcon}
+            <div className={`${classes.guildIcon} ${guild.id === currentGuild?.id ? classes.guildActive : '' }`}
               key={index}
               onClick={() => handleGuildUpdate(guild)}
             >

@@ -1,12 +1,15 @@
 .navbar_container {
-  width: 200px;
+  width: 100%;
+  max-width: 250px;
   height: 100vh;
-  display: inline-grid;
+  display: grid;
   grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
   padding: 1rem;
+  margin-right: 2em;
   align-content: flex-start;
   justify-content: flex-start;
-  justify-items: center;
+  justify-items: flex-start;
   text-align: center;
   gap: 1em;
   font-size: 1.5em;
@@ -14,15 +17,19 @@
   padding-bottom: var(--margin-bottom);
 }
 
+.navbar_container > * {
+  margin-left: 2em;
+}
+
 .navbar_container > div {
   display: inline-block;
-  width: 100%;
   word-wrap: break-word;
   word-break: normal;
 }
 
 .logo_container {
   position: relative;
+  margin: 0;
 }
 
 .logo_container svg {
@@ -53,11 +60,13 @@
 
 .guilds_container {
   display: grid;
+  width: 100%;
   max-height: 100%;
   overflow: auto;
-  padding: 0 1rem;
   grid-template-rows: repeat(auto-fill, 1fr);
   gap: .5em;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .guilds_container::-webkit-scrollbar {
@@ -97,8 +106,46 @@
   border-radius: 50%;
 }
 
+
+.guildIcon.guildActive {
+  grid-row: 1;
+  transform: translateX(50px);
+  border-radius: 15px;
+  /*animation: activateGuild 200ms linear;*/
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-radius 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.guildIcon.guildActive img {
+  border-radius: 0.5em;
+  transform: scale(1.2);
+}
+
+.guildIcon.guildActive::before {
+  content: '';
+  background-color: var(--clr-surface3);
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: -75%;
+  transform: translateY(-50%);
+  animation: markerAnimation 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes markerAnimation {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: -75%;
+  }
+}
+
 .navbar__footer {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: flex-start;
 }
