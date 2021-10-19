@@ -1,0 +1,43 @@
+.track_preview {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 300px;
+  width: 300px;
+  background-color: var(--clr-surface1);
+}
+
+.track__thumbnail {
+  width: 100%;
+  aspect-ratio: 16/9;
+  padding-bottom: 1em;
+}
+
+.track__thumbnail img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.track__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 .5em;
+}
+
+.track__info h1 {
+  font-size: 1.2em;
+  font-weight: 500;
+  word-break: normal;
+  color: var(--clr-accent);
+  padding-bottom: 0.5em;
+}
+
+.track__info h2 {
+  font-size: 1em;
+  font-weight: 500;
+  word-break: normal;
+}

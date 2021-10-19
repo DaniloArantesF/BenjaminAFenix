@@ -30,6 +30,7 @@ import { getDiscordAvatar } from '../../libs/Discord';
 import { selectPlayerState } from '../../app/playerSlice';
 import GuildHeader from '../../components/GuildHeader';
 import { createGetAccessor } from 'typescript';
+import TrackPreview from '../../components/TrackPreview';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -202,6 +203,9 @@ const Dashboard = () => {
             toggleShuffle={toggleShuffle}
             setVolume={setVolume}
           />
+        </section>
+        <section id={classes.preview } className={ classes.dashboard__component}>
+          <TrackPreview track={ currentTrack}/>
         </section>
       </div>
     </div>

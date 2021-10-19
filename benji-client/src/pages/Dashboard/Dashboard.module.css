@@ -7,20 +7,21 @@
 }
 
 .dashboard__body {
-  width: 100%;
+  width: calc(100% - 250px);
   height: 100%;
   display: grid;
   grid-template-areas:
     'srch srch'
-    'info info'
+    'info btns'
     'que btns'
+    'que prev'
     'ctrls prev';
 
   /* VIDEO STUFF, come back to it later */
   /* This is done to keep first column only as wide as video component and enforce 16/9 aspect ratio
   grid-template-columns: minmax(auto, calc(16*var(--max-video-height)/9)) 1fr;
   grid-template-rows: 1fr 1fr auto; */
-  grid-template-columns: minmax(600px, 800px) minmax(400px, 500px);
+  grid-template-columns: minmax(auto, 800px) auto;
   gap: 1em;
   padding: 5% 2em;
 }
@@ -30,7 +31,7 @@
   background-color: var(--clr-surface1);
   display: flex;
   height: 100%;
-  width: 100%;
+  width: fit-content;
   overflow: hidden;
   box-shadow: var(--shadow-light);
   border-radius: var(--border-radius);
@@ -40,6 +41,7 @@
 #info {
   grid-area: info;
   padding: 1em;
+  width: 100%;
 }
 
 #video {
@@ -52,20 +54,25 @@
 #queue {
   grid-area: que;
   align-items: flex-start;
-  max-width: 800px;
+  width: 100%;
 }
 
 #player_controls {
   grid-area: ctrls;
-  height: 120px;
+  height: 100%;
   width: 100%;
   display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 #search {
   grid-area: srch;
-  display: grid;
-  max-width: 700px;
+}
+
+#preview {
+  grid-area: prev;
+  width: fit-content;
+  height: fit-content;
+  max-height: 100%;
+  margin-top: auto;
 }

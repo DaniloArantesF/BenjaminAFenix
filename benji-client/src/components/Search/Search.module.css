@@ -5,11 +5,13 @@
   --search-bar-width: 450px;
   --search-bar-height: 3rem;
   position: relative;
+  max-width: var(--search-bar-width);
   left: 0;
   height: calc(var(--search-bar-height) + 2em);
   padding: 1em 1em 0 1em;
   justify-content: center;
   grid-area: srch;
+  margin: 0 auto;
 }
 
 .search_container > ul {

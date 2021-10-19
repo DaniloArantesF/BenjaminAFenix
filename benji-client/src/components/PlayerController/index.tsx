@@ -21,23 +21,6 @@ interface PlayerControllerProps {
   setVolume: (vol: number) => void;
 }
 
-const CurrentlyPlaying = () => {
-  const { currentTrack } = useAppSelector(selectPlayerState);
-  if (!currentTrack) return <div></div>;
-
-  return (
-    <div className={classes.currently_playing}>
-      <div className={classes.track__thumbnail}>
-        <img src={currentTrack.thumbnail} />
-      </div>
-      <div className={classes.track__info}>
-        <h1>{currentTrack.title}</h1>
-        <h2>{currentTrack.channelTitle}</h2>
-      </div>
-    </div>
-  );
-};
-
 const PlayerController = (props: PlayerControllerProps) => {
   const {
     unpausePlayer,
@@ -58,7 +41,6 @@ const PlayerController = (props: PlayerControllerProps) => {
 
   return (
     <>
-      <CurrentlyPlaying />
       <div className={classes.player_container}>
         <button  onClick={(event) => interceptClick(event, toggleShuffle)} >
           <ShuffleIcon/>
