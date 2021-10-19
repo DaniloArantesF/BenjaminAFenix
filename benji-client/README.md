@@ -19,9 +19,10 @@
     * Create leave guild button
       * Create way to change channels within guild
     * Create help page for commands
-    * *Refresh Tokens*
+    * ~~*Refresh Tokens*~~
   - Errors
     * Redirect users on failed requests
 
 [Bugs]
+  * *Logout btn still crashes stuff*
   * Dragging does not work on firefox

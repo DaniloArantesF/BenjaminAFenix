@@ -92,7 +92,7 @@ class Auth {
       return res.send({
         accessToken: authRes.data.access_token,
         refreshToken: authRes.data.refresh_token,
-        expiresIn: authRes.data.expires_in,
+        expiresIn: authRes.data.expires_in
       });
     } catch (error) {
       console.log(error);

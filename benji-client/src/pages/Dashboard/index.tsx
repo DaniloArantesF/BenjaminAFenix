@@ -6,7 +6,13 @@ import Search from '../../components/Search/Search';
 import { useEffect, useState } from 'react';
 import { selectItems, selectPosition } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { selectAuth, setUser, setCredentials } from '../../app/authSlice';
+import {
+  selectAuth,
+  setUser,
+  setCredentials,
+  refreshCredentials,
+  setRefreshTimeout,
+} from '../../app/authSlice';
 import {
   Channel,
   Guild,
@@ -23,6 +29,7 @@ import { getUserData, getUserGuilds } from '../../libs/Discord';
 import { getDiscordAvatar } from '../../libs/Discord';
 import { selectPlayerState } from '../../app/playerSlice';
 import GuildHeader from '../../components/GuildHeader';
+import { createGetAccessor } from 'typescript';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -79,7 +86,7 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
-  const { accessToken } = useAppSelector(selectAuth);
+  const { accessToken, refreshToken, expiration } = useAppSelector(selectAuth);
   const { currentTrack } = useAppSelector(selectPlayerState);
   const [windowWidth, setWindowWidth] = useState<number>();
   const history = useHistory();
@@ -112,6 +119,29 @@ const Dashboard = () => {
     }
     init();
   }, []);
+
+  /**
+   * Initially set timeout to refresh token before it expires.
+   * A new interval will be set when the expiration is updated.
+   */
+  useEffect(() => {
+    const expiresIn = expiration - Date.now(); // Time in ms until expiration
+
+    const refresh = () => {
+      //console.log('Refreshing tokens...');
+      dispatch(refreshCredentials(refreshToken));
+    };
+
+    // Refresh right away
+    if (expiresIn < 0) {
+      return refresh();
+    }
+    const interval = setTimeout(
+      refresh,
+      expiresIn - 5 * 60 * 1000 // refresh token 5 min before
+    );
+    dispatch(setRefreshTimeout(interval));
+  }, [expiration]);
 
   const init = async () => {
     // Check that token is present

@@ -8,7 +8,8 @@ export interface AuthState {
   username: string;
   accessToken: string;
   refreshToken: string;
-  refreshInterval: number;
+  refreshTimeout?: NodeJS.Timeout;
+  expiration: number;
   error: any;
 }
 
@@ -18,20 +19,52 @@ const initialState: AuthState = {
   username: localStorage.getItem('username') || '',
   accessToken: localStorage.getItem('accessToken') || '',
   refreshToken: localStorage.getItem('refreshToken') || '',
-  refreshInterval: 0,
+  expiration: 0,
   error: null,
-}
+};
 
 // Payload creator
-export const fetchCredentials = createAsyncThunk('login', async (code: string, { rejectWithValue }) => {
-  try {
-    const { data } = await axios.post('http://localhost:8000/auth/code', { code }) as any;
-    return { accessToken: data.accessToken, refreshToken: data.refreshToken };
-  } catch (error) {
-    console.error(error);
-    return rejectWithValue(error);
+export const fetchCredentials = createAsyncThunk(
+  'login',
+  async (code: string, { rejectWithValue }) => {
+    try {
+      const { data } = (await axios.post('http://localhost:8000/auth/code', {
+        code,
+      })) as any;
+      const expiresIn = data.expiresIn;
+      return {
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+        expiration: Date.now() + expiresIn * 1000,
+      };
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(error);
+    }
   }
-});
+);
+
+export const refreshCredentials = createAsyncThunk(
+  'refresh',
+  async (refreshToken: string, { rejectWithValue }) => {
+    try {
+      const { data } = (await axios.post('http://localhost:8000/auth/refresh', {
+        refreshToken,
+      })) as any;
+
+      const expiresIn = data.expiresIn;
+      return {
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+        expiration: Date.now() + expiresIn * 1000,
+      };
+    } catch (error) {
+      console.error('Error refreshing tokens');
+      // TODO: handle
+      return rejectWithValue(error);
+    }
+  }
+);
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -50,17 +83,26 @@ export const authSlice = createSlice({
     setCredentials: (state, { payload }) => {
       state.accessToken = payload.accessToken;
       state.refreshToken = payload.refreshToken;
+      return state;
+    },
+    setRefreshTimeout: (state, { payload }) => {
+      if (state.refreshTimeout) {
+        clearTimeout(state.refreshTimeout);
+      }
+      state.refreshTimeout = payload;
+      return state;
     },
   },
   extraReducers: (builder) => {
     // Builder callback is used as it provides correctly typed reducers from action creators
     builder.addCase(fetchCredentials.fulfilled, (state, { payload }) => {
-      // TODO: set refresh interval
       state.accessToken = payload.accessToken;
       state.refreshToken = payload.refreshToken;
+      state.expiration = payload.expiration;
 
       localStorage.setItem('accessToken', payload.accessToken);
       localStorage.setItem('refreshToken', payload.refreshToken);
+      localStorage.setItem('expiration', `${payload.expiration}`);
       state.error = null;
     });
     builder.addCase(fetchCredentials.rejected, (state, { payload }) => {
@@ -68,9 +110,26 @@ export const authSlice = createSlice({
         state.error = payload;
       }
     });
+
+    builder.addCase(refreshCredentials.fulfilled, (state, { payload }) => {
+      state.accessToken = payload.accessToken;
+      state.refreshToken = payload.refreshToken;
+      state.expiration = payload.expiration;
+
+      localStorage.setItem('accessToken', payload.accessToken);
+      localStorage.setItem('refreshToken', payload.refreshToken);
+      localStorage.setItem('expiration', `${payload.expiration}`);
+    });
+
+    builder.addCase(refreshCredentials.rejected, (state, { payload }) => {
+      if (payload) {
+        state.error = payload;
+      }
+    });
   },
 });
 
-export const { clearCredentials, setUser, setCredentials } = authSlice.actions;
+export const { clearCredentials, setUser, setCredentials, setRefreshTimeout } =
+  authSlice.actions;
 export const selectAuth = (state: AppState) => state.auth;
 export default authSlice.reducer;
