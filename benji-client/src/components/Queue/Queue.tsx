@@ -4,12 +4,14 @@ import { msToMinSec } from '../../util/util';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   selectPosition,
+  selectQueue,
   selectQueueLength,
   setQueue,
 } from '../../app/queueSlice';
 import classes from './Queue.module.css';
 import { ReactComponent as DraggableIcon } from '../../assets/draggable.svg';
 import { selectPlayerState } from '../../app/playerSlice';
+import { selectDashboard } from '../../app/dashboardSlice';
 
 export interface QItem extends Track {
   itemPosition: number;
@@ -24,16 +26,17 @@ interface QItemProps {
   dragCallback: (event: SyntheticEvent) => void;
   mouseDownCb: (event: SyntheticEvent) => void;
   mouseUpCb?: (event: SyntheticEvent) => void;
+  active?: boolean
 }
 
-const QueueItem = ({ item, dragCallback, mouseUpCb }: QItemProps) => {
+const QueueItem = ({ item, dragCallback, mouseUpCb, active }: QItemProps) => {
   const [hover, setHover] = useState(false); // current item is being hovered
   const { itemPosition, title, channelTitle, duration, user } = item;
 
   return (
     <div
       draggable="true"
-      className={classes.queue__item}
+      className={`${classes.queue__item} ${active && classes.current_item}`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onDrag={dragCallback}
@@ -127,7 +130,7 @@ const Queue = ({ items }: QProps) => {
         ref={headerRef}
         className={`${classes.queue__item} ${classes.queue__header}`}
       >
-        <span>Order</span>
+        <span>#</span>
         <span>Title</span>
         <span>Author</span>
         <span>Duration</span>
@@ -151,9 +154,10 @@ const Queue = ({ items }: QProps) => {
               dragCallback={(event: SyntheticEvent) =>
                 dragHandler(index, event)
               }
-              mouseDownCb={(event: SyntheticEvent) => {}}
+              mouseDownCb={(event: SyntheticEvent) => { }}
               key={index}
               item={item}
+              active={ index === position }
             />
           );
         })}
