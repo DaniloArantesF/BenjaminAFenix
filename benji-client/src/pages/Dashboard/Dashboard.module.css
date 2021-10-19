@@ -7,7 +7,7 @@
 }
 
 .dashboard__body {
-  width: calc(100% - 250px);
+  width: fit-content;
   height: 100%;
   display: grid;
   grid-template-areas:

@@ -5,7 +5,6 @@
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 1fr;
   padding: 1rem;
-  margin-right: 2em;
   align-content: flex-start;
   justify-content: flex-start;
   justify-items: flex-start;
