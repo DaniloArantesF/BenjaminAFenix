@@ -48,10 +48,11 @@ class WebClient {
     this.io = new Server(server, { cors: { origin: '*' } });
     this.discordClient = discordClient;
     this.connections = this.discordClient.connections;
-
+    this.webClients = new Map();
     this.server = this.io.of('/bot');
     this.server.on('connection', (socket: Socket) => {
       socket.on('ping', () => this.pong(socket));
+      socket.on('player_connect', (payload) => this.createConnection(socket, payload))
       socket.on('get_player', (payload) => this.getPlayer(socket, payload));
       socket.on('join_channel', (payload) => this.joinChannel(socket, payload));
       socket.on('request_track', (payload) =>
@@ -104,10 +105,13 @@ class WebClient {
       socket,
       guildId,
     });
+
+    socket.join(guildId);
+    return this.getPlayer(socket, payload);
   }
 
   public getPlayer(socket: Socket, payload: any) {
-    const { id: guildId } = payload;
+    const { guildId } = payload;
 
     // Check if bot is active in this guild
     if (!this.connections.get(guildId)) {
@@ -189,16 +193,12 @@ class WebClient {
 
   public handlePlayerUpdate(payload: PlayerState) {
     const { guildId, currentTrack, progress, status, volume, queue } = payload;
-    console.info(`Player update for ${guildId}...`)
-    console.log(payload);
+    this.server.to(guildId).emit('player_update', payload);
   }
 
   public handlePlaybackUpdate(payload: PlaybackState) {
     const { guildId, status, volume, progress, timestamp } = payload;
-
-
-    console.info(`Playback update for ${guildId}...`)
-    console.log(progress)
+    this.server.to(guildId).emit('playback_state', payload);
   }
 }
 

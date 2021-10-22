@@ -6,6 +6,7 @@ import DiscordClient from './DiscordClient';
 import Auth from './apis/Auth';
 import DiscordAPI from './apis/Discord';
 import YoutubeAPI from './apis/Youtube';
+import BotAPI from './apis/';
 import rateLimit from 'express-rate-limit';
 
 const PORT = 8000;
@@ -26,6 +27,7 @@ class App {
     // Create bot client and pass it to API
     this.bot = Bot(this.server);
     DiscordAPI.setClient(this.bot);
+    BotAPI.setClient(this.bot);
 
     this.server.listen(PORT, () => {
       console.log(`Server listening at ${PORT}`);
@@ -48,6 +50,7 @@ class App {
   }
 
   private routes() {
+    this.express.use('/', BotAPI.router);
     this.express.use('/auth', Auth.router);
     this.express.use('/discord', DiscordAPI.router);
     this.express.use('/youtube', YoutubeAPI.router);

@@ -6,6 +6,8 @@ import { QueueState, setQueue } from './queueSlice';
 import { Track } from '../types';
 import { selectAuth } from './authSlice';
 import { selectPlayerState, setCurrentTrack, updatePlaybackState } from './playerSlice';
+import { connect } from 'http2';
+import axios from 'axios';
 
 const endpoint = `localhost:8000/bot`;
 
@@ -24,7 +26,7 @@ const useSocket = () => {
   const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
-    setSocket(socketIOClient(endpoint));
+    connect();
 
     return () => {
       socket?.off('connect');
@@ -45,6 +47,26 @@ const useSocket = () => {
       getGuildPlayer();
     }
   }, [currentGuild, socket]);
+
+  /**
+   * Pings the server to check if bot is online.
+   * If not, dont bother trying to connect
+   */
+  const checkBotStatus = async () => {
+    try {
+      const res = await axios.get('http://localhost:8000/status');
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  const connect = async () => {
+    const isOnline = await checkBotStatus();
+    if (isOnline) {
+      setSocket(socketIOClient(endpoint));
+    }
+  }
 
   const setUpEvents = () => {
     socket?.on('connect', () => {
@@ -75,7 +97,7 @@ const useSocket = () => {
 
   const getGuildPlayer = () => {
     if (!currentGuild) return;
-    socket?.emit('get_player', { id: currentGuild.id });
+    socket?.emit('player_connect', { guildId: currentGuild?.id });
   };
 
   const joinChannel = (guildId: string, channelId: string) => {
