@@ -11,14 +11,13 @@ import type { Track } from './DiscordClient';
 import QueueController from './QueueController';
 import { getYoutubeUrl } from './apis/Youtube';
 import { Message } from 'discord.js';
-import { Namespace } from 'socket.io';
+import { EventBus } from './EventBus';
 
 /**
  * Manages player state and holds queue controller
  * Calls queue for state updates relaying commands from client
  */
 class PlayerController extends AudioPlayer {
-  channel: Namespace;
   currentTrack: Track;
   guildId: string;
   lastEmbed: Message;
@@ -29,15 +28,16 @@ class PlayerController extends AudioPlayer {
   volume: number;
   playerInterval: NodeJS.Timer;
   clientUpdateInterval: number; // Frequency with whitch clients will be updated
+  eventBus: EventBus;
 
-  constructor(guildId: string, channel: Namespace) {
+  constructor(guildId: string) {
     super();
     this.queueController = new QueueController();
     this.status = AudioPlayerStatus.Idle;
     this.guildId = guildId;
     this.volume = 1;
-    this.channel = channel;
     this.clientUpdateInterval = 1000;
+    this.eventBus = EventBus.getInstance();
 
     /* Player Events */
     this.on(AudioPlayerStatus.Idle, () => {
@@ -120,7 +120,8 @@ class PlayerController extends AudioPlayer {
     }
 
     // Update web clients
-    this.channel.to(this.guildId).emit('player_update', this.getPlayerState());
+    // this.channel.to(this.guildId).emit('player_update', this.getPlayerState());
+    this.eventBus.dispatch(`player_update`, this.getPlayerState());
   }
 
   /**
@@ -134,7 +135,14 @@ class PlayerController extends AudioPlayer {
     this.progress = state.playbackDuration;
     const timestamp = Date.now();
 
-    this.channel.to(this.guildId).emit('playback_state', {
+    // this.channel.to(this.guildId).emit('playback_state', {
+    //   status: this.status,
+    //   volume: this.volume,
+    //   progress: this.progress,
+    //   timestamp,
+    // });
+    this.eventBus.dispatch('playback_state', {
+      guildId: this.guildId,
       status: this.status,
       volume: this.volume,
       progress: this.progress,
@@ -168,6 +176,7 @@ class PlayerController extends AudioPlayer {
     const { currentTrack, progress, queueController, status, volume } = this;
 
     return {
+      guildId: this.guildId,
       currentTrack,
       progress,
       status,

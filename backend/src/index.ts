@@ -40,8 +40,8 @@ class App {
 
     // Rate limiter
     this.express.use(rateLimit({
-      windowMs: 10 * 1000, // 10 seconds in ms,
-      max: 100,
+      windowMs: 1000, // 10 seconds in ms,
+      max: 10,
       message: 'Exceeded 100 requests/min',
       headers: true,
     }));

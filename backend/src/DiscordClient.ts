@@ -41,28 +41,16 @@ export interface DiscordConnection {
   player: PlayerController;
 }
 
-// Web clients are created in the connection event handler
-// Each web client is connected to one guild at a time
-// On get_player event handler you should check if that client is
-// already connected and if so leave the previous guild
-export interface WebClient {
-  socket: Socket;
-  guildId: string;
-}
-
 class DiscordClient extends Client {
   static commands = new Collection<string, Command>();
   connections: Map<string, DiscordConnection | null>;
   ready: boolean;
-  server: Namespace;
-  webClients: Map<string, WebClient>; // Maps socket.id to web client
 
-  constructor(props: ClientOptions, io: Server) {
+  constructor(props: ClientOptions) {
     super(props);
     this.ready = false;
     this.connections = new Map(); // maps guild ids to voice connections
-    this.server = io.of('/bot');
-    this.webClients = new Map();
+
     this.setUpCommands();
     // this.setUpEvents();
 
@@ -79,107 +67,7 @@ class DiscordClient extends Client {
       this.ready = true;
     });
 
-    /* Socket.io Events */
-    this.server.on('connection', (socket: Socket) => {
-      socket.on('get_player', (payload) => {
-        const { id: guildId } = payload;
-        const client = this.webClients.get(socket.id);
 
-        // New client
-        if (!client) {
-          console.log(`Creating new client ${socket.id}.`);
-          this.webClients.set(socket.id, {
-            socket,
-            guildId,
-          });
-        } else {
-          // Disconnect client from previous room before joining
-          console.log(`Disconnecting ${socket.id} from ${client.guildId}`);
-          socket.leave(client.guildId);
-        }
-
-        console.log(`Connecting ${socket.id} to ${guildId}`);
-        socket.join(guildId);
-
-        // Check if bot is active in this guild
-        if (!this.connections.get(guildId)) {
-          return socket.emit('not_active');
-        }
-
-        // Otherwise send queue to client
-        const { player } = this.connections.get(guildId);
-        socket.emit('player_update', player.getPlayerState());
-      });
-
-      socket.on('join_channel', async (payload) => {
-        const { guildId, channelId } = payload;
-
-        const guild = this.guilds.cache.get(guildId);
-        const { player } = await this.joinChannel(guild, channelId);
-        socket.emit('player_update', player.getPlayerState());
-      });
-
-      socket.on('request_track', (payload) => {
-        const track: Track = payload.track;
-        const guildId = this.webClients.get(socket.id)?.guildId;
-        if (!guildId) return console.error('Web client not found', payload);
-
-        //console.info(`Pushing ${JSON.stringify(track, null, 2)} to ${guildId}`);
-        const { player } = this.connections.get(guildId);
-        player.queueController.pushItem(track);
-      });
-
-      socket.on('unpause', (payload) => {
-        const user = payload;
-        const guildId = this.webClients.get(socket.id)?.guildId;
-        const { player } = this.connections.get(guildId);
-        player.unpause();
-      });
-
-      socket.on('pause', (payload) => {
-        const user = payload;
-        const guildId = this.webClients.get(socket.id)?.guildId;
-        const { player } = this.connections.get(guildId);
-        player.pause();
-      });
-
-      socket.on('next', (payload) => {
-        const user = payload;
-        const guildId = this.webClients.get(socket.id)?.guildId;
-        const { player } = this.connections.get(guildId);
-        player.queueController.next();
-      });
-
-      socket.on('prev', (payload) => {
-        const user = payload;
-        const guildId = this.webClients.get(socket.id)?.guildId;
-        const { player } = this.connections.get(guildId);
-        player.queueController.previous();
-      });
-
-      socket.on('shuffle', (payload) => {
-        const user = payload;
-        console.log('shuffle');
-      });
-
-      socket.on('repeat', (payload) => {
-        const user = payload;
-        console.log('repeat');
-      });
-
-      socket.on('volume', (payload) => {
-        const volume = payload.volume;
-        console.log('volume', volume);
-      });
-
-      socket.on('disconnect', (reason) => {
-        // Remove socket from guild room and delete entry in clients map
-        if (this.webClients.get(socket.id)) {
-          socket.leave(this.webClients.get(socket.id).guildId);
-          this.webClients.delete(socket.id);
-        }
-      });
-    });
   }
 
   private setUpCommands() {
@@ -222,7 +110,7 @@ class DiscordClient extends Client {
         adapterCreator: guild.voiceAdapterCreator,
       });
 
-      const player = new PlayerController(guild.id, this.server);
+      const player = new PlayerController(guild.id);
       connection.subscribe(player);
 
       this.connections.set(guild.id, {
@@ -250,7 +138,7 @@ class DiscordClient extends Client {
   /**
    * Return guild from interaction
    */
-  public getGuild(interaction: CommandInteraction): Guild {
+  public getGuildFromInteraction(interaction: CommandInteraction): Guild {
     return this.guilds.cache.get(interaction.guildId);
   }
 
@@ -263,10 +151,14 @@ class DiscordClient extends Client {
    * @param interaction
    */
   public async getUserVoiceChannel(interaction: CommandInteraction) {
-    const guild = this.getGuild(interaction);
+    const guild = this.getGuildFromInteraction(interaction);
     const userId = interaction.member.user.id;
     const member = await this.getGuildMember(guild, userId);
     return member.voice.channelId;
+  }
+
+  public getGuild(guildId: string) {
+    return this.guilds.cache.get(guildId);
   }
 }
 

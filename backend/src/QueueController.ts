@@ -1,6 +1,11 @@
 import { EventEmitter } from 'events';
 import type { Track } from './DiscordClient';
 
+export interface QueueState {
+  items: Track[];
+  position: number;
+}
+
 class QueueController extends EventEmitter {
   items: Track[];
   position: number;
@@ -19,7 +24,7 @@ class QueueController extends EventEmitter {
   }
 
   public pushItem(item: Track) {
-    //console.log(JSON.stringify(item, null, 2));
+    // console.log(JSON.stringify(item, null, 2));
     this.items = [...this.items, item];
     this.emit('queue_update');
   }
