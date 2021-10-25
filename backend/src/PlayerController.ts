@@ -12,6 +12,7 @@ import QueueController from './QueueController';
 import { getYoutubeUrl } from './apis/Youtube';
 import { Message } from 'discord.js';
 import { EventBus } from './EventBus';
+import logger from './Logger';
 
 /**
  * Manages player state and holds queue controller
@@ -135,12 +136,6 @@ class PlayerController extends AudioPlayer {
     this.progress = state.playbackDuration;
     const timestamp = Date.now();
 
-    // this.channel.to(this.guildId).emit('playback_state', {
-    //   status: this.status,
-    //   volume: this.volume,
-    //   progress: this.progress,
-    //   timestamp,
-    // });
     this.eventBus.dispatch('playback_state', {
       guildId: this.guildId,
       status: this.status,
@@ -152,19 +147,28 @@ class PlayerController extends AudioPlayer {
 
   private playCurrentItem() {
     const item = this.currentTrack;
-    const stream = ytdl(getYoutubeUrl(item.id), {
-      filter: 'audioonly',
-      // tslint:disable-next-line: no-bitwise
-      highWaterMark: 1 << 25,
-    });
-    const resource = createAudioResource(stream, {
-      inputType: StreamType.Arbitrary,
-      inlineVolume: true, // Creates volume transformer allowing volume settings
-    });
-    this.resource = resource;
-    resource.volume.setVolumeLogarithmic(this.volume);
-    this.status = AudioPlayerStatus.Playing;
-    this.play(resource);
+
+    try {
+      const stream = ytdl(getYoutubeUrl(item.id), {
+        filter: 'audioonly',
+        // tslint:disable-next-line: no-bitwise
+        highWaterMark: 1 << 25,
+      });
+      const resource = createAudioResource(stream, {
+        inputType: StreamType.Arbitrary,
+        inlineVolume: true, // Creates volume transformer allowing volume settings
+      });
+      this.resource = resource;
+      resource.volume.setVolumeLogarithmic(this.volume);
+      this.status = AudioPlayerStatus.Playing;
+      this.play(resource);
+    } catch (error) {
+      console.error(error);
+      // logger.error({
+      //   function: 'playCurrentItem',
+      //   error: error.data.error,
+      // });
+    }
   }
 
   public setVolume(volume: number) {

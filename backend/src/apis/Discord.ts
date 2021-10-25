@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import axios, { AxiosResponse } from 'axios';
 import DiscordClient from '../DiscordClient';
+import logger from '../Logger';
 require('dotenv').config();
 
 const clientId = process.env.DISCORD_CLIENT_ID;
@@ -66,15 +67,24 @@ class DiscordAPI {
     const accessToken = req.query.accessToken;
     if (!accessToken) return res.sendStatus(400);
 
-    const guildsRes: AxiosResponse<GuildData[]> = await axios.get(
-      'https://discord.com/api/users/@me/guilds',
-      {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return res.send({ guilds: guildsRes.data });
+    try {
+      const guildsRes: AxiosResponse<GuildData[]> = await axios.get(
+        'https://discord.com/api/users/@me/guilds',
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return res.send({ guilds: guildsRes.data });
+    } catch (error) {
+      logger.error({
+        function: 'getUserGuilds',
+        error: error.data.error,
+        description: error.data.error_description
+      });
+      return res.status(401);
+    }
   }
 
   public async getGuildVoiceChannels(req: Request, res: Response) {
