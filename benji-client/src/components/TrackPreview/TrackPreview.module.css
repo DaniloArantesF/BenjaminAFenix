@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: flex-start;
   height: calc(2 * (300px * 9 / 16));
-  width: 300px;
+  max-width: 300px;
   background-color: var(--clr-surface1);
 }
 

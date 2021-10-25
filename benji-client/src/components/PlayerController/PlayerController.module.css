@@ -1,8 +1,8 @@
 
 
 .player_container {
-  display: grid;
-  height: 100%;
+  display: inline-grid;
+  height: auto;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   align-items: center;
   padding: 1em 2em;

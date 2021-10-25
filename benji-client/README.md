@@ -7,6 +7,7 @@
     * ~~Make bot join channels through UI~~
     * ~~Setup logout btn~~
     * ~~Make active guild highlighted~~
+    * Create hidden navbar for mobile
   - Player
     * ~~Set up player with play/pause/previous/next~~
     * Setup shuffle & repeat
