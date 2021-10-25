@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { AppState } from './store';
+import { useHistory } from 'react-router-dom';
 
 export interface AuthState {
   id: string;
@@ -11,6 +12,10 @@ export interface AuthState {
   refreshTimeout?: NodeJS.Timeout;
   expiration: number;
   error: any;
+}
+
+export interface ErrorPayload {
+  error: string;
 }
 
 const initialState: AuthState = {
@@ -37,9 +42,10 @@ export const fetchCredentials = createAsyncThunk(
         refreshToken: data.refreshToken,
         expiration: Date.now() + expiresIn * 1000,
       };
-    } catch (error) {
-      console.error(error);
-      return rejectWithValue(error);
+    } catch (err) {
+      let error = err as any;
+      const { data, status } = error;
+      return rejectWithValue({ error: 'Invalid Code!' });
     }
   }
 );
@@ -61,6 +67,7 @@ export const refreshCredentials = createAsyncThunk(
     } catch (error) {
       console.error('Error refreshing tokens');
       // TODO: handle
+      window.location.href = 'http://'
       return rejectWithValue(error);
     }
   }
@@ -121,10 +128,8 @@ export const authSlice = createSlice({
       localStorage.setItem('expiration', `${payload.expiration}`);
     });
 
-    builder.addCase(refreshCredentials.rejected, (state, { payload }) => {
-      if (payload) {
-        state.error = payload;
-      }
+    builder.addCase(refreshCredentials.rejected, (state, { error }) => {
+      state.error = error;
     });
   },
 });

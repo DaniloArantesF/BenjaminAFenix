@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import axios, { AxiosResponse } from 'axios';
+import logger from '../Logger';
 require('dotenv').config();
 
 const clientId = process.env.DISCORD_CLIENT_ID;
@@ -29,6 +30,9 @@ class Auth {
         message: "No code in request",
       });
     }
+
+    // TESTING INVALID CODE
+    return res.send(401);
 
     try {
       const authRes: AxiosResponse<DiscordTokenResponse> = await axios.post(
@@ -61,7 +65,13 @@ class Auth {
         expiresIn,
       });
     } catch (error) {
-      console.log(error);
+      logger.error({
+        function: 'getAccessToken',
+        code,
+        error: error.data.error,
+        description: error.data.error_description
+      });
+      res.send(401);
     }
   }
 

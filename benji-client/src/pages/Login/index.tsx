@@ -15,7 +15,7 @@ const BOT_INVITE_URL =
 
 const Login = () => {
   const history = useHistory();
-  const { accessToken } = useAppSelector(selectAuth);
+  const { accessToken, error } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState(false);
@@ -39,6 +39,18 @@ const Login = () => {
     if (!accessToken) return;
     history.push('/');
   }, [accessToken]);
+
+
+  /**
+   * Handle API Errors
+   */
+  useEffect(() => {
+    if (error) {
+      // Remove invalid code from url and reset btns
+      setLoading(false);
+      history.push('/login');
+    }
+  }, [error]);
 
   return (
     <div className={classes.login_container}>
