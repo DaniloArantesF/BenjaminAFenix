@@ -29,7 +29,6 @@ import { getUserData, getUserGuilds } from '../../libs/Discord';
 import { getDiscordAvatar } from '../../libs/Discord';
 import { selectPlayerState } from '../../app/playerSlice';
 import GuildHeader from '../../components/GuildHeader';
-import { createGetAccessor } from 'typescript';
 import TrackPreview from '../../components/TrackPreview';
 
 // TODO: manage layouts better
