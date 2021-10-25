@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 300px;
+  height: calc(2 * (300px * 9 / 16));
   width: 300px;
   background-color: var(--clr-surface1);
 }

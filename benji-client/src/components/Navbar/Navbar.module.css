@@ -69,6 +69,15 @@
   align-items: center;
 }
 
+/* Hide Scrollbar */
+.guilds_container::-webkit-scrollbar {
+  display: none;
+}
+.guilds_container {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 .guilds_container::-webkit-scrollbar {
   background-color: #202324;
   color: #aba499;

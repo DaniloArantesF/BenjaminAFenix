@@ -80,8 +80,7 @@ class DiscordAPI {
     } catch (error) {
       logger.error({
         function: 'getUserGuilds',
-        error: error.data.error,
-        description: error.data.error_description
+        error: error.data,
       });
       return res.status(401);
     }
