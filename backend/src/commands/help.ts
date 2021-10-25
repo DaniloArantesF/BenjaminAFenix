@@ -23,6 +23,10 @@ export const HelpEmbed = () => {
 
 export const CommandHelpEmbed = (name: string) => {
   const cmd: Command = DiscordClient.commands.get(name);
+
+  // If cmd supplied is invalid go back to normal help embed
+  if (!cmd) return HelpEmbed();
+
   // TODO: set constraints name, description cant be empty
   return new MessageEmbed()
     .setColor('#b700ff')

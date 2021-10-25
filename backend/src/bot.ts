@@ -1,4 +1,4 @@
-import { Intents, WebhookClient } from 'discord.js';
+import { CommandInteraction, Intents, WebhookClient } from 'discord.js';
 import DiscordClient from './DiscordClient';
 import dotenv from 'dotenv';
 import FileWatcher from './util/FileWatcher';
@@ -23,16 +23,37 @@ const intents = [
   Intents.FLAGS.DIRECT_MESSAGE_TYPING,
 ];
 
+const COOLDOWN_MS = 2500;
+
 const Bot = (server: http.Server) => {
   const client = new DiscordClient({ intents });
   const webController = new WebClient(server, client);
-  
-  client.on('interactionCreate', async (interaction: any) => {
+  // Indicates whether a user is in cooldown
+  // A timestamp is set to indicate the last interaction this user created
+  const cooldown = new Map<string, number>();
+
+  client.on('interactionCreate', async (interaction: CommandInteraction) => {
     const command = DiscordClient.commands.get(interaction.commandName);
     if (!command) return;
 
     try {
-      await command.execute(client, interaction);
+      const user = interaction.member.user.id;
+      const lastInteraction = cooldown.get(user) ?? -1;
+      const timeLeft = lastInteraction === -1 ? 0 : (lastInteraction + COOLDOWN_MS) - Date.now();
+
+      if (timeLeft > 0) {
+        // User is in cooldown
+        console.info(`${user} is in cooldown for ${timeLeft}`);
+        cooldown.set(user, Date.now());
+        // interaction.deferReply();
+        setTimeout(() => {
+          command.execute(client, interaction);
+        }, timeLeft)
+      } else {
+        console.info(`${user} not in cooldown`);
+        cooldown.set(user, Date.now());
+        command.execute(client, interaction);
+      }
     } catch (error) {
       console.error(error);
       await interaction.reply({ content: 'Deu ruim meu bom', ephemeral: true });
