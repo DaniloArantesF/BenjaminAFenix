@@ -8,6 +8,8 @@ import DiscordAPI from './apis/Discord';
 import YoutubeAPI from './apis/Youtube';
 import BotAPI from './apis/';
 import rateLimit from 'express-rate-limit';
+import expressPinoLogger from 'express-pino-logger';
+import logger from './Logger';
 
 const PORT = 8000;
 
@@ -39,13 +41,15 @@ class App {
     this.express.use(express.json());
     this.express.use(cors());
     this.express.options('*', cors());
-
-    // Rate limiter
     this.express.use(rateLimit({
       windowMs: 1000, // 10 seconds in ms,
       max: 10,
       message: 'Exceeded 100 requests/min',
       headers: true,
+    }));
+    this.express.use(expressPinoLogger({
+      logger,
+      useLevel: 'http'
     }));
   }
 
