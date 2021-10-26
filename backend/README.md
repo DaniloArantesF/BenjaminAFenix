@@ -4,6 +4,7 @@
     * Remind me
     * Lofi mode
     * Shuffle & Repeat
+    * *Switch channel*
 
   - General
     * ~~Setup rate limiter~~

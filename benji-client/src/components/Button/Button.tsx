@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './Button.module.css';
+import classes from './Button2.module.css';
 import { useAppDispatch } from '../../app/hooks';
 import { ActionCreator } from 'redux';
 import type { InputHandler } from '../../types';
@@ -28,7 +28,7 @@ const Button = ({ children, action, isActive, onClick }: ButtonProps) => {
         className={`${classes.btn_border} ${!active && classes.btn_inactive}`}
         onClick={clickHandler}
       >
-        {children}
+        <span>{children}</span>
       </button>
     </div>
   );
