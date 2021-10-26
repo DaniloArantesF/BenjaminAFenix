@@ -31,9 +31,6 @@ class Auth {
       });
     }
 
-    // TESTING INVALID CODE
-    return res.send(401);
-
     try {
       const authRes: AxiosResponse<DiscordTokenResponse> = await axios.post(
         'https://discord.com/api/oauth2/token',

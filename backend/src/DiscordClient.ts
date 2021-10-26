@@ -1,10 +1,19 @@
 import fs from 'fs';
-import { Client, Collection, Guild, GuildMember } from 'discord.js';
+import {
+  Channel,
+  Client,
+  Collection,
+  Guild,
+  GuildChannel,
+  GuildMember,
+  User,
+} from 'discord.js';
 import { joinVoiceChannel, VoiceConnection } from '@discordjs/voice';
 import type { ClientOptions } from 'discord.js';
 import { CommandInteraction } from 'discord.js';
 import PlayerController from './PlayerController';
 import { Namespace, Server, Socket } from 'socket.io';
+import { channel } from 'diagnostics_channel';
 
 export interface Command {
   data: {
@@ -66,8 +75,6 @@ class DiscordClient extends Client {
 
       this.ready = true;
     });
-
-
   }
 
   private setUpCommands() {
@@ -159,6 +166,61 @@ class DiscordClient extends Client {
 
   public getGuild(guildId: string) {
     return this.guilds.cache.get(guildId);
+  }
+
+  // Notes: Later change this to only check in guilds the user
+  // is actually in.
+  public getUserCurrentGuild(id: string) {
+    console.log(id);
+    const usersOnline = this.getVoiceUsers();
+    const connection = usersOnline.get(id);
+    const userChannel = connection?.channel;
+    const guild = connection?.guild;
+
+    return {
+      guild: {
+        id: guild?.id,
+        name: guild?.name,
+        icon: guild?.icon,
+        owner: guild?.ownerId,
+      },
+      channel: {
+        id: userChannel?.id,
+        name: userChannel?.name
+      }
+    };
+  }
+
+  public getVoiceUsers() {
+    type ConnectionState = {
+      guild: Guild;
+      channel: GuildChannel;
+      user: User;
+    }
+    const usersOnline = new Map<string, ConnectionState>();
+
+    const channels: GuildChannel[] = this.guilds.cache.reduce(
+      (accum, guild) => {
+        return [...accum, ...guild.channels.cache.map((i) => i)];
+      },
+      []
+    );
+
+    const voiceChannels = channels.filter((curChannel) => {
+      return curChannel.isVoice();
+    });
+
+    voiceChannels.forEach((curChannel) => {
+      curChannel.members.forEach((member) => {
+        usersOnline.set(member.user.id, {
+          guild: member.guild,
+          channel: curChannel,
+          user: member.user
+        });
+      });
+    });
+
+    return usersOnline;
   }
 }
 

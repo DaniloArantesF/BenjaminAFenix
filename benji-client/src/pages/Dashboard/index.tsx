@@ -17,13 +17,14 @@ import {
   Channel,
   Guild,
   selectDashboard,
+  setCurrentChannel,
   setCurrentGuild,
 } from '../../app/dashboardSlice';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
 import Button from '../../components/Button/Button';
-import { getGuildVoiceChannels } from '../../libs/Discord';
+import { getGuildVoiceChannels, getUserVoiceChannel } from '../../libs/Discord';
 import PlayerController from '../../components/PlayerController';
 import { getUserData, getUserGuilds } from '../../libs/Discord';
 import { getDiscordAvatar } from '../../libs/Discord';
@@ -86,7 +87,7 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
-  const { accessToken, refreshToken, expiration } = useAppSelector(selectAuth);
+  const { accessToken, refreshToken, expiration, id: userId } = useAppSelector(selectAuth);
   const { currentTrack } = useAppSelector(selectPlayerState);
   const [windowWidth, setWindowWidth] = useState<number>();
   const history = useHistory();
@@ -172,8 +173,16 @@ const Dashboard = () => {
     dispatch(setUserGuilds(userGuilds));
 
     // Restore guild from last session
-    const guild: Guild = JSON.parse(localStorage.getItem('guild') || '{}');
-    if (guild?.id) dispatch(setCurrentGuild(guild));
+    const lastGuild: Guild = JSON.parse(localStorage.getItem('guild') || '{}');
+    if (lastGuild?.id) dispatch(setCurrentGuild(lastGuild));
+
+    // Check if user is connected to voice channel already
+    const conn = await getUserVoiceChannel(accessToken, userId);
+    // if (!currentGuild || guild?.id !== currentGuild.id) {
+    //   dispatch(setCurrentGuild(guild))
+    // }
+    console.log(conn);
+    //dispatch(setCurrentChannel(channel));
   };
 
   if (!active) return <InactiveGuild joinChannel={joinChannel} />;

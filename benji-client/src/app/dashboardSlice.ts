@@ -9,7 +9,6 @@ export interface Guild {
 }
 
 export interface Channel {
-  type: string;
   id: string;
   name: string;
 }
@@ -50,6 +49,11 @@ export const dashboardSlice = createSlice({
       localStorage.setItem('guild', JSON.stringify(payload));
       return state;
     },
+    setCurrentChannel: (state, { payload }) => {
+      console.log(payload);
+      state.channel = payload;
+      return state;
+    },
     setActive: (state, { payload }) => {
       state.active = payload;
       return state;
@@ -57,6 +61,6 @@ export const dashboardSlice = createSlice({
   },
 });
 
-export const { setUserGuilds, setCurrentGuild, setActive } = dashboardSlice.actions;
+export const { setUserGuilds, setCurrentGuild, setCurrentChannel, setActive } = dashboardSlice.actions;
 export const selectDashboard = (state: AppState) => state.dashboard;
 export default dashboardSlice.reducer;

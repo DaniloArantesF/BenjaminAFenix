@@ -40,6 +40,7 @@ class DiscordAPI {
     this.router.get('/user', this.getDiscordUser.bind(this));
     this.router.get('/guilds', this.getUserGuilds.bind(this));
     this.router.get('/channels', this.getGuildVoiceChannels.bind(this));
+    this.router.get('/connection', this.getUserConnection.bind(this));
     this.client = null;
   }
 
@@ -49,7 +50,6 @@ class DiscordAPI {
 
   public async getDiscordUser(req: Request, res: Response) {
     const accessToken = req.query.accessToken;
-    console.log(accessToken);
     const userRes: AxiosResponse<DiscordUserResponse> = await axios.get(
       'https://discord.com/api/users/@me',
       {
@@ -63,9 +63,20 @@ class DiscordAPI {
     return res.send({ id, username, avatar });
   }
 
+  public async getUserConnection(req: Request, res: Response) {
+    const accessToken = req.query.accessToken;
+    const id = req.query.id as string;
+    if (!accessToken) return res.sendStatus(401);
+    if (!id) return res.sendStatus(400);
+
+    // get current guild & channel the user is connected to
+    const connection = this.client.getUserCurrentGuild(id)
+    return res.send(connection)
+  }
+
   public async getUserGuilds(req: Request, res: Response) {
     const accessToken = req.query.accessToken;
-    if (!accessToken) return res.sendStatus(400);
+    if (!accessToken) return res.sendStatus(401);
 
     try {
       const guildsRes: AxiosResponse<GuildData[]> = await axios.get(

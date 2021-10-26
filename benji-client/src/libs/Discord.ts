@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { Guild } from '../app/dashboardSlice';
+import { Channel, Guild } from '../app/dashboardSlice';
 
 export const getGuildVoiceChannels = async (guildId: string) => {
   try {
@@ -45,6 +45,29 @@ export const getUserGuilds = async (accessToken: string) => {
     console.error('Error getting user guilds');
   }
 };
+
+
+export const getUserVoiceChannel = async (accessToken: string, id: string) => {
+  try {
+    const res: AxiosResponse<any> = await axios.get(
+      'http://localhost:8000/discord/connection',
+      {
+        params: { accessToken, id },
+      }
+    );
+
+    return {
+      guild: res.data.guild as Guild,
+      channel: res.data.channel as Channel,
+    };
+  } catch (error) {
+    console.error('Error getting user connection');
+    return {
+      guild: null,
+      channel: null,
+    }
+  }
+}
 
 /**
  * Returns the url for a discord avatar given an avatar hash

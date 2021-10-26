@@ -47,10 +47,11 @@ class App {
       message: 'Exceeded 100 requests/min',
       headers: true,
     }));
-    this.express.use(expressPinoLogger({
-      logger,
-      useLevel: 'http'
-    }));
+    // TODO: change in prod
+    // this.express.use(expressPinoLogger({
+    //   logger,
+    //   useLevel: 'http'
+    // }));
   }
 
   private routes() {
