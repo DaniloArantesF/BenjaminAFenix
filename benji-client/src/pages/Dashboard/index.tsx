@@ -32,6 +32,7 @@ import { getDiscordAvatar } from '../../libs/Discord';
 import { selectPlayerState } from '../../app/playerSlice';
 import GuildHeader from '../../components/GuildHeader';
 import TrackPreview from '../../components/TrackPreview';
+import InactiveGuild from '../../components/InactiveGuild';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -40,50 +41,7 @@ export enum breakpoints {
   SMALL = 0,
 }
 
-interface InactiveGuildProps {
-  joinChannel: (guildId: string, channelId: string) => void;
-}
 
-const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
-  const [channels, setChannels] = useState<Channel[]>();
-  const { currentGuild } = useAppSelector(selectDashboard);
-
-  useEffect(() => {
-    if (!currentGuild) return;
-    getChannels(currentGuild.id);
-  }, [currentGuild]);
-
-  const getChannels = async (guildId: string) => {
-    const channels = await getGuildVoiceChannels(guildId);
-    setChannels(channels);
-  };
-
-  return (
-    <div className={classes.dashboard_container}>
-      <Navbar />
-      <div className={classes.dashboard__body}>
-        <section>
-          {channels?.map((channel, index) => {
-            return (
-              <div key={index}>
-                <Button
-                  isActive={() => true}
-                  onClick={() =>
-                    joinChannel(currentGuild?.id || '', channel.id)
-                  }
-                >
-                  {channel.name}
-                </Button>
-              </div>
-            );
-          })}
-        </section>
-        <section></section>
-        <section></section>
-      </div>
-    </div>
-  );
-};
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();

@@ -37,17 +37,6 @@ const useSocket = () => {
     };
   }, []);
 
-        // Check if user is connected to voice channel already
-        // const { guild, channel } = await getUserVoiceChannel(accessToken, userId);
-        // if (!currentGuild || guild?.id !== currentGuild.id) {
-        //   dispatch(setCurrentGuild(guild));
-        // }
-
-        // if (channel && guild === currentGuild) {
-        //   dispatch(setCurrentChannel(channel));
-        //   dispatch(setActive(true));
-        // }
-
   useEffect(() => {
     if (!socket) return;
     setUpEvents();
