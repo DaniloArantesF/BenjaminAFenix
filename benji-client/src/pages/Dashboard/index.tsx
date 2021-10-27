@@ -17,6 +17,7 @@ import {
   Channel,
   Guild,
   selectDashboard,
+  setActive,
   setCurrentChannel,
   setCurrentGuild,
 } from '../../app/dashboardSlice';
@@ -87,7 +88,12 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
-  const { accessToken, refreshToken, expiration, id: userId } = useAppSelector(selectAuth);
+  const {
+    accessToken,
+    refreshToken,
+    expiration,
+    id: userId,
+  } = useAppSelector(selectAuth);
   const { currentTrack } = useAppSelector(selectPlayerState);
   const [windowWidth, setWindowWidth] = useState<number>();
   const history = useHistory();
@@ -175,14 +181,6 @@ const Dashboard = () => {
     // Restore guild from last session
     const lastGuild: Guild = JSON.parse(localStorage.getItem('guild') || '{}');
     if (lastGuild?.id) dispatch(setCurrentGuild(lastGuild));
-
-    // Check if user is connected to voice channel already
-    const conn = await getUserVoiceChannel(accessToken, userId);
-    // if (!currentGuild || guild?.id !== currentGuild.id) {
-    //   dispatch(setCurrentGuild(guild))
-    // }
-    console.log(conn);
-    //dispatch(setCurrentChannel(channel));
   };
 
   if (!active) return <InactiveGuild joinChannel={joinChannel} />;
@@ -212,8 +210,8 @@ const Dashboard = () => {
             setVolume={setVolume}
           />
         </section>
-        <section id={classes.preview } className={ classes.dashboard__component}>
-          <TrackPreview track={ currentTrack}/>
+        <section id={classes.preview} className={classes.dashboard__component}>
+          <TrackPreview track={currentTrack} />
         </section>
       </div>
     </div>

@@ -50,7 +50,6 @@ export const dashboardSlice = createSlice({
       return state;
     },
     setCurrentChannel: (state, { payload }) => {
-      console.log(payload);
       state.channel = payload;
       return state;
     },

@@ -14,6 +14,7 @@ import { CommandInteraction } from 'discord.js';
 import PlayerController from './PlayerController';
 import { Namespace, Server, Socket } from 'socket.io';
 import { channel } from 'diagnostics_channel';
+import { EventBus } from './EventBus';
 
 export interface Command {
   data: {
@@ -47,6 +48,7 @@ export interface Track {
 
 export interface DiscordConnection {
   connection: VoiceConnection;
+  channel: GuildChannel;
   player: PlayerController;
 }
 
@@ -54,12 +56,13 @@ class DiscordClient extends Client {
   static commands = new Collection<string, Command>();
   connections: Map<string, DiscordConnection | null>;
   ready: boolean;
+  eventBus: EventBus;
 
   constructor(props: ClientOptions) {
     super(props);
     this.ready = false;
     this.connections = new Map(); // maps guild ids to voice connections
-
+    this.eventBus = EventBus.getInstance();
     this.setUpCommands();
     // this.setUpEvents();
 
@@ -120,11 +123,23 @@ class DiscordClient extends Client {
       const player = new PlayerController(guild.id);
       connection.subscribe(player);
 
+      const target = this.guilds.cache
+        .get(guild.id)
+        .channels.cache.get(channelId) as GuildChannel;
+
       this.connections.set(guild.id, {
         connection,
         player,
+        channel: target,
       });
-      return { connection, player };
+
+      // Emit event to web controller
+      this.eventBus.dispatch('bot_connection', {
+        guildId: guild.id,
+        channel: target,
+      });
+
+      return { connection, player, channel: target };
     } catch (error) {
       console.error(error);
       return null;
@@ -171,7 +186,6 @@ class DiscordClient extends Client {
   // Notes: Later change this to only check in guilds the user
   // is actually in.
   public getUserCurrentGuild(id: string) {
-    console.log(id);
     const usersOnline = this.getVoiceUsers();
     const connection = usersOnline.get(id);
     const userChannel = connection?.channel;
@@ -186,8 +200,8 @@ class DiscordClient extends Client {
       },
       channel: {
         id: userChannel?.id,
-        name: userChannel?.name
-      }
+        name: userChannel?.name,
+      },
     };
   }
 
@@ -196,9 +210,24 @@ class DiscordClient extends Client {
       guild: Guild;
       channel: GuildChannel;
       user: User;
-    }
+    };
     const usersOnline = new Map<string, ConnectionState>();
 
+    const voiceChannels = this.getVoiceChannels();
+    voiceChannels.forEach((curChannel) => {
+      curChannel.members.forEach((member) => {
+        usersOnline.set(member.user.id, {
+          guild: member.guild,
+          channel: curChannel,
+          user: member.user,
+        });
+      });
+    });
+
+    return usersOnline;
+  }
+
+  public getVoiceChannels() {
     const channels: GuildChannel[] = this.guilds.cache.reduce(
       (accum, guild) => {
         return [...accum, ...guild.channels.cache.map((i) => i)];
@@ -206,21 +235,9 @@ class DiscordClient extends Client {
       []
     );
 
-    const voiceChannels = channels.filter((curChannel) => {
+    return channels.filter((curChannel) => {
       return curChannel.isVoice();
     });
-
-    voiceChannels.forEach((curChannel) => {
-      curChannel.members.forEach((member) => {
-        usersOnline.set(member.user.id, {
-          guild: member.guild,
-          channel: curChannel,
-          user: member.user
-        });
-      });
-    });
-
-    return usersOnline;
   }
 }
 

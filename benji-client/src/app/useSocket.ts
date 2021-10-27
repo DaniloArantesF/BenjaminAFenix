@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './hooks';
 import socketIOClient, { Socket } from 'socket.io-client';
-import { selectDashboard, setActive } from './dashboardSlice';
+import { Channel, Guild, selectDashboard, setActive, setCurrentChannel } from './dashboardSlice';
 import { QueueState, setQueue } from './queueSlice';
 import { Track } from '../types';
 import { selectAuth } from './authSlice';
@@ -36,6 +36,17 @@ const useSocket = () => {
       socket?.disconnect();
     };
   }, []);
+
+        // Check if user is connected to voice channel already
+        // const { guild, channel } = await getUserVoiceChannel(accessToken, userId);
+        // if (!currentGuild || guild?.id !== currentGuild.id) {
+        //   dispatch(setCurrentGuild(guild));
+        // }
+
+        // if (channel && guild === currentGuild) {
+        //   dispatch(setCurrentChannel(channel));
+        //   dispatch(setActive(true));
+        // }
 
   useEffect(() => {
     if (!socket) return;
@@ -74,7 +85,7 @@ const useSocket = () => {
     });
 
     socket?.on('not_active', () => {
-      console.info('Guild not active');
+      dispatch(setActive(false));
     });
 
     socket?.on('player_update', (payload: any) => {
@@ -84,10 +95,19 @@ const useSocket = () => {
         dispatch(setCurrentTrack(curTrack));
       }
       dispatch(setQueue(queue));
+
       if (!active) {
         dispatch(setActive(true));
       }
     });
+
+    // Dispatched when bot connects to a guild
+    socket?.on('bot_connection', (payload) => {
+      dispatch(setCurrentChannel(payload.channel));
+      dispatch(setActive(true));
+    });
+
+    // TODO: set not active on bot_disconnect
 
     // Triggered periodically to update state of playback
     socket?.on('playback_state', (payload: PlaybackState) => {

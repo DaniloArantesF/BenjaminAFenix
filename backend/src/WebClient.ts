@@ -52,7 +52,9 @@ class WebClient {
     this.server = this.io.of('/bot');
     this.server.on('connection', (socket: Socket) => {
       socket.on('ping', () => this.pong(socket));
-      socket.on('player_connect', (payload) => this.createConnection(socket, payload))
+      socket.on('player_connect', (payload) =>
+        this.createConnection(socket, payload)
+      );
       socket.on('get_player', (payload) => this.getPlayer(socket, payload));
       socket.on('join_channel', (payload) => this.joinChannel(socket, payload));
       socket.on('request_track', (payload) =>
@@ -73,6 +75,10 @@ class WebClient {
     this.eventBus.register(
       'playback_state',
       this.handlePlaybackUpdate.bind(this)
+    );
+    this.eventBus.register(
+      'bot_connection',
+      this.handleConnection.bind(this)
     );
   }
 
@@ -107,6 +113,7 @@ class WebClient {
     });
 
     socket.join(guildId);
+    socket.emit('bot_connect', )
     return this.getPlayer(socket, payload);
   }
 
@@ -199,6 +206,12 @@ class WebClient {
   public handlePlaybackUpdate(payload: PlaybackState) {
     const { guildId, status, volume, progress, timestamp } = payload;
     this.server.to(guildId).emit('playback_state', payload);
+  }
+
+  public handleConnection(payload: any) {
+    const { guildId, channel } = payload;
+    console.log(`bot connection ${guildId}`)
+    this.server.to(guildId).emit('bot_connection', { channel });
   }
 }
 
