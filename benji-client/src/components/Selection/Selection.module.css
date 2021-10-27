@@ -1,7 +1,7 @@
 
 
 .selection_container {
-  background: var(--clr-surface1);
+  background: var(--clr-surface3);
   width: 100%;
   max-width: 400px;
   max-height: 400px;
@@ -10,11 +10,23 @@
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
-  position: absolute;
+  position: fixed;
+  z-index: 1;
+  transition: all 0.6s cubic-bezier(0.53, 0.21, 0, 1);
+}
+
+.selection_container.active {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   box-shadow: var(--shadow-heavy);
+  animation: slideIn 500ms linear;
+}
+
+.selection_container.inactive {
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .selection_container > h1 {

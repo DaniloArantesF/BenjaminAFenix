@@ -4,7 +4,10 @@ import { getDiscordAvatar } from "../../libs/Discord";
 import Button from "../Button/Button";
 import classes from './GuildHeader.module.css';
 
-const GuildHeader = () => {
+interface props {
+  switchHandler: () => void;
+}
+const GuildHeader = ({ switchHandler }: props) => {
   const { currentGuild } = useAppSelector(selectDashboard);
 
   if (!currentGuild) return null;
@@ -29,11 +32,11 @@ const GuildHeader = () => {
       </div>
 
       <div className={classes.guild_header__btns}>
-        <Button isActive={() => true} action={() => console.log('click')}>
+        <Button isActive={() => true} onClick={() => switchHandler()}>
           Switch Channel
         </Button>
 
-        <Button isActive={() => true} action={() => console.log('click')}>
+        <Button isActive={() => true} onClick={() => console.log('click')}>
           Leave
         </Button>
       </div>

@@ -15,6 +15,7 @@ export interface Channel {
 
 export interface DashboardState {
   currentGuild: Guild | null;
+  channels: Channel[];
   guilds: Guild[];
   channel: Channel | null;
   active: boolean;
@@ -23,6 +24,7 @@ export interface DashboardState {
 
 const initialState: DashboardState = {
   currentGuild: null,
+  channels: [],
   channel: null,
   guilds: [],
   active: false,
@@ -56,10 +58,14 @@ export const dashboardSlice = createSlice({
     setActive: (state, { payload }) => {
       state.active = payload;
       return state;
-    }
+    },
+    setChannels: (state, { payload }) => {
+      state.channels = [...payload];
+      return state;
+    },
   },
 });
 
-export const { setUserGuilds, setCurrentGuild, setCurrentChannel, setActive } = dashboardSlice.actions;
+export const { setUserGuilds, setCurrentGuild, setCurrentChannel, setActive, setChannels } = dashboardSlice.actions;
 export const selectDashboard = (state: AppState) => state.dashboard;
 export default dashboardSlice.reducer;

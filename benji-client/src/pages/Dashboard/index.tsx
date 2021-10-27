@@ -13,19 +13,13 @@ import {
   refreshCredentials,
   setRefreshTimeout,
 } from '../../app/authSlice';
-import {
-  Channel,
-  Guild,
+import { Guild,
   selectDashboard,
-  setActive,
-  setCurrentChannel,
   setCurrentGuild,
 } from '../../app/dashboardSlice';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
-import Button from '../../components/Button/Button';
-import { getGuildVoiceChannels, getUserVoiceChannel } from '../../libs/Discord';
 import PlayerController from '../../components/PlayerController';
 import { getUserData, getUserGuilds } from '../../libs/Discord';
 import { getDiscordAvatar } from '../../libs/Discord';
@@ -33,6 +27,7 @@ import { selectPlayerState } from '../../app/playerSlice';
 import GuildHeader from '../../components/GuildHeader';
 import TrackPreview from '../../components/TrackPreview';
 import InactiveGuild from '../../components/InactiveGuild';
+import ChannelSelection from '../../components/Selection';
 
 // TODO: manage layouts better
 export enum breakpoints {
@@ -67,7 +62,8 @@ const Dashboard = () => {
     toggleShuffle,
     setVolume,
   } = useSocket();
-  const { active, currentGuild } = useAppSelector(selectDashboard);
+  const { active, currentGuild, channels } = useAppSelector(selectDashboard);
+  const [switchActive, setSwitchActive] = useState(false);
 
   useEffect(() => {
     if (!accessToken) {
@@ -141,14 +137,17 @@ const Dashboard = () => {
     if (lastGuild?.id) dispatch(setCurrentGuild(lastGuild));
   };
 
-  if (!active) return <InactiveGuild joinChannel={joinChannel} />;
+  if (!active) return <InactiveGuild joinChannel={ joinChannel } />;
 
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
       <div className={classes.dashboard__body}>
+        <ChannelSelection active={switchActive} joinChannel={ joinChannel }/>
         <section id={classes.info} className={classes.dashboard__component}>
-          <GuildHeader />
+          <GuildHeader
+            switchHandler={ () => setSwitchActive(!switchActive) }
+          />
         </section>
         <section id={classes.queue} className={classes.dashboard__component}>
           <Queue items={items} />

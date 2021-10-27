@@ -26,17 +26,12 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
     setChannels(channels);
   };
 
-  const selectChannel = (channel: Channel) => {
-    if (!currentGuild) return;
-    joinChannel(currentGuild?.id, channel.id);
-  }
-
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
       <div>
         <section >
-          <ChannelSelection chooseItem={selectChannel} channels={channels ?? []}/>
+          {/* <ChannelSelection joinChannel={joinChannel} /> */}
         </section>
         <section></section>
         <section></section>

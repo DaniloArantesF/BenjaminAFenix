@@ -1,13 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './hooks';
 import socketIOClient, { Socket } from 'socket.io-client';
-import { Channel, Guild, selectDashboard, setActive, setCurrentChannel } from './dashboardSlice';
+import {
+  Channel,
+  Guild,
+  selectDashboard,
+  setActive,
+  setChannels,
+  setCurrentChannel,
+} from './dashboardSlice';
 import { QueueState, setQueue } from './queueSlice';
 import { Track } from '../types';
 import { selectAuth } from './authSlice';
-import { selectPlayerState, setCurrentTrack, updatePlaybackState } from './playerSlice';
+import {
+  selectPlayerState,
+  setCurrentTrack,
+  updatePlaybackState,
+} from './playerSlice';
 import { connect } from 'http2';
 import axios from 'axios';
+import { getGuildVoiceChannels } from '../libs/Discord';
 
 const endpoint = `localhost:8000/bot`;
 
@@ -20,14 +32,13 @@ interface PlaybackState {
 
 const useSocket = () => {
   const dispatch = useAppDispatch();
-  const { currentGuild, active } = useAppSelector(selectDashboard);
+  const { currentGuild, active, channel } = useAppSelector(selectDashboard);
   const { currentTrack } = useAppSelector(selectPlayerState);
   const { username } = useAppSelector(selectAuth);
   const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
     connect();
-
     return () => {
       socket?.off('connect');
       socket?.off('not_active');
@@ -42,11 +53,23 @@ const useSocket = () => {
     setUpEvents();
   }, [socket]);
 
+
+  useEffect(() => {
+    if (!currentGuild) return;
+    getVoiceChannels();
+
+  }, [currentGuild]);
   useEffect(() => {
     if (socket && currentGuild) {
       getGuildPlayer();
     }
   }, [currentGuild, socket]);
+
+  const getVoiceChannels = async () => {
+    if (!currentGuild) return;
+    const channels = await getGuildVoiceChannels(currentGuild.id);
+    dispatch(setChannels(channels));
+  };
 
   /**
    * Pings the server to check if bot is online.
@@ -59,14 +82,14 @@ const useSocket = () => {
     } catch (error) {
       return false;
     }
-  }
+  };
 
   const connect = async () => {
     const isOnline = await checkBotStatus();
     if (isOnline) {
       setSocket(socketIOClient(endpoint));
     }
-  }
+  };
 
   const setUpEvents = () => {
     socket?.on('connect', () => {
@@ -93,7 +116,8 @@ const useSocket = () => {
     // Dispatched when bot connects to a guild
     socket?.on('bot_connection', (payload) => {
       dispatch(setCurrentChannel(payload.channel));
-      dispatch(setActive(true));
+      if (!active)
+        dispatch(setActive(true));
     });
 
     // TODO: set not active on bot_disconnect
@@ -167,7 +191,7 @@ const useSocket = () => {
     prevTrack,
     toggleRepeat,
     toggleShuffle,
-    setVolume
+    setVolume,
   };
 };
 
