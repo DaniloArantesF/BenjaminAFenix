@@ -29,12 +29,21 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
-      <div>
-        <section >
+      <div className={classes.dashboard__body}>
+        <ChannelSelection active={true} joinChannel={joinChannel}/>
+        <section id={classes.info}>
           {/* <ChannelSelection joinChannel={joinChannel} /> */}
         </section>
-        <section></section>
-        <section></section>
+        <section id={classes.queue}>
+
+        </section>
+        <section id={classes.search}>
+
+        </section>
+        <section id={classes.player_controls}>
+
+        </section>
+        <section id={classes.preview}></section>
       </div>
     </div>
   );

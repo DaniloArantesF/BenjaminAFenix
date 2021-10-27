@@ -168,7 +168,7 @@ const Dashboard = () => {
           />
         </section>
         <section id={classes.preview} className={classes.dashboard__component}>
-          <TrackPreview track={currentTrack} />
+          { currentTrack && <TrackPreview track={currentTrack} />}
         </section>
       </div>
     </div>

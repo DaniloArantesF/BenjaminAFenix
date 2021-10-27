@@ -5,3 +5,83 @@
   width: 100vw;
   display: flex;
 }
+
+.dashboard__body {
+  margin: 0 auto;
+  width: fit-content;
+  height: 100%;
+  display: grid;
+  grid-template-areas:
+    'srch srch'
+    'info btns'
+    'que prev'
+    'que prev'
+    'ctrls prev';
+
+  /* VIDEO STUFF, come back to it later */
+  /* This is done to keep first column only as wide as video component and enforce 16/9 aspect ratio
+  grid-template-columns: minmax(auto, calc(16*var(--max-video-height)/9)) 1fr;
+  grid-template-rows: 1fr 1fr auto; */
+  grid-template-columns: minmax(auto, 800px) auto;
+  grid-template-rows: auto minmax(120px, 0.5fr) minmax(400px, 1fr) minmax(auto, 0.5fr);
+  gap: 1em;
+  padding: var(--margin-bottom) 2em;
+  overflow-y: auto;
+}
+
+.dashboard__body > section {
+  background-color: var(--clr-surface1);
+  box-shadow: var(--shadow-light);
+  border-radius: var(--border-radius);
+}
+
+
+#info {
+  grid-area: info;
+  padding: 1em;
+  width: 100%;
+  height: 100%;
+}
+
+#video {
+  aspect-ratio: 16/9;
+  object-fit: contain;
+  max-height: var(--max-video-height);
+  width: auto;
+}
+
+#queue {
+  grid-area: que;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+#player_controls {
+  grid-area: ctrls;
+  min-height: 120px;
+  height: 100%;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+}
+
+#search {
+  --thumb-width: 120px;
+  --thumb-height: 90px;
+  --search-bar-width: 450px;
+  --search-bar-height: 3rem;
+  display: flex;
+  position: relative;
+  width: var(--search-bar-width);
+  height: calc(var(--search-bar-height) + 2em);
+  margin: 0 auto;
+  grid-area: srch;
+}
+
+#preview {
+  grid-area: prev;
+  width: fit-content;
+  height: fit-content;
+  margin-top: auto;
+}
