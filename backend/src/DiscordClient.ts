@@ -249,7 +249,6 @@ class DiscordClient extends Client {
       let onlineCount = members.size;
       // Dont count bot in users online
       if (members.get(this.user.id)) {
-        console.log('bot in this channel')
         onlineCount--;
       }
       return {
