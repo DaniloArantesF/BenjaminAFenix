@@ -1,25 +1,29 @@
 .btn_container > button{
   --border-width: 4px;
-  --duration: 200ms;
+  --duration: 100ms;
   width: 100px;
   height: 50px;
   margin: 1em;
-  background: var(--clr-font);
+  background: var(--clr-surface3);
+  /* background-color: transparent; */
+  color: var(--clr-font);
   border: none;
   cursor: pointer;
   line-height: 1.2;
   font-weight: 700;
-  font-size: 100%;
+  font-size: clamp(.8em, 50%, 100%);
   padding: .5em 1em;
   letter-spacing: 0.05em;
 }
 
 .btn_border {
-  box-shadow:  0 0 0 var(--border-width) var(--clr-surface2);
+  /* box-shadow:  0 0 0 var(--border-width) var(--clr-btn); */
   color: var(--clr-surface2);
   font-weight: 900;
   transition: color var(--duration) calc(var(--duration) / 3);
-  transition: background-color var(--duration);
+  transition: box-shadow var(--duration);
+  transition-timing-function: cubic-bezier(0,1.5,1,1.5);
+  transition: background-color calc(var(--duration) * 2) ease-out;
   position: relative;
 }
 
@@ -55,7 +59,7 @@
   0% {
   }
   50% {
-    transform: scale(0.98);
+    transform: scale(0.96);
   }
   100% {
     transform: scale(1);
@@ -63,11 +67,12 @@
 }
 
 .btn_border:hover {
-  background-color: var(--clr-accent);
+  background-color: var(--clr-font);
+  color: black;
 }
 
 .btn_border:hover::before, .btn_border:hover::after {
-  border-color: var(--clr-accent);
+  border-color: var(--clr-font);
   transition: border-color 0s, width var(--duration), height var(--duration);
   width: 100%;
   height: 100%;

@@ -64,6 +64,7 @@ const Login = () => {
           <h1>New Here?</h1>
           <p>Start by adding Benji to your server!</p>
           <Button
+            type={'button'}
             isActive={() => !loading}
             action={() => {
               window.location.href = BOT_INVITE_URL;
@@ -76,6 +77,7 @@ const Login = () => {
           <h1>Login</h1>
           <p>Use your discord account to log into your bot</p>
           <Button
+            type={'button'}
             isActive={() => !loading}
             action={() => {
               window.location.href = DISCORD_AUTH_URL;
