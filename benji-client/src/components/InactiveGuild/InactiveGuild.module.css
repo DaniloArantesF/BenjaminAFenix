@@ -11,6 +11,7 @@
   width: fit-content;
   height: 100%;
   display: grid;
+  position: relative;
   grid-template-areas:
     'srch srch'
     'info btns'

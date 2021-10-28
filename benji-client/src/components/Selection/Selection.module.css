@@ -17,7 +17,7 @@
 
 .selection_container.active {
   top: 50%;
-  left: 50%;
+  left: calc(50% + (var(--navbar-width) / 2));
   transform: translate(-50%, -50%);
   box-shadow: var(--shadow-heavy);
   animation: slideIn 500ms linear;
@@ -25,7 +25,7 @@
 
 .selection_container.inactive {
   top: -100%;
-  left: 50%;
+  left: calc(50% + (var(--navbar-width) / 2));
   transform: translateX(-50%);
 }
 
