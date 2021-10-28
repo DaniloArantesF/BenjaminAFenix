@@ -14,17 +14,20 @@
   font-size: clamp(.8em, 50%, 100%);
   padding: .5em 1em;
   letter-spacing: 0.05em;
+  border-radius: calc(var(--btn-border-radius) / 2);
 }
 
 .btn_border {
   /* box-shadow:  0 0 0 var(--border-width) var(--clr-btn); */
+  box-shadow: var(--shadow-light);
   color: var(--clr-surface2);
   font-weight: 900;
   transition: color var(--duration) calc(var(--duration) / 3);
   transition: box-shadow var(--duration);
   transition-timing-function: cubic-bezier(0,1.5,1,1.5);
-  transition: background-color calc(var(--duration) * 2) ease-out;
+  transition: background-color calc(var(--duration) * 3) ease-out;
   position: relative;
+  border-radius: var(--border-radius);
 }
 
 .btn_border::before, .btn_border::after {
@@ -34,7 +37,7 @@
   position: absolute;
   width: 0;
   height: 0;
-
+  border-radius: calc(var(--btn-border-radius) / 2);
   /* where anim will begin from*/
   top: 0;
   left: 0;
