@@ -13,5 +13,5 @@
     * ~~Set up volume controls~~
     * Check for permissions on restricted commands
     * ~~Implement cooldown from commands~~
-
+    * Update channel member count
 [Bugs]

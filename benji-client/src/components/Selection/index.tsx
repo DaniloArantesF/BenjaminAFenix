@@ -12,9 +12,6 @@ interface ChannelSelectionProps {
 const ChannelSelection = ({ joinChannel, active }: ChannelSelectionProps) => {
   const { currentGuild, channels } = useAppSelector(selectDashboard);
 
-  useEffect(() => {
-    console.log(active);
-  }, [active])
   const chooseItem = (channel: Channel) => {
     if (!currentGuild) return;
     joinChannel(currentGuild.id, channel.id);
@@ -29,6 +26,7 @@ const ChannelSelection = ({ joinChannel, active }: ChannelSelectionProps) => {
             onClick={() => chooseItem(channel)}
           >
             {channel.name}
+            <span>{channel.onlineCount} online</span>
           </section>
         );
       })}

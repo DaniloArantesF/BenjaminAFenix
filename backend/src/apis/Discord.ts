@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import axios, { AxiosResponse } from 'axios';
 import DiscordClient from '../DiscordClient';
 import logger from '../Logger';
+import { GuildChannel } from 'discord.js/typings/index.js';
 require('dotenv').config();
 
 const clientId = process.env.DISCORD_CLIENT_ID;
@@ -70,8 +71,8 @@ class DiscordAPI {
     if (!id) return res.sendStatus(400);
 
     // get current guild & channel the user is connected to
-    const connection = this.client.getUserCurrentGuild(id)
-    return res.send(connection)
+    const connection = this.client.getUserCurrentGuild(id);
+    return res.send(connection);
   }
 
   public async getUserGuilds(req: Request, res: Response) {
@@ -98,18 +99,11 @@ class DiscordAPI {
   }
 
   public async getGuildVoiceChannels(req: Request, res: Response) {
-    const { guildId } = req.query;
+    const guildId = req.query.guildId as string;
     if (!guildId) return res.sendStatus(400);
     if (!this.client) return res.sendStatus(500);
 
-    const channels = this.client.guilds.cache.get(guildId as string)?.channels
-      .cache;
-    const data = [];
-    if (!channels) return res.sendStatus(404);
-    for (const channelId of channels.keys()) {
-      const { type, id, name } = channels.get(channelId);
-      if (type === 'GUILD_VOICE') data.push({ type, id, name });
-    }
+    const data = this.client.getGuildVoiceChannels(guildId);
 
     return res.send({
       channels: data,

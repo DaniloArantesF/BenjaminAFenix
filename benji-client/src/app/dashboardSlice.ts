@@ -11,6 +11,7 @@ export interface Guild {
 export interface Channel {
   id: string;
   name: string;
+  onlineCount: number
 }
 
 export interface DashboardState {

@@ -239,6 +239,29 @@ class DiscordClient extends Client {
       return curChannel.isVoice();
     });
   }
+
+  public getGuildVoiceChannels(guildId: string) {
+    const channels = [...this.guilds.cache.get(guildId as string).channels.cache.map((i) => i)] as GuildChannel[];
+    const voiceChannels = channels.filter((curChannel) => {
+      return curChannel.isVoice();
+    });
+    const data = voiceChannels.map(({ type, id, name, members }) => {
+      let onlineCount = members.size;
+      // Dont count bot in users online
+      if (members.get(this.user.id)) {
+        console.log('bot in this channel')
+        onlineCount--;
+      }
+      return {
+        type,
+        id,
+        name,
+        onlineCount,
+      };
+    });
+
+    return data;
+  }
 }
 
 export default DiscordClient;

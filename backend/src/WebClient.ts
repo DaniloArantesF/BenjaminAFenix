@@ -210,7 +210,6 @@ class WebClient {
 
   public handleConnection(payload: any) {
     const { guildId, channel } = payload;
-    console.log(`bot connection ${guildId}`)
     this.server.to(guildId).emit('bot_connection', { channel });
   }
 }

@@ -8,11 +8,9 @@ interface props {
   switchHandler: () => void;
 }
 const GuildHeader = ({ switchHandler }: props) => {
-  const { currentGuild } = useAppSelector(selectDashboard);
+  const { currentGuild: guild, channel } = useAppSelector(selectDashboard);
 
-  if (!currentGuild) return null;
-  const onlineCount = 5;
-  const guild = currentGuild;
+  if (!guild) return null;
   const uptime = '1:45:33';
   return (
     <div className={classes.guild_header}>
@@ -26,8 +24,8 @@ const GuildHeader = ({ switchHandler }: props) => {
       )}
 
       <div className={classes.guild_header__body}>
-        <h1>{guild.name}</h1>
-        <h2>{onlineCount} online</h2>
+        <h1>{guild.name} {channel ? `/ ${channel.name}` : ''}</h1>
+        <h2>{channel?.onlineCount || 0} online</h2>
         <h2>{uptime}</h2>
       </div>
 
