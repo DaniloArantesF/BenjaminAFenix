@@ -89,6 +89,9 @@ class DiscordAPI {
         }
       );
 
+      /**
+       * Check which guilds the bot is a member and cleanup data
+       */
       const guilds = guildsRes.data.map(({ id, name, icon, owner, }) => {
         return {
           id,

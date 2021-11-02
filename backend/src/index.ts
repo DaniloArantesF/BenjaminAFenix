@@ -42,9 +42,9 @@ class App {
     this.express.use(cors());
     this.express.options('*', cors());
     this.express.use(rateLimit({
-      windowMs: 1000, // 10 seconds in ms,
+      windowMs: 1000,
       max: 10,
-      message: 'Exceeded 100 requests/min',
+      message: 'Exceeded 10 requests/s',
       headers: true,
     }));
     // TODO: change in prod
