@@ -3,7 +3,7 @@ import Queue from '../../components/Queue/Queue';
 import YoutubeEmbed from '../../components/YoutubeEmbed/YoutubeEmbed';
 import Navbar from '../../components/Navbar/Navbar';
 import Search from '../../components/Search/Search';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { selectItems, selectPosition } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
@@ -13,7 +13,8 @@ import {
   refreshCredentials,
   setRefreshTimeout,
 } from '../../app/authSlice';
-import { Guild,
+import {
+  Guild,
   selectDashboard,
   setCurrentGuild,
 } from '../../app/dashboardSlice';
@@ -35,8 +36,6 @@ export enum breakpoints {
   MEDIUM = 850,
   SMALL = 0,
 }
-
-
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -61,10 +60,11 @@ const Dashboard = () => {
     toggleRepeat,
     toggleShuffle,
     setVolume,
-    leaveChannel
+    leaveChannel,
   } = useSocket();
   const { active, currentGuild, channels } = useAppSelector(selectDashboard);
-  const [switchActive, setSwitchActive] = useState(false);
+  const [channelSelectionActive, setChannelSelectionActive] = useState(false);
+  const selectionRef = useRef(null);
 
   useEffect(() => {
     if (!accessToken) {
@@ -79,6 +79,7 @@ const Dashboard = () => {
           setWindowWidth(win.innerWidth);
       });
     }
+
     init();
   }, []);
 
@@ -138,16 +139,22 @@ const Dashboard = () => {
     if (lastGuild?.id) dispatch(setCurrentGuild(lastGuild));
   };
 
-  if (!active) return <InactiveGuild joinChannel={ joinChannel } />;
+  if (!active) return <InactiveGuild joinChannel={joinChannel} />;
 
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
       <div className={classes.dashboard__body}>
-        <ChannelSelection active={switchActive} joinChannel={ joinChannel }/>
+        <ChannelSelection
+          active={channelSelectionActive}
+          setActive={(val: boolean) => setChannelSelectionActive(val)}
+          joinChannel={joinChannel}
+        />
         <section id={classes.info} className={classes.dashboard__component}>
           <GuildHeader
-            switchHandler={() => setSwitchActive(!switchActive)}
+            switchHandler={() =>
+              setChannelSelectionActive(!channelSelectionActive)
+            }
             leaveChannel={leaveChannel}
           />
         </section>
@@ -170,7 +177,7 @@ const Dashboard = () => {
           />
         </section>
         <section id={classes.preview} className={classes.dashboard__component}>
-          { currentTrack && <TrackPreview track={currentTrack} />}
+          {currentTrack && <TrackPreview track={currentTrack} />}
         </section>
       </div>
     </div>

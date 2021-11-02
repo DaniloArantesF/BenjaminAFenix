@@ -17,7 +17,6 @@ import {
   setCurrentTrack,
   updatePlaybackState,
 } from './playerSlice';
-import { connect } from 'http2';
 import axios from 'axios';
 import { getGuildVoiceChannels } from '../libs/Discord';
 
@@ -60,7 +59,6 @@ const useSocket = () => {
 
   useEffect(() => {
     if (socket && currentGuild) {
-      console.log('Getting player...')
       getGuildPlayer();
     }
   }, [currentGuild, socket]);
