@@ -50,6 +50,7 @@ export interface DiscordConnection {
   connection: VoiceConnection;
   channel: GuildChannel;
   player: PlayerController;
+  timestamp: number;
 }
 
 class DiscordClient extends Client {
@@ -127,19 +128,22 @@ class DiscordClient extends Client {
         .get(guild.id)
         .channels.cache.get(channelId) as GuildChannel;
 
+      const timestamp = Date.now();
       this.connections.set(guild.id, {
         connection,
         player,
         channel: target,
+        timestamp,
       });
 
       // Emit event to web controller
       this.eventBus.dispatch('bot_connection', {
         guildId: guild.id,
         channel: target,
+        timestamp
       });
 
-      return { connection, player, channel: target };
+      return { connection, player, channel: target, timestamp };
     } catch (error) {
       console.error(error);
       return null;
@@ -241,7 +245,9 @@ class DiscordClient extends Client {
   }
 
   public getGuildVoiceChannels(guildId: string) {
-    const channels = [...this.guilds.cache.get(guildId as string).channels.cache.map((i) => i)] as GuildChannel[];
+    const channels = [
+      ...this.guilds.cache.get(guildId as string).channels.cache.map((i) => i),
+    ] as GuildChannel[];
     const voiceChannels = channels.filter((curChannel) => {
       return curChannel.isVoice();
     });
@@ -260,6 +266,18 @@ class DiscordClient extends Client {
     });
 
     return data;
+  }
+
+  public getChannelUserCount = (guildId: string, channelId: string) => {
+    const guild = this.guilds.cache.get(guildId)
+    const targetChannel = guild.channels.cache.get(channelId) as GuildChannel;
+
+    return targetChannel.members.reduce((acc, cur) => {
+      if (cur.id !== this.user.id) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0);
   }
 }
 

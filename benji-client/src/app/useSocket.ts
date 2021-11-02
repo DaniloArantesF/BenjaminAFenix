@@ -115,6 +115,7 @@ const useSocket = () => {
 
     // Dispatched when bot connects to a guild
     socket?.on('bot_connection', (payload) => {
+      console.log("bot_connection")
       dispatch(setCurrentChannel(payload.channel));
       if (!active)
         dispatch(setActive(true));

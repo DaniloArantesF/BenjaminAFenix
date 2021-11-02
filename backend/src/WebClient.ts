@@ -111,9 +111,21 @@ class WebClient {
       socket,
       guildId,
     });
-
     socket.join(guildId);
-    socket.emit('bot_connect', )
+
+    const connection = this.discordClient.connections.get(guildId);
+    if (connection) {
+      const { channel, timestamp } = connection;
+      const onlineCount = this.discordClient.getChannelUserCount(guildId, channel.id);
+      socket.emit('bot_connection', {
+        channel: {
+          name: channel.name,
+          id: channel.id,
+          onlineCount,
+          timestamp
+        }
+      });
+    }
     return this.getPlayer(socket, payload);
   }
 
@@ -129,6 +141,22 @@ class WebClient {
     const { player } = this.connections.get(guildId);
     socket.emit('player_update', player.getPlayerState());
   }
+
+  public getChannel(socket: Socket, payload: any) {
+    const { guildId } = payload;
+
+    if (!this.connections.get(guildId)) {
+      return socket.emit('not_active');
+    }
+
+    const { channel, timestamp } = this.connections.get(guildId);
+    const onlineCount = this.discordClient.getChannelUserCount(guildId, channel.id);
+    socket.emit('channel_update', {
+      id: channel.id,
+      onlineCount,
+      timestamp
+    });
+  };
 
   public async joinChannel(socket: Socket, payload: any) {
     const { guildId, channelId } = payload;
@@ -209,12 +237,14 @@ class WebClient {
   }
 
   public handleConnection(payload: any) {
-    const { guildId, channel } = payload;
+    const { guildId, channel, timestamp } = payload;
+    const onlineCount = this.discordClient.getChannelUserCount(guildId, channel.id);
     this.server.to(guildId).emit('bot_connection', {
       channel: {
         name: channel.name,
         id: channel.id,
-        onlineCount: channel.members.size - 1,
+        onlineCount,
+        timestamp
       }
      });
   }

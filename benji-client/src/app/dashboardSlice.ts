@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { msToMinSec } from '../util/util';
 import type { AppState } from './store';
 
 export interface Guild {
@@ -11,7 +12,8 @@ export interface Guild {
 export interface Channel {
   id: string;
   name: string;
-  onlineCount: number
+  onlineCount: number;
+  timestamp: number; // when bot joined channel
 }
 
 export interface DashboardState {
@@ -22,14 +24,13 @@ export interface DashboardState {
   active: boolean;
 }
 
-
 const initialState: DashboardState = {
   currentGuild: null,
   channels: [],
   channel: null,
   guilds: [],
   active: false,
-}
+};
 
 export const dashboardSlice = createSlice({
   name: 'dashboard',
@@ -67,6 +68,16 @@ export const dashboardSlice = createSlice({
   },
 });
 
-export const { setUserGuilds, setCurrentGuild, setCurrentChannel, setActive, setChannels } = dashboardSlice.actions;
+export const {
+  setUserGuilds,
+  setCurrentGuild,
+  setCurrentChannel,
+  setActive,
+  setChannels,
+} = dashboardSlice.actions;
 export const selectDashboard = (state: AppState) => state.dashboard;
+export const selectUptime = (state: AppState) => {
+  if (!state.dashboard.channel) return Date.now();
+  return state.dashboard.channel?.timestamp;
+};
 export default dashboardSlice.reducer;

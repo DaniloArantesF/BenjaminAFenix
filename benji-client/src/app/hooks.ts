@@ -10,7 +10,6 @@ export const useForm =
     event.preventDefault();
     event.persist();
     const form = event.target as HTMLFormElement;
-    console.log(form.elements)
     const elements = Array.from(form.elements) as HTMLInputElement[];
     const data = elements
       .filter((element) => element.hasAttribute('name'))

@@ -1,7 +1,11 @@
-import { selectDashboard } from "../../app/dashboardSlice";
-import { useAppSelector } from "../../app/hooks";
-import { getDiscordAvatar } from "../../libs/Discord";
-import Button from "../Button/Button";
+import { timeStamp } from 'console';
+import { useEffect, useState } from 'react';
+import { clearInterval } from 'timers';
+import { selectDashboard, selectUptime } from '../../app/dashboardSlice';
+import { useAppSelector } from '../../app/hooks';
+import { getDiscordAvatar } from '../../libs/Discord';
+import { msToMinSec } from '../../util/util';
+import Button from '../Button/Button';
 import classes from './GuildHeader.module.css';
 
 interface props {
@@ -9,9 +13,24 @@ interface props {
 }
 const GuildHeader = ({ switchHandler }: props) => {
   const { currentGuild: guild, channel } = useAppSelector(selectDashboard);
+  const [uptime, setUptime] = useState(getUptime(channel?.timestamp ?? 0));
+
+
+  useEffect(() => {
+    const interval = setInterval(function() {
+      setUptime(getUptime(channel?.timestamp ?? 0));
+    }, 1000);
+
+    return function () {
+      clearInterval(interval);
+    }
+  }, []);
+
+  function getUptime(start: number) {
+    return msToMinSec(start ? Date.now() - start : 0);
+  }
 
   if (!guild) return null;
-  const uptime = '1:45:33';
   return (
     <div className={classes.guild_header}>
       {guild.icon ? (
@@ -24,7 +43,9 @@ const GuildHeader = ({ switchHandler }: props) => {
       )}
 
       <div className={classes.guild_header__body}>
-        <h1>{guild.name} {channel ? `/ ${channel.name}` : ''}</h1>
+        <h1>
+          {guild.name} {channel ? `/ ${channel.name}` : ''}
+        </h1>
         <h2>{channel?.onlineCount || 0} online</h2>
         <h2>{uptime}</h2>
       </div>
