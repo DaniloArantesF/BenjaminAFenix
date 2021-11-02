@@ -279,6 +279,11 @@ class DiscordClient extends Client {
       return acc;
     }, 0);
   }
+
+  public disconnect = (guildId: string) => {
+    this.connections.get(guildId).connection.destroy();
+    this.connections.delete(guildId);
+  }
 }
 
 export default DiscordClient;

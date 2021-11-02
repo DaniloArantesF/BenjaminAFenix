@@ -68,6 +68,7 @@ class WebClient {
       socket.on('repeat', (payload) => this.repeat(socket, payload));
       socket.on('volume', (payload) => this.volume(socket, payload));
       socket.on('disconnect', (payload) => this.disconnect(socket, payload));
+      socket.on('leave_channel', (payload) => this.leaveChannel(socket, payload));
     });
 
     this.eventBus = EventBus.getInstance();
@@ -247,6 +248,12 @@ class WebClient {
         timestamp
       }
      });
+  }
+
+  public leaveChannel(socket: Socket, payload: any) {
+    const { guildId } = payload;
+    this.discordClient.disconnect(guildId);
+    this.server.to(guildId).emit('not_active');
   }
 }
 

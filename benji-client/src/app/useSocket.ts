@@ -53,11 +53,9 @@ const useSocket = () => {
     setUpEvents();
   }, [socket]);
 
-
   useEffect(() => {
     if (!currentGuild) return;
     getVoiceChannels();
-
   }, [currentGuild]);
   useEffect(() => {
     if (socket && currentGuild) {
@@ -97,6 +95,14 @@ const useSocket = () => {
     });
 
     socket?.on('not_active', () => {
+      dispatch(
+        setCurrentChannel({
+          id: '',
+          name: '',
+          onlineCount: 0,
+          timestamp: 0,
+        })
+      );
       dispatch(setActive(false));
     });
 
@@ -115,10 +121,19 @@ const useSocket = () => {
 
     // Dispatched when bot connects to a guild
     socket?.on('bot_connection', (payload) => {
-      console.log("bot_connection")
       dispatch(setCurrentChannel(payload.channel));
-      if (!active)
+      if (!active) dispatch(setActive(true));
+    });
+
+    socket?.on('channel_update', (payload) => {
+      const channel = payload.channel;
+      if (active && (!channel || !channel.name)) {
+        dispatch(setActive(false));
+      } else if (!active && channel.name !== '') {
         dispatch(setActive(true));
+      }
+
+      dispatch(setCurrentChannel(payload.channel));
     });
 
     // TODO: set not active on bot_disconnect
@@ -181,6 +196,13 @@ const useSocket = () => {
     socket?.emit('volume', { volume });
   };
 
+  const leaveChannel = () => {
+    if (!currentGuild || !channel) {
+      return;
+    }
+    socket?.emit('leave_channel', { guildId: currentGuild.id });
+  };
+
   return {
     socket,
     setSocket,
@@ -193,6 +215,7 @@ const useSocket = () => {
     toggleRepeat,
     toggleShuffle,
     setVolume,
+    leaveChannel
   };
 };
 

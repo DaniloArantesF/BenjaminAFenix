@@ -61,6 +61,7 @@ const Dashboard = () => {
     toggleRepeat,
     toggleShuffle,
     setVolume,
+    leaveChannel
   } = useSocket();
   const { active, currentGuild, channels } = useAppSelector(selectDashboard);
   const [switchActive, setSwitchActive] = useState(false);
@@ -146,7 +147,8 @@ const Dashboard = () => {
         <ChannelSelection active={switchActive} joinChannel={ joinChannel }/>
         <section id={classes.info} className={classes.dashboard__component}>
           <GuildHeader
-            switchHandler={ () => setSwitchActive(!switchActive) }
+            switchHandler={() => setSwitchActive(!switchActive)}
+            leaveChannel={leaveChannel}
           />
         </section>
         <section id={classes.queue} className={classes.dashboard__component}>

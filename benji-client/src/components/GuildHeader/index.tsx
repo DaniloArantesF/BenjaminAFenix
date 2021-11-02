@@ -1,6 +1,4 @@
-import { timeStamp } from 'console';
 import { useEffect, useState } from 'react';
-import { clearInterval } from 'timers';
 import { selectDashboard, selectUptime } from '../../app/dashboardSlice';
 import { useAppSelector } from '../../app/hooks';
 import { getDiscordAvatar } from '../../libs/Discord';
@@ -10,8 +8,9 @@ import classes from './GuildHeader.module.css';
 
 interface props {
   switchHandler: () => void;
+  leaveChannel: () => void;
 }
-const GuildHeader = ({ switchHandler }: props) => {
+const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
   const { currentGuild: guild, channel } = useAppSelector(selectDashboard);
   const [uptime, setUptime] = useState(getUptime(channel?.timestamp ?? 0));
 
@@ -21,8 +20,9 @@ const GuildHeader = ({ switchHandler }: props) => {
       setUptime(getUptime(channel?.timestamp ?? 0));
     }, 1000);
 
-    return function () {
-      clearInterval(interval);
+    return () => {
+      if (interval)
+        clearInterval(interval);
     }
   }, []);
 
@@ -55,7 +55,7 @@ const GuildHeader = ({ switchHandler }: props) => {
           Switch Channel
         </Button>
 
-        <Button isActive={() => true} onClick={() => console.log('click')}>
+        <Button isActive={() => true} onClick={leaveChannel}>
           Leave
         </Button>
       </div>
