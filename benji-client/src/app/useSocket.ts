@@ -57,8 +57,10 @@ const useSocket = () => {
     if (!currentGuild) return;
     getVoiceChannels();
   }, [currentGuild]);
+
   useEffect(() => {
     if (socket && currentGuild) {
+      console.log('Getting player...')
       getGuildPlayer();
     }
   }, [currentGuild, socket]);
@@ -94,18 +96,6 @@ const useSocket = () => {
       console.info('Connected to server!');
     });
 
-    socket?.on('not_active', () => {
-      dispatch(
-        setCurrentChannel({
-          id: '',
-          name: '',
-          onlineCount: 0,
-          timestamp: 0,
-        })
-      );
-      dispatch(setActive(false));
-    });
-
     socket?.on('player_update', (payload: any) => {
       const queue = payload.queue as QueueState;
       const curTrack = queue.items[queue.position];
@@ -119,20 +109,13 @@ const useSocket = () => {
       }
     });
 
-    // Dispatched when bot connects to a guild
-    socket?.on('bot_connection', (payload) => {
-      dispatch(setCurrentChannel(payload.channel));
-      if (!active) dispatch(setActive(true));
-    });
-
     socket?.on('channel_update', (payload) => {
       const channel = payload.channel;
-      if (active && (!channel || !channel.name)) {
+      if ((!channel || channel?.name === '')) {
         dispatch(setActive(false));
-      } else if (!active && channel.name !== '') {
+      } else if (channel.name !== '') {
         dispatch(setActive(true));
       }
-
       dispatch(setCurrentChannel(payload.channel));
     });
 

@@ -24,7 +24,7 @@ const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
       if (interval)
         clearInterval(interval);
     }
-  }, []);
+  }, [ channel ]);
 
   function getUptime(start: number) {
     return msToMinSec(start ? Date.now() - start : 0);

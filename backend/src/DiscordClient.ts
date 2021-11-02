@@ -137,10 +137,10 @@ class DiscordClient extends Client {
       });
 
       // Emit event to web controller
-      this.eventBus.dispatch('bot_connection', {
+      this.eventBus.dispatch('channel_update', {
         guildId: guild.id,
         channel: target,
-        timestamp
+        timestamp,
       });
 
       return { connection, player, channel: target, timestamp };
@@ -269,7 +269,7 @@ class DiscordClient extends Client {
   }
 
   public getChannelUserCount = (guildId: string, channelId: string) => {
-    const guild = this.guilds.cache.get(guildId)
+    const guild = this.guilds.cache.get(guildId);
     const targetChannel = guild.channels.cache.get(channelId) as GuildChannel;
 
     return targetChannel.members.reduce((acc, cur) => {
@@ -278,12 +278,14 @@ class DiscordClient extends Client {
       }
       return acc;
     }, 0);
-  }
+  };
 
   public disconnect = (guildId: string) => {
-    this.connections.get(guildId).connection.destroy();
+    const connection = this.connections.get(guildId);
+    if (!connection) return;
+    connection.connection.destroy();
     this.connections.delete(guildId);
-  }
+  };
 }
 
 export default DiscordClient;

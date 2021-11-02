@@ -68,7 +68,9 @@ class WebClient {
       socket.on('repeat', (payload) => this.repeat(socket, payload));
       socket.on('volume', (payload) => this.volume(socket, payload));
       socket.on('disconnect', (payload) => this.disconnect(socket, payload));
-      socket.on('leave_channel', (payload) => this.leaveChannel(socket, payload));
+      socket.on('leave_channel', (payload) =>
+        this.leaveChannel(socket, payload)
+      );
     });
 
     this.eventBus = EventBus.getInstance();
@@ -78,8 +80,8 @@ class WebClient {
       this.handlePlaybackUpdate.bind(this)
     );
     this.eventBus.register(
-      'bot_connection',
-      this.handleConnection.bind(this)
+      'channel_update',
+      this.handleChannelUpdate.bind(this)
     );
   }
 
@@ -117,14 +119,26 @@ class WebClient {
     const connection = this.discordClient.connections.get(guildId);
     if (connection) {
       const { channel, timestamp } = connection;
-      const onlineCount = this.discordClient.getChannelUserCount(guildId, channel.id);
-      socket.emit('bot_connection', {
+      const onlineCount = this.discordClient.getChannelUserCount(
+        guildId,
+        channel.id
+      );
+      socket.emit('channel_update', {
         channel: {
           name: channel.name,
           id: channel.id,
           onlineCount,
-          timestamp
-        }
+          timestamp,
+        },
+      });
+    } else {
+      socket.emit('channel_update', {
+        channel: {
+          name: '',
+          id: '',
+          onlineCount: 0,
+          timestamp: 0,
+        },
       });
     }
     return this.getPlayer(socket, payload);
@@ -151,13 +165,14 @@ class WebClient {
     }
 
     const { channel, timestamp } = this.connections.get(guildId);
-    const onlineCount = this.discordClient.getChannelUserCount(guildId, channel.id);
+    const onlineCount = this.discordClient.getChannelUserCount(
+      guildId,
+      channel.id
+    );
     socket.emit('channel_update', {
-      id: channel.id,
-      onlineCount,
-      timestamp
+      channel: { name: channel.name, id: channel.id, onlineCount, timestamp },
     });
-  };
+  }
 
   public async joinChannel(socket: Socket, payload: any) {
     const { guildId, channelId } = payload;
@@ -237,23 +252,28 @@ class WebClient {
     this.server.to(guildId).emit('playback_state', payload);
   }
 
-  public handleConnection(payload: any) {
+  public handleChannelUpdate(payload: any) {
     const { guildId, channel, timestamp } = payload;
-    const onlineCount = this.discordClient.getChannelUserCount(guildId, channel.id);
-    this.server.to(guildId).emit('bot_connection', {
+    const onlineCount = this.discordClient.getChannelUserCount(
+      guildId,
+      channel.id
+    );
+    this.server.to(guildId).emit('channel_update', {
       channel: {
         name: channel.name,
         id: channel.id,
         onlineCount,
-        timestamp
-      }
-     });
+        timestamp,
+      },
+    });
   }
 
   public leaveChannel(socket: Socket, payload: any) {
     const { guildId } = payload;
     this.discordClient.disconnect(guildId);
-    this.server.to(guildId).emit('not_active');
+    this.server.to(guildId).emit('channel_update', {
+      channel: { name: '', id: '', onlineCount: 0, timestamp: 0 },
+    });
   }
 }
 

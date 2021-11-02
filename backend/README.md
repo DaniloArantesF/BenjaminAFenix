@@ -14,4 +14,5 @@
     * Check for permissions on restricted commands
     * ~~Implement cooldown from commands~~
     * Update channel member count
+    * Stop connections to guilds the bot is not on
 [Bugs]
