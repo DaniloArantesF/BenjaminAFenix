@@ -29,6 +29,8 @@ interface QItemProps {
   active?: boolean
 }
 
+const DRAGGING_ENABLED = false;
+
 const QueueItem = ({ item, dragCallback, mouseUpCb, active }: QItemProps) => {
   const [hover, setHover] = useState(false); // current item is being hovered
   const { itemPosition, title, channelTitle, duration, user } = item;
@@ -42,7 +44,7 @@ const QueueItem = ({ item, dragCallback, mouseUpCb, active }: QItemProps) => {
       onDrag={dragCallback}
       onMouseUp={mouseUpCb}
     >
-      {hover ? (
+      {(hover && DRAGGING_ENABLED) ? (
         <span>
           <DraggableIcon className={classes.draggable} />
         </span>
@@ -156,7 +158,7 @@ const Queue = ({ items }: QProps) => {
               }
               mouseDownCb={(event: SyntheticEvent) => { }}
               key={index}
-              item={item}
+              item={{ ...item, itemPosition: index + 1}}
               active={ index === position }
             />
           );
