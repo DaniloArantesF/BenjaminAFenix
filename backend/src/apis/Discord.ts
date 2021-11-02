@@ -88,7 +88,17 @@ class DiscordAPI {
           },
         }
       );
-      return res.send({ guilds: guildsRes.data });
+
+      const guilds = guildsRes.data.map(({ id, name, icon, owner, }) => {
+        return {
+          id,
+          name,
+          icon,
+          owner,
+          allowed: this.client.guilds.cache.get(id) !== undefined,
+        };
+      });
+      return res.send({ guilds });
     } catch (error) {
       logger.error({
         function: 'getUserGuilds',

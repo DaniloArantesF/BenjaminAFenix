@@ -86,3 +86,14 @@
   height: fit-content;
   margin-top: auto;
 }
+
+.prompt {
+  position: absolute;
+  top: 50%;
+  left: calc(50% - var(--navbar-width)/2);
+  transform: translate(calc(-50% + var(--navbar-width)/2), -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

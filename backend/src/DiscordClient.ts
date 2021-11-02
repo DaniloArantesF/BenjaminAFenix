@@ -245,8 +245,13 @@ class DiscordClient extends Client {
   }
 
   public getGuildVoiceChannels(guildId: string) {
+    // Check if bot is present in this guild
+    if (!this.guilds.cache.get(guildId)) {
+      return [];
+    }
+
     const channels = [
-      ...this.guilds.cache.get(guildId as string).channels.cache.map((i) => i),
+      ...this.guilds.cache.get(guildId).channels.cache.map((i) => i),
     ] as GuildChannel[];
     const voiceChannels = channels.filter((curChannel) => {
       return curChannel.isVoice();

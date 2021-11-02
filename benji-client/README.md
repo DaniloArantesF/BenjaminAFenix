@@ -18,8 +18,8 @@
   - General
     * Create error page to display when backend is offline
     * Improve typography and font sizing
-    * Create leave guild button
-      * Create way to change channels within guild
+    * ~~Create leave guild button~~
+      * ~~Create way to change channels within guild~~
     * Create help page for commands
     * ~~*Refresh Tokens*~~
   - Errors

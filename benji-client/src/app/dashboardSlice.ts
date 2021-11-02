@@ -7,6 +7,7 @@ export interface Guild {
   name: string;
   icon: string;
   owner: boolean;
+  allowed: boolean;   // Whether or not the bot has been added to this guild
 }
 
 export interface Channel {

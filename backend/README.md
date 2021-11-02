@@ -4,7 +4,7 @@
     * Remind me
     * Lofi mode
     * Shuffle & Repeat
-    * *Switch channel*
+    * ~~*Switch channel*~~
 
   - General
     * ~~Setup rate limiter~~
@@ -14,5 +14,5 @@
     * Check for permissions on restricted commands
     * ~~Implement cooldown from commands~~
     * Update channel member count
-    * Stop connections to guilds the bot is not on
+    * ~~Stop connections to guilds the bot is not on~~
 [Bugs]

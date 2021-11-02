@@ -14,7 +14,7 @@ const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
   const { currentGuild: guild, channel } = useAppSelector(selectDashboard);
   const [uptime, setUptime] = useState(getUptime(channel?.timestamp ?? 0));
 
-
+  // TODO: try using useLayoutEffect here ?
   useEffect(() => {
     const interval = setInterval(function() {
       setUptime(getUptime(channel?.timestamp ?? 0));
