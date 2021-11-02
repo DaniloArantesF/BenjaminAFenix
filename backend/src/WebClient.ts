@@ -133,12 +133,7 @@ class WebClient {
       });
     } else {
       socket.emit('channel_update', {
-        channel: {
-          name: '',
-          id: '',
-          onlineCount: 0,
-          timestamp: 0,
-        },
+        channel: null,
       });
     }
     return this.getPlayer(socket, payload);
@@ -272,7 +267,7 @@ class WebClient {
     const { guildId } = payload;
     this.discordClient.disconnect(guildId);
     this.server.to(guildId).emit('channel_update', {
-      channel: { name: '', id: '', onlineCount: 0, timestamp: 0 },
+      channel: null,
     });
   }
 }

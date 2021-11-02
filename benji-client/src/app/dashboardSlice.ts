@@ -27,7 +27,7 @@ export interface DashboardState {
 const initialState: DashboardState = {
   currentGuild: null,
   channels: [],
-  channel: null,
+  channel: { name: '', id: '', onlineCount: 0, timestamp: 0 },
   guilds: [],
   active: false,
 };
@@ -54,7 +54,11 @@ export const dashboardSlice = createSlice({
       return state;
     },
     setCurrentChannel: (state, { payload }) => {
-      state.channel = payload;
+      if (payload) {
+        state.channel = payload;
+      } else {
+        state.channel = initialState.channel;
+      }
       return state;
     },
     setActive: (state, { payload }) => {

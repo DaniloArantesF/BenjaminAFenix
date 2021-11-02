@@ -111,7 +111,7 @@ const useSocket = () => {
 
     socket?.on('channel_update', (payload) => {
       const channel = payload.channel;
-      if ((!channel || channel?.name === '')) {
+      if (!channel) {
         dispatch(setActive(false));
       } else if (channel.name !== '') {
         dispatch(setActive(true));

@@ -14,10 +14,9 @@ export const command: Command = {
       return interaction.reply(":angry:");
     }
 
-    // Disconnect then remove connection from map
+    // Disconnect bot from guild
     interaction.reply("flw mens :rocket:");
-    client.connections.get(guildId).connection.destroy();
-    client.connections.delete(guildId);
+    client.disconnect(guildId);
   },
   usage: '/disconnectdd'
 };
