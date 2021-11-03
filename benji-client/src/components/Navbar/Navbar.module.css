@@ -14,7 +14,7 @@
   word-wrap: break-word;
   padding-bottom: var(--margin-bottom);
   background-color: var(--clr-surface1);
-  box-shadow: var(--shadow-light);
+  box-shadow: var(--shadow-heavy);
 }
 
 .navbar_container > * {

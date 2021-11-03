@@ -29,6 +29,7 @@ const Slider = ({ changeCb }: SliderProps) => {
    * and unset on mouse up or mouse leave
    */
   useEffect(() => {
+    console.log(active);
     if (active === false) {
       console.log(`Volume change callback ${value}`);
       //changeCb(value);
@@ -67,7 +68,7 @@ const Slider = ({ changeCb }: SliderProps) => {
         setValue(newValue);
       }}
       onMouseUp={() => setActive(false)}
-      onMouseLeave={() => setActive(false)}
+      onMouseLeave={() => { active && setActive(false)}}
     >
       <div className={classes.slider__track}>
         <span ref={activeTrackRef} className={classes.track__left} />

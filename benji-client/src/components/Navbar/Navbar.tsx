@@ -40,7 +40,6 @@ const Navbar = () => {
 
   const handleWindowClick = (event: MouseEvent) => {
     if (!navbarRef.current) return;
-    console.log("dkldkddkkd")
     const { clientX: clickX, clientY: clickY } = event;
     const { top, right, bottom, left } =
       navbarRef.current.getBoundingClientRect();
