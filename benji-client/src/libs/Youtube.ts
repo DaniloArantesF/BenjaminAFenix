@@ -4,7 +4,7 @@ import { YoutubeItem } from '../types/youtube';
 export const getYoutubeItem = async (itemId: string) => {
   try {
     const res: AxiosResponse<{ item: YoutubeItem }> = await axios.get(
-      'http://localhost:8000/youtube/',
+      `${process.env.REACT_APP_BOT_HOSTNAME}/youtube/`,
       {
         params: { itemId },
       }
@@ -35,7 +35,7 @@ export const getYoutubeItem = async (itemId: string) => {
 export const searchYoutube = async (query: string, resultsCount = 5) => {
   try {
     const res: AxiosResponse<any> = await axios.get(
-      'http://localhost:8000/youtube/search',
+      `${process.env.REACT_APP_BOT_HOSTNAME}/youtube/search`,
       {
         params: {
           q: query,

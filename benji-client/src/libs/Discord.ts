@@ -4,7 +4,7 @@ import { Channel, Guild } from '../app/dashboardSlice';
 export const getGuildVoiceChannels = async (guildId: string) => {
   try {
     const res: AxiosResponse<any> = await axios.get(
-      'http://localhost:8000/discord/channels',
+      `${process.env.REACT_APP_BOT_HOSTNAME}/discord/channels`,
       {
         params: { guildId },
       }
@@ -18,7 +18,7 @@ export const getGuildVoiceChannels = async (guildId: string) => {
 export const getUserData = async (accessToken: string) => {
   try {
     const res: AxiosResponse<any> = await axios.get(
-      'http://localhost:8000/discord/user',
+      `${process.env.REACT_APP_BOT_HOSTNAME}/discord/user`,
       {
         params: { accessToken },
       }
@@ -33,7 +33,7 @@ export const getUserData = async (accessToken: string) => {
 export const getUserGuilds = async (accessToken: string) => {
   try {
     const res: AxiosResponse<any> = await axios.get(
-      'http://localhost:8000/discord/guilds',
+      `${process.env.REACT_APP_BOT_HOSTNAME}/discord/guilds`,
       {
         params: { accessToken },
       }
@@ -46,11 +46,10 @@ export const getUserGuilds = async (accessToken: string) => {
   }
 };
 
-
 export const getUserVoiceChannel = async (accessToken: string, id: string) => {
   try {
     const res: AxiosResponse<any> = await axios.get(
-      'http://localhost:8000/discord/connection',
+      `${process.env.REACT_APP_BOT_HOSTNAME}/discord/connection`,
       {
         params: { accessToken, id },
       }
@@ -65,9 +64,9 @@ export const getUserVoiceChannel = async (accessToken: string, id: string) => {
     return {
       guild: null,
       channel: null,
-    }
+    };
   }
-}
+};
 
 /**
  * Returns the url for a discord avatar given an avatar hash

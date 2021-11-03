@@ -20,7 +20,7 @@ import {
 import axios from 'axios';
 import { getGuildVoiceChannels } from '../libs/Discord';
 
-const endpoint = `localhost:8000/bot`;
+const endpoint = `${process.env.REACT_APP_BOT_HOSTNAME}/bot`;
 
 interface PlaybackState {
   status: string;
@@ -75,7 +75,9 @@ const useSocket = () => {
    */
   const checkBotStatus = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/status');
+      const res = await axios.get(
+        `${process.env.REACT_APP_BOT_HOSTNAME}/status`
+      );
       return true;
     } catch (error) {
       return false;
@@ -196,7 +198,7 @@ const useSocket = () => {
     toggleRepeat,
     toggleShuffle,
     setVolume,
-    leaveChannel
+    leaveChannel,
   };
 };
 

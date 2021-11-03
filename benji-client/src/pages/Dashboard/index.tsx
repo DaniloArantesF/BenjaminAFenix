@@ -23,7 +23,6 @@ import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
 import PlayerController from '../../components/PlayerController';
 import { getUserData, getUserGuilds } from '../../libs/Discord';
-import { getDiscordAvatar } from '../../libs/Discord';
 import { selectPlayerState } from '../../app/playerSlice';
 import GuildHeader from '../../components/GuildHeader';
 import TrackPreview from '../../components/TrackPreview';
@@ -64,7 +63,6 @@ const Dashboard = () => {
   } = useSocket();
   const { active, currentGuild, channels } = useAppSelector(selectDashboard);
   const [channelSelectionActive, setChannelSelectionActive] = useState(false);
-  const selectionRef = useRef(null);
 
   useEffect(() => {
     if (!accessToken) {

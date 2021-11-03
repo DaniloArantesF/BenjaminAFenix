@@ -33,9 +33,12 @@ export const fetchCredentials = createAsyncThunk(
   'login',
   async (code: string, { rejectWithValue }) => {
     try {
-      const { data } = (await axios.post('http://localhost:8000/auth/code', {
-        code,
-      })) as any;
+      const { data } = (await axios.post(
+        `${process.env.REACT_APP_BOT_HOSTNAME}/auth/code`,
+        {
+          code,
+        }
+      )) as any;
       const expiresIn = data.expiresIn;
       return {
         accessToken: data.accessToken,
@@ -54,9 +57,12 @@ export const refreshCredentials = createAsyncThunk(
   'refresh',
   async (refreshToken: string, { rejectWithValue }) => {
     try {
-      const { data } = (await axios.post('http://localhost:8000/auth/refresh', {
-        refreshToken,
-      })) as any;
+      const { data } = (await axios.post(
+        `${process.env.REACT_APP_BOT_HOSTNAME}/auth/refresh`,
+        {
+          refreshToken,
+        }
+      )) as any;
 
       const expiresIn = data.expiresIn;
       return {
@@ -67,7 +73,7 @@ export const refreshCredentials = createAsyncThunk(
     } catch (error) {
       console.error('Error refreshing tokens');
       // TODO: handle
-      window.location.href = 'http://'
+      window.location.href = 'http://';
       return rejectWithValue(error);
     }
   }
