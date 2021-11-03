@@ -46,4 +46,5 @@ export const command: Command = {
     });
   },
   usage: '/queue',
+  aliases: ['q'],
 };

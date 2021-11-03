@@ -114,4 +114,5 @@ export const command: Command = {
   },
   usage: '/play <url, id, >',
   // TODO: add examples
+  aliases: ['p'],
 };

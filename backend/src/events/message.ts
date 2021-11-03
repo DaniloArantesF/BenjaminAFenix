@@ -4,5 +4,7 @@ module.exports = {
 	name: 'messageCreate',
   execute(message: APIMessage) {
     //console.log(message.content)
+    const value = message.content;
+    
 	},
 };

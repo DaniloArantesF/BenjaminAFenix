@@ -23,4 +23,5 @@ export const command: Command = {
     });
   },
   usage: '/volume <percentage>',
+  aliases: ['vol'],
 };

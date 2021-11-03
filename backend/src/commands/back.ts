@@ -13,5 +13,6 @@ export const command: Command = {
     player.queueController.previous();
     interaction.reply({ content: "opa", ephemeral: true });
   },
-  usage: '/back'
+  usage: '/back',
+  aliases: ['prev', 'rewind'],
 };

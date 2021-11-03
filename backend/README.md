@@ -9,6 +9,8 @@
   - General
     * ~~Setup rate limiter~~
     * Implement Aliases for commands
+      * Fallback to regular messages
+      * Implement old command scheme
     * Set up pools
     * ~~Set up volume controls~~
     * Check for permissions on restricted commands

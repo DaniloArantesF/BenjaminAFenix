@@ -61,4 +61,5 @@ export const command: Command = {
     });
   },
   usage: '/help',
+  aliases: ['h', 'halp'],
 };

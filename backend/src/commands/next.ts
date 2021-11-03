@@ -13,5 +13,6 @@ export const command: Command = {
     player.queueController.next();
     interaction.reply({ content: "fechou", ephemeral: true });
   },
-  usage: '/next'
+  usage: '/next',
+  aliases: ['skip', 'forward'],
 };

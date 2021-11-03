@@ -10,4 +10,5 @@ export const command: Command = {
     await interaction.reply('pruu')
   },
   usage: '/salve',
+  aliases: ['pru'],
 };

@@ -27,4 +27,5 @@ export const command: Command = {
     player.queueController.reset();
   },
   usage: '/stop',
+  aliases: [],
 };

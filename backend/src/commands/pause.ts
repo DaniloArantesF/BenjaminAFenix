@@ -20,5 +20,6 @@ export const command: Command = {
     interaction.reply({ content: "Pausado, chefe", ephemeral: true });
     player.pause();
   },
-  usage: '/pause'
+  usage: '/pause',
+  aliases: ['p'],
 };

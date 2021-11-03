@@ -18,5 +18,6 @@ export const command: Command = {
     interaction.reply("flw mens :rocket:");
     client.disconnect(guildId);
   },
-  usage: '/disconnectdd'
+  usage: '/disconnect',
+  aliases: ['leave'],
 };

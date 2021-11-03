@@ -12,9 +12,12 @@ import { joinVoiceChannel, VoiceConnection } from '@discordjs/voice';
 import type { ClientOptions } from 'discord.js';
 import { CommandInteraction } from 'discord.js';
 import PlayerController from './PlayerController';
-import { Namespace, Server, Socket } from 'socket.io';
-import { channel } from 'diagnostics_channel';
 import { EventBus } from './EventBus';
+import { userInfo } from 'os';
+
+interface CommandFile {
+  command: Command
+}
 
 export interface Command {
   data: {
@@ -55,6 +58,10 @@ export interface DiscordConnection {
 
 class DiscordClient extends Client {
   static commands = new Collection<string, Command>();
+  static aliases = new Map<string, string>();
+  // Indicates whether a user is in cooldown
+  // A timestamp is set to indicate the last interaction this user created
+  static userCooldown = new Map<string, number>();
   connections: Map<string, DiscordConnection | null>;
   ready: boolean;
   eventBus: EventBus;
@@ -87,10 +94,17 @@ class DiscordClient extends Client {
       .filter((file) => file.endsWith('.ts'));
 
     for (const file of commandFiles) {
-      const { command } = require(`./commands/${file}`);
+      const { command }: CommandFile = require(`./commands/${file}`);
 
       if (!command?.data) continue; // Ignore empty files
       DiscordClient.commands.set(command.data.name, command);
+
+      // Setup aliases
+      // Each alias is mapped to its original command name
+      const aliases = command.aliases;
+      aliases.forEach((alias) => {
+        DiscordClient.aliases.set(alias, command.data.name);
+      });
     }
   }
 

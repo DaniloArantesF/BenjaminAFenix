@@ -23,14 +23,15 @@ const intents = [
   Intents.FLAGS.DIRECT_MESSAGE_TYPING,
 ];
 
+// Time in ms where users are not allowed to send more than one
+// interaction. The next command will be run only when cooldown is over.
+// *Note* The discord api requires a reply within 3 seconds. If cooldown is greater than 3000, you need to defer reply and edit it later.
 const COOLDOWN_MS = 2500;
 
 const Bot = (server: http.Server) => {
   const client = new DiscordClient({ intents });
   const webController = new WebClient(server, client);
-  // Indicates whether a user is in cooldown
-  // A timestamp is set to indicate the last interaction this user created
-  const cooldown = new Map<string, number>();
+  const cooldown = DiscordClient.userCooldown;
 
   client.on('interactionCreate', async (interaction: CommandInteraction) => {
     const command = DiscordClient.commands.get(interaction.commandName);
@@ -50,7 +51,6 @@ const Bot = (server: http.Server) => {
           command.execute(client, interaction);
         }, timeLeft)
       } else {
-        console.info(`${user} not in cooldown`);
         cooldown.set(user, Date.now());
         command.execute(client, interaction);
       }
