@@ -1,9 +1,5 @@
 import { useEffect, useRef } from 'react';
-import {
-  Channel,
-  selectDashboard,
-  setCurrentChannel,
-} from '../../app/dashboardSlice';
+import { Channel, selectDashboard, } from '../../app/dashboardSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import classes from './Selection.module.css';
 
@@ -13,7 +9,6 @@ interface ChannelSelectionProps {
   setActive?: (val: boolean) => void;
 }
 
-// TODO: implement click to dismiss
 const ChannelSelection = ({
   joinChannel,
   active,

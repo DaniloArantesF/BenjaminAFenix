@@ -3,7 +3,7 @@
     * Jump to song in queue
     * Remind me
     * Lofi mode
-    * Shuffle & Repeat
+    * *Shuffle & Repeat*
     * ~~*Switch channel*~~
 
   - General

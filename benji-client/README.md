@@ -22,6 +22,7 @@
       * ~~Create way to change channels within guild~~
     * Create help page for commands
     * ~~*Refresh Tokens*~~
+    * Implement dynamic hostname for redirect uri in auth urls
   - Errors
     * Redirect users on failed requests
 

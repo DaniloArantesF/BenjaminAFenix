@@ -35,11 +35,14 @@ const Login = () => {
     setLoading(true);
   }, [code]);
 
+  /**
+   * Redirects user to main page if
+   * access token is present
+   */
   useEffect(() => {
     if (!accessToken) return;
     history.push('/');
   }, [accessToken]);
-
 
   /**
    * Handle API Errors
