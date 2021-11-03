@@ -1,20 +1,54 @@
-import React, { BaseSyntheticEvent } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useLayoutEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 import classes from './Navbar.module.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
+import { ReactComponent as MenuIcon } from '../../assets/menu.svg';
 import {
   Guild,
   selectDashboard,
   setCurrentGuild,
+  setNavbarVisibility,
 } from '../../app/dashboardSlice';
 import { clearCredentials } from '../../app/authSlice';
 import { getDiscordAvatar } from '../../libs/Discord';
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
-  const { guilds, currentGuild } = useAppSelector(selectDashboard);
+  const {
+    guilds,
+    currentGuild,
+    windowWidth,
+    navbar: isVisible,
+  } = useAppSelector(selectDashboard);
   const history = useHistory();
+  const navbarRef = useRef<HTMLDivElement>(null);
+
+  // When navbar becomes visible, add event listener to
+  // check for clicks outside navbar and dismiss it.
+  useEffect(() => {
+    if (windowWidth > 1150) return;
+    if (isVisible) {
+      window.addEventListener('click', handleWindowClick);
+    } else {
+      window.removeEventListener('click', handleWindowClick);
+    }
+    return () => {
+      window.removeEventListener('click', handleWindowClick);
+    };
+  }, [isVisible]);
+
+  const handleWindowClick = (event: MouseEvent) => {
+    if (!navbarRef.current) return;
+    console.log("dkldkddkkd")
+    const { clientX: clickX, clientY: clickY } = event;
+    const { top, right, bottom, left } =
+      navbarRef.current.getBoundingClientRect();
+
+    if (clickX < left || clickX > right || clickY < top || clickY > bottom) {
+      dispatch(setNavbarVisibility(false));
+    }
+  };
 
   /**
    * Updates the current guild
@@ -33,41 +67,57 @@ const Navbar = () => {
   const logout = (event: BaseSyntheticEvent) => {
     dispatch(clearCredentials());
     history.push('/login');
-  }
+  };
 
   return (
-    <div className={classes.navbar_container}>
-      <div className={classes.logo_container}>
-        <Logo />
-      </div>
-      <section className={classes.guilds_container}>
-        {guilds.map((guild, index) => {
-          return (
-            <div className={`${classes.guildIcon} ${guild.id === currentGuild?.id ? classes.guildActive : '' }`}
-              key={index}
-              onClick={() => handleGuildUpdate(guild)}
-            >
-              {guild.icon ? (
-                <img
-                  src={getDiscordAvatar('guild', guild.id, guild.icon)}
-                  alt={guild.name}
-
-                />
-              ) : (
-                <h2>{guild.name.substring(0, 1)}</h2>
-              )}
-            </div>
-          );
-        })}
-      </section>
-      <section className={classes.navbar__footer}>
-        <div className={classes.navLink}>Help</div>
+    <>
+      {windowWidth < 1150 && (
         <div
-          className={classes.navLink}
-          onClick={logout}
-        >Logout</div>
-      </section>
-    </div>
+          className={classes.menu_btn}
+          onClick={() => dispatch(setNavbarVisibility(true))}
+        >
+          <MenuIcon />
+        </div>
+      )}
+      <div
+        ref={navbarRef}
+        className={`${classes.navbar_container} ${
+          isVisible ? classes.active : classes.hidden
+        }`}
+      >
+        <div className={classes.logo_container}>
+          <Logo />
+        </div>
+        <section className={classes.guilds_container}>
+          {guilds.map((guild, index) => {
+            return (
+              <div
+                className={`${classes.guildIcon} ${
+                  guild.id === currentGuild?.id ? classes.guildActive : ''
+                }`}
+                key={index}
+                onClick={() => handleGuildUpdate(guild)}
+              >
+                {guild.icon ? (
+                  <img
+                    src={getDiscordAvatar('guild', guild.id, guild.icon)}
+                    alt={guild.name}
+                  />
+                ) : (
+                  <h2>{guild.name.substring(0, 1)}</h2>
+                )}
+              </div>
+            );
+          })}
+        </section>
+        <section className={classes.navbar__footer}>
+          <div className={classes.navLink}>Help</div>
+          <div className={classes.navLink} onClick={logout}>
+            Logout
+          </div>
+        </section>
+      </div>
+    </>
   );
 };
 

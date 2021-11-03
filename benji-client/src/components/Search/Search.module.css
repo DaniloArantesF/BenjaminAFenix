@@ -1,9 +1,5 @@
 
 .search_container {
-  --thumb-width: 120px;
-  --thumb-height: 90px;
-  --search-bar-width: 450px;
-  --search-bar-height: 3rem;
   position: relative;
   max-width: var(--search-bar-width);
   left: 0;

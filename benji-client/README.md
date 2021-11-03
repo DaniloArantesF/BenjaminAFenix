@@ -7,7 +7,7 @@
     * ~~Make bot join channels through UI~~
     * ~~Setup logout btn~~
     * ~~Make active guild highlighted~~
-    * Create hidden navbar for mobile
+    * ~~Create hidden navbar for mobile~~
   - Player
     * ~~Set up player with play/pause/previous/next~~
     * Setup shuffle & repeat
@@ -20,9 +20,8 @@
     * Improve typography and font sizing
     * ~~Create leave guild button~~
       * ~~Create way to change channels within guild~~
-    * Create help page for commands
     * ~~*Refresh Tokens*~~
-    * Implement dynamic hostname for redirect uri in auth urls
+    * ~~Implement dynamic hostname for redirect uri in auth urls~~
   - Errors
     * Redirect users on failed requests
 

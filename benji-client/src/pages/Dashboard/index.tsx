@@ -17,6 +17,7 @@ import {
   Guild,
   selectDashboard,
   setCurrentGuild,
+  setWindowWidth,
 } from '../../app/dashboardSlice';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
@@ -46,7 +47,7 @@ const Dashboard = () => {
     id: userId,
   } = useAppSelector(selectAuth);
   const { currentTrack } = useAppSelector(selectPlayerState);
-  const [windowWidth, setWindowWidth] = useState<number>();
+  const { windowWidth } = useAppSelector(selectDashboard);
   const history = useHistory();
   const {
     socket,
@@ -74,7 +75,7 @@ const Dashboard = () => {
         // fixing window is not defined see https://bit.ly/3k8w4lr
         const win = event.target as Window;
         if (event.target && win.innerWidth !== windowWidth)
-          setWindowWidth(win.innerWidth);
+          dispatch(setWindowWidth(win.innerWidth));
       });
     }
 

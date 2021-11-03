@@ -7,7 +7,7 @@ export interface Guild {
   name: string;
   icon: string;
   owner: boolean;
-  allowed: boolean;   // Whether or not the bot has been added to this guild
+  allowed: boolean; // Whether or not the bot has been added to this guild
 }
 
 export interface Channel {
@@ -23,6 +23,9 @@ export interface DashboardState {
   guilds: Guild[];
   channel: Channel | null;
   active: boolean;
+  channelSelection: boolean;
+  navbar: boolean;
+  windowWidth: number;
 }
 
 const initialState: DashboardState = {
@@ -31,6 +34,9 @@ const initialState: DashboardState = {
   channel: { name: '', id: '', onlineCount: 0, timestamp: 0 },
   guilds: [],
   active: false,
+  channelSelection: false,
+  navbar: window.innerWidth > 1150, // Only show by default in larger displays
+  windowWidth: window.innerWidth,
 };
 
 export const dashboardSlice = createSlice({
@@ -70,6 +76,14 @@ export const dashboardSlice = createSlice({
       state.channels = [...payload];
       return state;
     },
+    setNavbarVisibility: (state, { payload }) => {
+      state.navbar = payload;
+    },
+    setWindowWidth: (state, { payload }) => {
+      state.windowWidth = payload;
+      state.navbar = payload > 1150;
+      return state;
+    },
   },
 });
 
@@ -79,6 +93,8 @@ export const {
   setCurrentChannel,
   setActive,
   setChannels,
+  setNavbarVisibility,
+  setWindowWidth,
 } = dashboardSlice.actions;
 export const selectDashboard = (state: AppState) => state.dashboard;
 export const selectUptime = (state: AppState) => {
