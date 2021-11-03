@@ -13,7 +13,6 @@ import type { ClientOptions } from 'discord.js';
 import { CommandInteraction } from 'discord.js';
 import PlayerController from './PlayerController';
 import { EventBus } from './EventBus';
-import { userInfo } from 'os';
 
 interface CommandFile {
   command: Command
@@ -102,9 +101,11 @@ class DiscordClient extends Client {
       // Setup aliases
       // Each alias is mapped to its original command name
       const aliases = command.aliases;
-      aliases.forEach((alias) => {
-        DiscordClient.aliases.set(alias, command.data.name);
-      });
+      if (aliases) {
+        aliases.forEach((alias) => {
+          DiscordClient.aliases.set(alias, command.data.name);
+        });
+      }
     }
   }
 

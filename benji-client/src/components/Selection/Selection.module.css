@@ -29,6 +29,12 @@
   transform: translateX(-50%);
 }
 
+@media screen and (max-width: 1150px) {
+  .selection_container.active, .selection_container.inactive {
+    left: 50%;
+  }
+}
+
 .selection_container > h1 {
   font-size: 1.3em;
   font-weight: 400;
