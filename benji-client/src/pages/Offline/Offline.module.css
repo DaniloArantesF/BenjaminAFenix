@@ -39,8 +39,6 @@
   padding-bottom: 0.2em;
   color: var(--clr-accent);
 }
-.offline__body p {
-}
 
 .offline__body img {
   max-width: 200px;

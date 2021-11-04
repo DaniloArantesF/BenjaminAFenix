@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { AppState } from './store';
-import { useHistory } from 'react-router-dom';
 
 export interface AuthState {
   id: string;
@@ -48,6 +47,7 @@ export const fetchCredentials = createAsyncThunk(
     } catch (err) {
       let error = err as any;
       const { data, status } = error;
+      console.log({data, status});
       return rejectWithValue({ error: 'Invalid Code!' });
     }
   }
@@ -73,7 +73,7 @@ export const refreshCredentials = createAsyncThunk(
     } catch (error) {
       console.error('Error refreshing tokens');
       // TODO: handle
-      window.location.href = 'http://';
+      //window.location.href = '/';
       return rejectWithValue(error);
     }
   }
@@ -105,6 +105,10 @@ export const authSlice = createSlice({
       state.refreshTimeout = payload;
       return state;
     },
+    setError: (state, { payload }) => {
+      state.error = payload;
+      return state;
+    }
   },
   extraReducers: (builder) => {
     // Builder callback is used as it provides correctly typed reducers from action creators
@@ -135,12 +139,13 @@ export const authSlice = createSlice({
     });
 
     builder.addCase(refreshCredentials.rejected, (state, { error }) => {
-      state.error = error;
+      state.error = 'Error refreshing credentials';
     });
   },
 });
 
-export const { clearCredentials, setUser, setCredentials, setRefreshTimeout } =
+export const { clearCredentials, setUser, setCredentials, setRefreshTimeout, setError } =
   authSlice.actions;
 export const selectAuth = (state: AppState) => state.auth;
+export const selectError = (state: AppState) => state.auth.error;
 export default authSlice.reducer;

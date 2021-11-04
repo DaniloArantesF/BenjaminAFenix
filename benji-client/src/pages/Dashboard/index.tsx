@@ -12,6 +12,7 @@ import {
   setCredentials,
   refreshCredentials,
   setRefreshTimeout,
+  selectError,
 } from '../../app/authSlice';
 import {
   Guild,
@@ -23,7 +24,7 @@ import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
 import PlayerController from '../../components/PlayerController';
-import { getUserData, getUserGuilds } from '../../libs/Discord';
+import useDiscordAPI from '../../libs/Discord';
 import { selectPlayerState } from '../../app/playerSlice';
 import GuildHeader from '../../components/GuildHeader';
 import TrackPreview from '../../components/TrackPreview';
@@ -64,7 +65,8 @@ const Dashboard = () => {
   } = useSocket();
   const { active, currentGuild, channels } = useAppSelector(selectDashboard);
   const [channelSelectionActive, setChannelSelectionActive] = useState(false);
-
+  const { getUserData, getUserGuilds } = useDiscordAPI();
+  const error = useAppSelector(selectError);
   useEffect(() => {
     if (!accessToken) {
       history.push('/login');
@@ -104,6 +106,12 @@ const Dashboard = () => {
     );
     dispatch(setRefreshTimeout(interval));
   }, [expiration]);
+
+  useEffect(() => {
+    if (error) {
+      history.push('/offline');
+    }
+  }, [error]);
 
   const init = async () => {
     // Check that token is present

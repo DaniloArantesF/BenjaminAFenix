@@ -18,7 +18,7 @@ import {
   updatePlaybackState,
 } from './playerSlice';
 import axios from 'axios';
-import { getGuildVoiceChannels } from '../libs/Discord';
+import useDiscordAPI from '../libs/Discord';
 
 const endpoint = `${process.env.REACT_APP_BOT_HOSTNAME}/bot`;
 
@@ -35,6 +35,7 @@ const useSocket = () => {
   const { currentTrack } = useAppSelector(selectPlayerState);
   const { username } = useAppSelector(selectAuth);
   const [socket, setSocket] = useState<Socket>();
+  const { getGuildVoiceChannels } = useDiscordAPI();
 
   useEffect(() => {
     connect();

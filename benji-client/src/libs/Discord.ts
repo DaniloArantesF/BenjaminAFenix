@@ -1,71 +1,92 @@
 import axios, { AxiosResponse } from 'axios';
+import { selectError, setError } from '../app/authSlice';
 import { Channel, Guild } from '../app/dashboardSlice';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 
-export const getGuildVoiceChannels = async (guildId: string) => {
-  try {
-    const res: AxiosResponse<any> = await axios.get(
-      `${process.env.REACT_APP_BOT_HOSTNAME}/discord/channels`,
-      {
-        params: { guildId },
-      }
-    );
-    return res.data.channels;
-  } catch (error) {
-    console.error('Error getting user guilds');
-  }
-};
+const useDiscord = () => {
+  const dispatch = useAppDispatch();
+  const error = useAppSelector(selectError);
 
-export const getUserData = async (accessToken: string) => {
-  try {
-    const res: AxiosResponse<any> = await axios.get(
-      `${process.env.REACT_APP_BOT_HOSTNAME}/discord/user`,
-      {
-        params: { accessToken },
-      }
-    );
-    const { id, username, avatar } = res.data;
-    return { id, username, avatar };
-  } catch (error) {
-    console.error('Error getting user');
-  }
-};
+  const getGuildVoiceChannels = async (guildId: string) => {
+    try {
+      const res: AxiosResponse<any> = await axios.get(
+        `${process.env.REACT_APP_BOT_HOSTNAME}/discord/channels`,
+        {
+          params: { guildId },
+        }
+      );
+      return res.data.channels;
+    } catch (error) {
+      console.error('Error getting user guilds');
+      !error && dispatch(setError('Error getting user guilds'));
+      return [];
+    }
+  };
 
-export const getUserGuilds = async (accessToken: string) => {
-  try {
-    const res: AxiosResponse<any> = await axios.get(
-      `${process.env.REACT_APP_BOT_HOSTNAME}/discord/guilds`,
-      {
-        params: { accessToken },
-      }
-    );
+  const getUserData = async (accessToken: string) => {
+    try {
+      const res: AxiosResponse<any> = await axios.get(
+        `${process.env.REACT_APP_BOT_HOSTNAME}/discord/user`,
+        {
+          params: { accessToken },
+        }
+      );
+      const { id, username, avatar } = res.data;
+      return { id, username, avatar };
+    } catch (error) {
+      console.error('Error getting user');
+      !error && dispatch(setError('Error getting user data'));
+      return { id: '', username: '', avatar: '' };
+    }
+  };
 
-    const guilds: Guild[] = res.data.guilds;
-    return guilds;
-  } catch (error) {
-    console.error('Error getting user guilds');
-  }
-};
+  const getUserGuilds = async (accessToken: string) => {
+    try {
+      const res: AxiosResponse<any> = await axios.get(
+        `${process.env.REACT_APP_BOT_HOSTNAME}/discord/guilds`,
+        {
+          params: { accessToken },
+        }
+      );
 
-export const getUserVoiceChannel = async (accessToken: string, id: string) => {
-  try {
-    const res: AxiosResponse<any> = await axios.get(
-      `${process.env.REACT_APP_BOT_HOSTNAME}/discord/connection`,
-      {
-        params: { accessToken, id },
-      }
-    );
+      const guilds: Guild[] = res.data.guilds;
+      return guilds;
+    } catch (error) {
+      console.error('Error getting user guilds');
+      !error && dispatch(setError('Error getting user guilds'));
+      return [];
+    }
+  };
 
-    return {
-      guild: res.data.guild as Guild,
-      channel: res.data.channel as Channel,
-    };
-  } catch (error) {
-    console.error('Error getting user connection');
-    return {
-      guild: null,
-      channel: null,
-    };
-  }
+  const getUserVoiceChannel = async (accessToken: string, id: string) => {
+    try {
+      const res: AxiosResponse<any> = await axios.get(
+        `${process.env.REACT_APP_BOT_HOSTNAME}/discord/connection`,
+        {
+          params: { accessToken, id },
+        }
+      );
+
+      return {
+        guild: res.data.guild as Guild,
+        channel: res.data.channel as Channel,
+      };
+    } catch (error) {
+      console.error('Error getting user connection');
+      !error && dispatch(setError('Error getting user connection'));
+      return {
+        guild: null,
+        channel: null,
+      };
+    }
+  };
+
+  return {
+    getGuildVoiceChannels,
+    getUserData,
+    getUserGuilds,
+    getUserVoiceChannel,
+  };
 };
 
 /**
@@ -92,3 +113,6 @@ export const getDiscordAvatar = (
     return baseUrl + guildPath + `?size=${size}`;
   }
 };
+
+
+export default useDiscord;
