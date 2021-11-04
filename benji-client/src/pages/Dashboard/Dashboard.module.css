@@ -67,8 +67,7 @@
   min-height: 120px;
   height: 100%;
   width: 100%;
-  display: inline-flex;
-  justify-content: center;
+  display: flex;
 }
 
 #search {
@@ -80,10 +79,6 @@
   width: fit-content;
   height: fit-content;
   margin-top: auto;
-}
-
-@media screen and (min-width: 1150px) {
-
 }
 
 @media screen and (max-width: 849px) {

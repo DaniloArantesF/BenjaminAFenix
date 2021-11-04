@@ -1,11 +1,13 @@
 
 
 .player_container {
-  display: inline-grid;
+  display: grid;
   height: auto;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  width: 100%;
+  max-width: 350px;
+  grid-template-columns: repeat(5, 1fr);
   align-items: center;
-  padding: 1em 2em;
+  margin: 1em auto;
 }
 
 .player_container button {
@@ -45,7 +47,11 @@
 .sound_controller {
   grid-column: 1 / -1;
   width: 100%;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1em;
+  display: flex;
+  transform: scale(.8);
+  user-select: none;
+}
+
+.sound_controller svg {
+  transform: scale(0.8);
 }

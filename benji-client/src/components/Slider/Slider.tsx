@@ -17,6 +17,7 @@ const Slider = ({ changeCb }: SliderProps) => {
   useEffect(() => {
     if (!volume) return;
     setValue(volume * 100);
+    updateSlider(volume * 100);
   }, [volume]);
 
   useEffect(() => {
@@ -29,16 +30,18 @@ const Slider = ({ changeCb }: SliderProps) => {
    * and unset on mouse up or mouse leave
    */
   useEffect(() => {
-    console.log(active);
     if (active === false) {
       console.log(`Volume change callback ${value}`);
-      //changeCb(value);
+      changeCb(value);
       updateSlider();
     }
   }, [active]);
 
-  const updateSlider = () => {
+  const updateSlider = (newValue?: number) => {
     if (!activeTrackRef?.current) return;
+    if (newValue) {
+      return (activeTrackRef.current.style.width = `${newValue}%`);
+    }
     activeTrackRef.current.style.width = `${value}%`;
   };
 
@@ -50,28 +53,39 @@ const Slider = ({ changeCb }: SliderProps) => {
     if (!sliderRef?.current) return 0;
     let slider = sliderRef.current.getBoundingClientRect();
     let mouseX = event.clientX - slider.x;
-    const newValue = Math.max(0, Math.min(100, Math.ceil((mouseX * 100) / slider.width)));
+    const newValue = Math.max(
+      0,
+      Math.min(100, Math.ceil((mouseX * 100) / slider.width))
+    );
     return newValue;
   };
 
   return (
-    <div
-      ref={sliderRef}
-      className={classes.slider}
-      onMouseDown={(event) => {
-        setActive(true);
-        const newValue = handleUpdate(event);
-        setValue(newValue);
-      }}
-      onMouseMove={(event) => {
-        const newValue = handleUpdate(event);
-        setValue(newValue);
-      }}
-      onMouseUp={() => setActive(false)}
-      onMouseLeave={() => { active && setActive(false)}}
-    >
-      <div className={classes.slider__track}>
-        <span ref={activeTrackRef} className={classes.track__left} />
+    <div className={classes.slider_container}>
+      <div
+        ref={sliderRef}
+        className={classes.slider}
+        onMouseDown={(event) => {
+          setActive(true);
+          const newValue = handleUpdate(event);
+          setValue(newValue);
+        }}
+        onMouseMove={(event) => {
+          if (!active) return;
+          const newValue = handleUpdate(event);
+          setValue(newValue);
+        }}
+        onMouseUp={() => setActive(false)}
+        onMouseLeave={() => {
+          active && setActive(false);
+        }}
+      >
+        <div className={classes.slider__track}>
+          <span ref={activeTrackRef} className={classes.track__left} />
+        </div>
+      </div>
+      <div className={ classes.volume_counter}>
+        { value }
       </div>
     </div>
   );
