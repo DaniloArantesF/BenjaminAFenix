@@ -16,15 +16,15 @@
     * ~~Click anywhere to dismiss search~~
 
   - General
-    * Create error page to display when backend is offline
+    * ~~Create error page to display when backend is offline~~
     * Improve typography and font sizing
     * ~~Create leave guild button~~
       * ~~Create way to change channels within guild~~
     * ~~*Refresh Tokens*~~
     * ~~Implement dynamic hostname for redirect uri in auth urls~~
   - Errors
-    * Redirect users on failed requests
+    * ~~Redirect users on failed requests~~
 
 [Bugs]
-  * *Logout btn still crashes stuff*
+  * ~~*Logout btn still crashes stuff*~~
   * Dragging does not work on firefox
