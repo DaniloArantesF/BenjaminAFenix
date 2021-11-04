@@ -36,7 +36,6 @@
   width: 110%;
   height: 110%;
   background-color: var(--clr-accent);
-  transition: transform 0.6s cubic-bezier(0.53, 0.21, 0, 1);
   z-index: 3;
 }
 
@@ -50,5 +49,6 @@
 }
 
 .btn_border:hover::before {
+  transition: transform 0.6s cubic-bezier(0.53, 0.21, 0, 1);
   transform: translate(0, -50%);
 }

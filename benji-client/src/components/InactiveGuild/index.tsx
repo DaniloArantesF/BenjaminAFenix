@@ -31,15 +31,25 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
     );
   };
 
+  const SelectServer = () => {
+    return (
+      <div className={classes.prompt}>
+        <h1>Select a server to start!</h1>
+      </div>
+    )
+  }
+
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
       <div className={classes.dashboard__body}>
-        {currentGuild?.allowed ? (
-          <ChannelSelection active={true} joinChannel={joinChannel} />
-        ) : (
-          <AddToServer />
-        )}
+        {currentGuild ? (
+          currentGuild?.allowed ? (
+            <ChannelSelection active={true} joinChannel={joinChannel} />
+          ) : (
+            <AddToServer />
+          )
+        ) : <SelectServer />}
         <section id={classes.info}></section>
         <section id={classes.queue}></section>
         <section id={classes.search}></section>
