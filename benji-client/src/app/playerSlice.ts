@@ -38,11 +38,14 @@ export const playerSlice = createSlice({
     setCurrentTrack: (state, { payload }) => {
       state.currentTrack = payload;
       return state;
-    }
+    },
+    resetPlayer: (state) => {
+      return { ...initialState };
+    },
   },
 });
 
-export const { updatePlaybackState, setCurrentTrack } = playerSlice.actions;
+export const { updatePlaybackState, setCurrentTrack, resetPlayer } = playerSlice.actions;
 export const selectStatus = (state: AppState) => state.player.status;
 export const selectPlayerState = (state: AppState) => state.player;
 export default playerSlice.reducer;

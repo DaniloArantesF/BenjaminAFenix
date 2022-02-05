@@ -72,8 +72,6 @@ export const refreshCredentials = createAsyncThunk(
       };
     } catch (error) {
       console.error('Error refreshing tokens');
-      // TODO: handle
-      //window.location.href = '/';
       return rejectWithValue(error);
     }
   }
