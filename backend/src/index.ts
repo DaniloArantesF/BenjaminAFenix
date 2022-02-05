@@ -10,8 +10,7 @@ import BotAPI from './apis/';
 import rateLimit from 'express-rate-limit';
 import expressPinoLogger from 'express-pino-logger';
 import logger from './Logger';
-
-const PORT = 8000;
+import config from './config';
 
 class App {
   public express: express.Application;
@@ -31,8 +30,8 @@ class App {
     DiscordAPI.setClient(this.bot);
     BotAPI.setClient(this.bot);
 
-    this.server.listen(PORT, () => {
-      console.log(`Server listening at ${PORT}`);
+    this.server.listen(config.PORT, () => {
+      console.log(`Server listening at ${config.PORT}`);
     });
   }
 
