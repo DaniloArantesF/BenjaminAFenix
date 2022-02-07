@@ -82,6 +82,7 @@ const Dashboard = () => {
     }
 
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -90,7 +91,6 @@ const Dashboard = () => {
    */
   useEffect(() => {
     const expiresIn = expiration - Date.now(); // Time in ms until expiration
-
     const refresh = () => {
       //console.log('Refreshing tokens...');
       dispatch(refreshCredentials(refreshToken));
@@ -105,12 +105,14 @@ const Dashboard = () => {
       expiresIn - 5 * 60 * 1000 // refresh token 5 min before
     );
     dispatch(setRefreshTimeout(interval));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expiration]);
 
   useEffect(() => {
     if (error) {
       history.push('/offline');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   const init = async () => {

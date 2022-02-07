@@ -37,6 +37,7 @@ const Login = () => {
     if (!code) return;
     dispatch(fetchCredentials(code));
     setLoading(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
   /**
@@ -46,6 +47,7 @@ const Login = () => {
   useEffect(() => {
     if (!accessToken) return;
     history.push('/');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
 
   /**
@@ -57,6 +59,7 @@ const Login = () => {
       setLoading(false);
       history.push('/login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   return (

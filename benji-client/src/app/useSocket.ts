@@ -49,22 +49,26 @@ const useSocket = () => {
       socket?.off('playback_state');
       socket?.disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!socket) return;
     setUpEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   useEffect(() => {
     if (!currentGuild) return;
     getVoiceChannels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGuild]);
 
   useEffect(() => {
     if (socket && currentGuild) {
       getGuildPlayer();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGuild, socket]);
 
   const getVoiceChannels = async () => {

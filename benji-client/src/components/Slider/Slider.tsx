@@ -18,11 +18,13 @@ const Slider = ({ changeCb }: SliderProps) => {
     if (!volume) return;
     setValue(volume * 100);
     updateSlider(volume * 100);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [volume]);
 
   useEffect(() => {
     if (!activeTrackRef?.current || !active) return;
     updateSlider();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   /**
@@ -35,6 +37,7 @@ const Slider = ({ changeCb }: SliderProps) => {
       changeCb(value);
       updateSlider();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
 
   const updateSlider = (newValue?: number) => {

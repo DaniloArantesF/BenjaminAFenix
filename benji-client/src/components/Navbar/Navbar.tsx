@@ -36,9 +36,10 @@ const Navbar = () => {
     return () => {
       window.removeEventListener('click', handleWindowClick);
     };
-  }, [isVisible]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible, windowWidth ]);
 
-  const handleWindowClick = (event: MouseEvent) => {
+  function handleWindowClick(event: MouseEvent) {
     if (!navbarRef.current) return;
     const { clientX: clickX, clientY: clickY } = event;
     const { top, right, bottom, left } =

@@ -30,7 +30,7 @@ const Button = ({ children, action, isActive, onClick, type }: ButtonProps) => {
         break;
       default:
     }
-  }, []);
+  }, [type]);
 
   const clickHandler: InputHandler = (event) => {
     if (!active) return;
