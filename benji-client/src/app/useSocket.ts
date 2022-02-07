@@ -36,8 +36,11 @@ const useSocket = () => {
   const { username } = useAppSelector(selectAuth);
   const [socket, setSocket] = useState<Socket>();
   const { getGuildVoiceChannels } = useDiscordAPI();
+  const [connected, setConnected] = useState(false);
 
   useEffect(() => {
+    if (connected) return;
+
     connect();
     return () => {
       socket?.off('connect');
@@ -85,10 +88,11 @@ const useSocket = () => {
     }
   };
 
-  const connect = async () => {
+  async function connect() {
     const isOnline = await checkBotStatus();
     if (isOnline) {
       setSocket(socketIOClient(endpoint));
+      setConnected(true);
     }
   };
 
