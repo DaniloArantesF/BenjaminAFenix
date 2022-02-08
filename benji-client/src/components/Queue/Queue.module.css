@@ -6,7 +6,6 @@
 }
 
 .queue_component {
-  --header-height: 2em;
   display: inline-grid;
   position: relative;
   width: 100%;
@@ -41,7 +40,7 @@
 .queue__item.current_item {
   background: var(--clr-surface3);
   box-shadow: var(--shadow-light);
-  border-radius: 0.5em;
+  border-radius: var(--border-radius);
 }
 
 .queue__item > span {
@@ -54,7 +53,6 @@
   word-break: normal;
   color: var(--clr-btn);
   font-weight: 600;
-  /*background-color: var(--clr-surface3);*/
   box-shadow: none;
   background: transparent;
   position: sticky;

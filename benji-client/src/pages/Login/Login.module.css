@@ -1,18 +1,19 @@
 .login_container {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-areas:
+  "LOGO"
+  "FORM"
+  "FOOTER";
+  grid-template-rows: auto .8fr var(--footer-height);
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  padding-bottom: 00px;
 }
 
 .login_container > header {
-  position: absolute;
-  left: 1em;
-  top: 1em;
+  grid-area: LOGO;
+  height: fit-content;
   display: flex;
   align-items: center;
   font-size: 1.5em;
@@ -20,19 +21,23 @@
 }
 
 .login_container > section {
-  display: flex;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.24);
+  grid-area: FORM;
+  display: grid;
+  max-height: 350px;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 300px);
+  gap: 1em;
 }
 
 
 .login_container > section > * {
-  width: 300px;
+  width: minmax(50%, 300px);
   background-color: var(--clr-surface0);
-  padding: 2rem;
+  padding: .5em 2em;
   color: var(--clr-font);
   display: grid;
-  grid-template-rows: 2em 1fr 1fr;
-  align-items: flex-start;
+  grid-template-rows: 2em minmax(fit-content, .4fr) minmax(fit-content, .6fr);
+  align-items: center;
   justify-items: center;
   gap: 1em;
 

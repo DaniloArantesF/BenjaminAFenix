@@ -1,9 +1,4 @@
 
-
-:root {
-  --bar-height: 1em;
-}
-
 .slider_container {
   display: inline-flex;
   align-items: center;
@@ -57,4 +52,5 @@
   font-weight: 800;
   padding: 0 1em;
   color: var(--clr-btn);
+  text-align: left;
 }

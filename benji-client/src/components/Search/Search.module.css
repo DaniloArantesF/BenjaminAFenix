@@ -2,8 +2,8 @@
 .search_container {
   position: relative;
   max-width: var(--search-bar-width);
-  left: 0;
   height: calc(var(--search-bar-height) + 2em);
+  left: 0;
   padding: 1em 1em 0 1em;
   justify-content: center;
   grid-area: srch;
@@ -22,7 +22,7 @@
   overflow-x: hidden;
   z-index: 30;
   background-color: var(--clr-surface2);
-  border-radius: 0 0 0.5em 0.5em;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
   padding-right: 0.2em;
   box-shadow: var(--shadow-heavy);
 }
@@ -213,7 +213,7 @@
 }
 
 .search__icon * {
-  transform: scale(0.8); /* TODO: find a better way of doing this ?*/
+  transform: scale(0.8);
   fill: var(--clr-btn);
   transition: all 150ms ease-out;
 }

@@ -3,7 +3,7 @@
 .selection_container {
   background: var(--clr-surface3);
   width: 100%;
-  max-width: 400px;
+  max-width: var(--selection-width);
   max-height: 400px;
   padding: 1em;
   display: flex;

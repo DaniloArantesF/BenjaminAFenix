@@ -40,10 +40,18 @@
   --search-bar-width: 450px;
   --search-bar-height: 3rem;
 
+  --player-width: 350px;
+  --header-height: 2em;
+
+  --selection-width: 400px;
+  --bar-height: .8em;
+
+  --footer-height: 200px;
 }
 
 @media screen and (max-width: 850px) {
   :root {
+    --selection-width: 80%;
   }
 }
 
