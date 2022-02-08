@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300&display=swap');
 
 :root {
   /* Colors */
@@ -28,7 +28,7 @@
 
   /* Shadows */
   --shadow-light: 0 4px 4px rgba(0, 0, 0, 0.25);
-  --shadow-heavy: 0 8px 16px rgba(0,0,0,0.25);
+  --shadow-heavy: 0 8px 16px rgba(0, 0, 0, 0.25);
 
   /* Constants */
   --margin-bottom: 1.5em;
@@ -44,19 +44,31 @@
   --header-height: 2em;
 
   --selection-width: 400px;
-  --bar-height: .8em;
+  --bar-height: 0.8em;
 
   --footer-height: 200px;
+  --max-video-height: 350px;
+
+  --margin-top: 300px;
+  --srch-margin-left: 0;
+
+  --dashboard-margin: 2em 1em;
+  --dashboard-margin-top: 2em;
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 1150px) {
   :root {
     --selection-width: 80%;
   }
 }
 
-@media screen and (max-width: 1150px) {
+@media screen and (max-width: 915px) {
   :root {
+    --srch-margin-left: 2em;
+    --search-bar-width: calc(100% - var(--srch-margin-left));
+    --thumb-width: 90px;
+    --thumb-height: 60px;
+    --margin-bottom: 1em;
   }
 }
 
@@ -66,10 +78,12 @@ body {
   background: var(--clr-bg);
   color: var(--clr-font);
   overflow: hidden;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
