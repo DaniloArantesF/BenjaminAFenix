@@ -59,18 +59,20 @@
 @media screen and (max-width: 1150px) {
   :root {
     --selection-width: 80%;
+    --srch-margin-left: 2em;
   }
 }
 
 @media screen and (max-width: 915px) {
   :root {
-    --srch-margin-left: 2em;
     --search-bar-width: calc(100% - var(--srch-margin-left));
     --thumb-width: 90px;
     --thumb-height: 60px;
     --margin-bottom: 1em;
+    font-size: .9em;
   }
 }
+
 
 body {
   height: 100vh;

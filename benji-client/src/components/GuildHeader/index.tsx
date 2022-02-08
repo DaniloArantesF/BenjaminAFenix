@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
-import { selectDashboard, selectUptime } from '../../app/dashboardSlice';
+import { BaseSyntheticEvent, useEffect, useState } from 'react';
+import { selectDashboard } from '../../app/dashboardSlice';
 import { useAppSelector } from '../../app/hooks';
 import { getDiscordAvatar } from '../../libs/Discord';
 import { msToMinSec } from '../../util/util';
 import Button from '../Button/Button';
+import { ReactComponent as ExitIcon } from '../../assets/exit.svg';
+import { ReactComponent as SwitchIcon } from '../../assets/switch.svg';
+
 import classes from './GuildHeader.module.css';
 
 interface props {
@@ -31,6 +34,13 @@ const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
   }
 
   if (!guild) return null;
+
+  // Used to blur icons, allowing animations to run again
+  const interceptClick = (event: BaseSyntheticEvent, next: () => void) => {
+    event.currentTarget.blur();
+    next();
+  }
+
   return (
     <div className={classes.guild_header}>
       {guild.icon ? (
@@ -51,13 +61,13 @@ const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
       </div>
 
       <div className={classes.guild_header__btns}>
-        <Button isActive={() => true} onClick={() => switchHandler()}>
-          Switch Channel
-        </Button>
+        <button onClick={(event) => interceptClick(event, switchHandler)}>
+          <SwitchIcon />
+        </button>
 
-        <Button isActive={() => true} onClick={leaveChannel}>
-          Leave
-        </Button>
+        <button onClick={(event) => interceptClick(event, leaveChannel)}>
+          <ExitIcon />
+        </button>
       </div>
     </div>
   );
