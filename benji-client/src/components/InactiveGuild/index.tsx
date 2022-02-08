@@ -19,7 +19,7 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
       <div className={classes.prompt}>
         <h1>Benji is not on this server :(</h1>
         <Button
-          type={'button'}
+          type={'btn-large'}
           isActive={() => true}
           onClick={() => {
             window.location.href = BOT_INVITE_URL;

@@ -15,20 +15,18 @@ interface ButtonProps {
 }
 
 const Button = ({ children, action, isActive, onClick, type }: ButtonProps) => {
-  const [classes, setClasses] = useState(btn1);
+  const [classes, setClasses] = useState(btn2);
   const dispatch = useAppDispatch();
   const active = isActive();
   const btnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     switch (type) {
-      case 'control':
-        setClasses(btn1);
-        break;
-      case 'button':
+      case 'btn-large':
         setClasses(btn2);
         break;
       default:
+        setClasses(btn1);
     }
   }, [type]);
 

@@ -99,6 +99,7 @@
   gap: .5em;
   justify-content: flex-start;
   align-items: center;
+  padding: .1em;
 }
 
 /* Hide Scrollbar */
@@ -152,7 +153,6 @@
   grid-row: 1;
   transform: translateX(50px);
   border-radius: 15px;
-  /*animation: activateGuild 200ms linear;*/
   transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
               border-radius 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }

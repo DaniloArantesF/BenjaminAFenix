@@ -47,7 +47,6 @@ export const fetchCredentials = createAsyncThunk(
     } catch (err) {
       let error = err as any;
       const { data, status } = error;
-      console.log({data, status});
       return rejectWithValue({ error: 'Invalid Code!' });
     }
   }

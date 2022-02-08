@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300&display=swap");
 
 :root {
+  /* Colors */
   --clr-bg-dark: #0e0e12;
   --clr-bg: var(--clr-bg-dark);
 
@@ -17,27 +18,38 @@
 
   --clr-accent: #a50e31;
 
-  --orange: #ea6f0b;
-  --yellow: #d7a936;
-  --red: #de4456;
+  --clr-warning: #d7a936;
+  --clr-error: #de4456;
 
-  font-family: "Roboto Condensed", sans-serif;
   --clr-font: #e8e6e3;
   --clr-title: #cdc8c2;
 
-  --clr-btn: #6b6a69;
+  --clr-btn: #555555;
 
-  --margin-bottom: 3%;
-  --border-radius: 0.5em;
-  --btn-border-radius: 0.5em;
+  /* Shadows */
   --shadow-light: 0 4px 4px rgba(0, 0, 0, 0.25);
   --shadow-heavy: 0 8px 16px rgba(0,0,0,0.25);
 
+  /* Constants */
+  --margin-bottom: 1.5em;
+  --border-radius: 0.5em;
+  --btn-border-radius: 0.3em;
   --navbar-width: 250px;
   --thumb-width: 120px;
   --thumb-height: 90px;
   --search-bar-width: 450px;
   --search-bar-height: 3rem;
+
+}
+
+@media screen and (max-width: 850px) {
+  :root {
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  :root {
+  }
 }
 
 body {
@@ -45,16 +57,18 @@ body {
   width: 100vw;
   background: var(--clr-bg);
   color: var(--clr-font);
+  overflow: hidden;
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 *, *::before, *::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-
 }
 
-.no-oveay-scrollbar ::-webkit-scrollbar {
+/* Scrollbar */
+.no-overlay-scrollbar ::-webkit-scrollbar {
   width: 0.5rem;
   height: 0.5rem;
 }
@@ -77,11 +91,4 @@ body {
 }
 .no-overlay-scrollbar ::-webkit-scrollbar-track-piece {
   background-color: initial;
-}
-
-
-@media screen and (max-height: 700px) {
-  :root {
-    --margin-bottom: 1%;
-  }
 }

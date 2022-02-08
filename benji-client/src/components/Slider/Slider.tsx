@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { selectPlayerState } from '../../app/playerSlice';
 import classes from './Slider.module.css';
@@ -33,7 +33,7 @@ const Slider = ({ changeCb }: SliderProps) => {
    */
   useEffect(() => {
     if (active === false) {
-      console.log(`Volume change callback ${value}`);
+      //console.log(`Volume Changed to ${value}`);
       changeCb(value);
       updateSlider();
     }

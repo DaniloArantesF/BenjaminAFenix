@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { fetchCredentials, selectAuth } from '../../app/authSlice';
+import { clearCredentials, fetchCredentials, selectAuth } from '../../app/authSlice';
 import classes from './Login.module.css';
 import { ReactComponent as Background } from '../../assets/Background.svg';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
@@ -56,6 +56,7 @@ const Login = () => {
   useEffect(() => {
     if (error) {
       // Remove invalid code from url and reset btns
+      dispatch(clearCredentials());
       setLoading(false);
       history.push('/login');
     }
@@ -74,7 +75,7 @@ const Login = () => {
           <h1>New Here?</h1>
           <p>Start by adding Benji to your server!</p>
           <Button
-            type={'button'}
+            type={'btn-large'}
             isActive={() => !loading}
             onClick={() => {
               window.location.href = BOT_INVITE_URL;
@@ -87,7 +88,7 @@ const Login = () => {
           <h1>Login</h1>
           <p>Use your discord account to log into your bot</p>
           <Button
-            type={'button'}
+            type={'btn-large'}
             isActive={() => !loading}
             onClick={() => {
               window.location.href = DISCORD_AUTH_URL;
