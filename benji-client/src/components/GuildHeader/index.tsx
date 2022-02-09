@@ -3,7 +3,6 @@ import { selectDashboard } from '../../app/dashboardSlice';
 import { useAppSelector } from '../../app/hooks';
 import { getDiscordAvatar } from '../../libs/Discord';
 import { msToMinSec } from '../../util/util';
-import Button from '../Button/Button';
 import { ReactComponent as ExitIcon } from '../../assets/exit.svg';
 import { ReactComponent as SwitchIcon } from '../../assets/switch.svg';
 

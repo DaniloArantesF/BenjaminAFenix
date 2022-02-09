@@ -86,6 +86,8 @@
     grid-template-rows: auto repeat(auto-fit, minmax(120px, 1fr));
     grid-template-columns: 1fr;
     padding: var(--dashboard-margin);
+    gap: 0;
+    row-gap: 1em;
   }
 
   #preview {

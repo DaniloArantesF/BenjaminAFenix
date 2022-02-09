@@ -11,8 +11,8 @@
 .search_container > ul {
   position: absolute;
   width: var(--search-bar-width);
-  top: var(--search-bar-height);
-  left: 50%;
+  top: calc(var(--search-bar-height) + 1em);
+  left: calc(50% + var(--srch-margin-left));
   transform: translateX(-50%);
   display: inline-flex;
   flex-direction: column;

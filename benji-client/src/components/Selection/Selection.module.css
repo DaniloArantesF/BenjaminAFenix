@@ -1,7 +1,7 @@
 
 
 .selection_container {
-  background: var(--clr-surface3);
+  background: var(--clr-surface2);
   width: 100%;
   max-width: var(--selection-width);
   max-height: 400px;
@@ -55,7 +55,7 @@
 }
 
 .selection__item:hover {
-  background-color: var(--clr-surface2);
+  background-color: var(--clr-surface3);
   /* box-shadow: -2px 4px 8px rgba(0, 0, 0, 0.15); */
 }
 
