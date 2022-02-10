@@ -87,7 +87,7 @@ class DiscordClient extends Client {
     });
   }
 
-  private setUpCommands() {
+  private setUpCommands = () => {
     const commandFiles = fs
       .readdirSync('src/commands/')
       .filter((file) => file.endsWith('.ts'));
@@ -109,7 +109,7 @@ class DiscordClient extends Client {
     }
   }
 
-  private setUpEvents() {
+  private setUpEvents = () => {
     const eventFiles = fs
       .readdirSync('src/events/')
       .filter((file) => file.endsWith('.ts'));
@@ -125,11 +125,13 @@ class DiscordClient extends Client {
     }
   }
 
-  public async joinChannel(
+  public joinChannel = async (
     guild: Guild,
     channelId: string
-  ): Promise<DiscordConnection | null> {
+  ): Promise<DiscordConnection | null> => {
     try {
+      this.disconnect(guild.id);
+
       const connection = joinVoiceChannel({
         channelId,
         guildId: guild.id,
@@ -170,7 +172,7 @@ class DiscordClient extends Client {
    * @param guildId Server Id to update queue
    * @param data    Item to be pushed
    */
-  public pushItem(guildId: string, item: Track) {
+  public pushItem = (guildId: string, item: Track) => {
     const connection = this.connections.get(guildId);
     const queueController = connection.player.queueController;
     queueController.pushItem(item);
@@ -179,11 +181,11 @@ class DiscordClient extends Client {
   /**
    * Return guild from interaction
    */
-  public getGuildFromInteraction(interaction: CommandInteraction): Guild {
+  public getGuildFromInteraction = (interaction: CommandInteraction): Guild => {
     return this.guilds.cache.get(interaction.guildId);
   }
 
-  public async getGuildMember(guild: Guild, userId: any): Promise<GuildMember> {
+  public getGuildMember = async (guild: Guild, userId: any): Promise<GuildMember> => {
     return await guild.members.fetch(userId);
   }
 
@@ -191,20 +193,20 @@ class DiscordClient extends Client {
    * Returns the channel id given an interaction
    * @param interaction
    */
-  public async getUserVoiceChannel(interaction: CommandInteraction) {
+  public getUserVoiceChannel = async (interaction: CommandInteraction) => {
     const guild = this.getGuildFromInteraction(interaction);
     const userId = interaction.member.user.id;
     const member = await this.getGuildMember(guild, userId);
     return member.voice.channelId;
   }
 
-  public getGuild(guildId: string) {
+  public getGuild = (guildId: string) => {
     return this.guilds.cache.get(guildId);
   }
 
   // Notes: Later change this to only check in guilds the user
   // is actually in.
-  public getUserCurrentGuild(id: string) {
+  public getUserCurrentGuild = (id: string) => {
     const usersOnline = this.getVoiceUsers();
     const connection = usersOnline.get(id);
     const userChannel = connection?.channel;
@@ -224,7 +226,7 @@ class DiscordClient extends Client {
     };
   }
 
-  public getVoiceUsers() {
+  public getVoiceUsers = () => {
     type ConnectionState = {
       guild: Guild;
       channel: GuildChannel;
@@ -246,7 +248,7 @@ class DiscordClient extends Client {
     return usersOnline;
   }
 
-  public getVoiceChannels() {
+  public getVoiceChannels = () => {
     const channels: GuildChannel[] = this.guilds.cache.reduce(
       (accum, guild) => {
         return [...accum, ...guild.channels.cache.map((i) => i)];
@@ -259,7 +261,7 @@ class DiscordClient extends Client {
     });
   }
 
-  public getGuildVoiceChannels(guildId: string) {
+  public getGuildVoiceChannels = (guildId: string) => {
     // Check if bot is present in this guild
     if (!this.guilds.cache.get(guildId)) {
       return [];
@@ -303,6 +305,9 @@ class DiscordClient extends Client {
   public disconnect = (guildId: string) => {
     const connection = this.connections.get(guildId);
     if (!connection) return;
+    clearInterval(connection.player.playerInterval);
+    connection.player.stop();
+    connection.player = null;
     connection.connection.destroy();
     this.connections.delete(guildId);
   };

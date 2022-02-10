@@ -98,7 +98,7 @@ class WebClient {
    * @param payload
    * @returns
    */
-  public createConnection(socket: Socket, payload: any) {
+  public createConnection = (socket: Socket, payload: any) => {
     const guildId = payload.guildId;
     if (!guildId) return;
 
@@ -140,7 +140,7 @@ class WebClient {
     return this.getPlayer(socket, payload);
   }
 
-  public getPlayer(socket: Socket, payload: any) {
+  public getPlayer = (socket: Socket, payload: any) => {
     const { guildId } = payload;
 
     // Check if bot is active in this guild
@@ -153,7 +153,7 @@ class WebClient {
     socket.emit('player_update', player.getPlayerState());
   }
 
-  public getChannel(socket: Socket, payload: any) {
+  public getChannel = (socket: Socket, payload: any) => {
     const { guildId } = payload;
 
     if (!this.connections.get(guildId)) {
@@ -170,7 +170,7 @@ class WebClient {
     });
   }
 
-  public async joinChannel(socket: Socket, payload: any) {
+  public joinChannel = async (socket: Socket, payload: any) => {
     const { guildId, channelId } = payload;
 
     const guild = this.discordClient.getGuild(guildId);
@@ -178,7 +178,7 @@ class WebClient {
     socket.emit('player_update', player.getPlayerState());
   }
 
-  public setQueuePosition(socket: Socket, payload: any) {
+  public setQueuePosition = (socket: Socket, payload: any) => {
     const position: number = payload.position;
     const guildId = this.webClients.get(socket.id)?.guildId;
     if (!guildId) return console.error('Web client not found', payload);
@@ -187,7 +187,7 @@ class WebClient {
     player.queueController.setPosition(position);
   }
 
-  public requestTrack(socket: Socket, payload: any) {
+  public requestTrack = (socket: Socket, payload: any) => {
     const track: Track = payload.track;
     const guildId = this.webClients.get(socket.id)?.guildId;
     if (!guildId) return console.error('Web client not found', payload);
@@ -197,53 +197,53 @@ class WebClient {
     player.queueController.pushItem(track);
   }
 
-  public unpause(socket: Socket, payload: any) {
+  public unpause = (socket: Socket, payload: any) => {
     const user = payload;
     const guildId = this.webClients.get(socket.id)?.guildId;
     const { player } = this.connections.get(guildId);
     player.unpause();
   }
 
-  public pause(socket: Socket, payload: any) {
+  public pause = (socket: Socket, payload: any) => {
     const user = payload;
     const guildId = this.webClients.get(socket.id)?.guildId;
     const { player } = this.connections.get(guildId);
     player.pause();
   }
 
-  public next(socket: Socket, payload: any) {
+  public next = (socket: Socket, payload: any)=>  {
     const user = payload;
     const guildId = this.webClients.get(socket.id)?.guildId;
     const { player } = this.connections.get(guildId);
     player.queueController.next();
   }
-  public prev(socket: Socket, payload: any) {
+  public prev = (socket: Socket, payload: any) => {
     const user = payload;
     const guildId = this.webClients.get(socket.id)?.guildId;
     const { player } = this.connections.get(guildId);
     player.queueController.previous();
   }
 
-  public shuffle(socket: Socket, payload: any) {
+  public shuffle = (socket: Socket, payload: any) => {
     const guildId = this.webClients.get(socket.id)?.guildId;
     const { player } = this.connections.get(guildId);
     player.queueController.setShuffle(payload.shuffle);
     this.server.to(guildId).emit('shuffle', { shuffle: player.queueController.shuffle });
   }
 
-  public repeat(socket: Socket, payload: any) {
+  public repeat = (socket: Socket, payload: any) => {
     const guildId = this.webClients.get(socket.id)?.guildId;
     const { player } = this.connections.get(guildId);
     player.queueController.setRepeat(payload.repeat);
     this.server.to(guildId).emit('repeat', { repeat: player.queueController.repeat });
   }
 
-  public volume(socket: Socket, payload: any) {
+  public volume = (socket: Socket, payload: any) => {
     const volume = payload.volume;
     console.log('volume', volume);
   }
 
-  public disconnect(socket: Socket, payload: any) {
+  public disconnect = (socket: Socket, payload: any) => {
     // Remove socket from guild room and delete entry in clients map
     if (this.webClients.get(socket.id)) {
       socket.leave(this.webClients.get(socket.id).guildId);
@@ -251,17 +251,17 @@ class WebClient {
     }
   }
 
-  public handlePlayerUpdate(payload: PlayerState) {
+  public handlePlayerUpdate = (payload: PlayerState) => {
     const { guildId, currentTrack, progress, status, volume, queue } = payload;
     this.server.to(guildId).emit('player_update', payload);
   }
 
-  public handlePlaybackUpdate(payload: PlaybackState) {
+  public handlePlaybackUpdate = (payload: PlaybackState) => {
     const { guildId, status, volume, progress, timestamp } = payload;
     this.server.to(guildId).emit('playback_state', payload);
   }
 
-  public handleChannelUpdate(payload: any) {
+  public handleChannelUpdate = (payload: any) => {
     const { guildId, channel, timestamp } = payload;
     const onlineCount = this.discordClient.getChannelUserCount(
       guildId,
@@ -277,7 +277,7 @@ class WebClient {
     });
   }
 
-  public leaveChannel(socket: Socket, payload: any) {
+  public leaveChannel = (socket: Socket, payload: any) => {
     const { guildId } = payload;
     this.discordClient.disconnect(guildId);
     this.server.to(guildId).emit('channel_update', {

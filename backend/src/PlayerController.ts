@@ -89,7 +89,7 @@ class PlayerController extends AudioPlayer {
    * Will be called whenever items or position is changed
    * to get new track to play.
    */
-  public updatePlayer() {
+  public updatePlayer = () => {
     console.info('Checking updates to player...');
     let track;
 
@@ -126,7 +126,7 @@ class PlayerController extends AudioPlayer {
     this.eventBus.dispatch(`player_update`, this.getPlayerState());
   }
 
-  public restartPlayback() {
+  public restartPlayback = () => {
     this.progress = 0;
     this.playCurrentItem();
   }
@@ -134,7 +134,7 @@ class PlayerController extends AudioPlayer {
   /**
    * Periodically broadcast playback state to all web clients connected to this player instance.
    */
-  private broadcastPlaybackState() {
+  private broadcastPlaybackState = () => {
     const state = this.state as AudioPlayerPlayingState;
 
     // Get current playback progress and save timestamp to
@@ -151,7 +151,7 @@ class PlayerController extends AudioPlayer {
     });
   }
 
-  private playCurrentItem() {
+  private playCurrentItem = () => {
     const item = this.currentTrack;
 
     try {
@@ -177,12 +177,12 @@ class PlayerController extends AudioPlayer {
     }
   }
 
-  public setVolume(volume: number) {
+  public setVolume = (volume: number) => {
     this.resource.volume.setVolumeLogarithmic(volume);
     this.volume = volume;
   }
 
-  public getPlayerState() {
+  public getPlayerState = () => {
     const { currentTrack, progress, queueController, status, volume } = this;
 
     return {

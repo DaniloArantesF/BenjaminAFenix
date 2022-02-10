@@ -20,19 +20,19 @@ class QueueController extends EventEmitter {
     this.repeat = false;
   }
 
-  public setQueue(queue: Track[], position: number) {
+  public setQueue = (queue: Track[],  position: number) => {
     this.items = [...queue];
     this.position = position;
     this.emit('queue_update');
   }
 
-  public pushItem(item: Track) {
+  public pushItem = (item: Track) => {
     // console.log(JSON.stringify(item, null, 2));
     this.items = [...this.items, item];
     this.emit('queue_update');
   }
 
-  public setPosition(newPosition: number) {
+  public setPosition = (newPosition: number) => {
     this.position = newPosition;
     this.emit('queue_update');
   }
@@ -40,11 +40,11 @@ class QueueController extends EventEmitter {
   /**
    * Returns current track to be played
    */
-  public getTrack() {
+  public getTrack = () => {
     return this.items[this.position];
   }
 
-  public topItems() {
+  public topItems = () => {
     return this.items.slice(this.position, this.position + 2);
   }
 
@@ -52,7 +52,7 @@ class QueueController extends EventEmitter {
    * Function called to jump to next song in queue
    * Position is updated and next resource is returned.
    */
-  public next(): Track | null {
+  public next = (): Track | null => {
     if (this.repeat) return this.items[this.position];
 
     if (this.shuffle) {
@@ -75,7 +75,7 @@ class QueueController extends EventEmitter {
    * If shuffle or repeat is enabled, it returns the same item
    */
   // TODO: implement history so it can return to prev random track
-  public previous(): Track | null {
+  public previous = (): Track | null => {
     if (this.position - 1 < 0 || this.shuffle || this.repeat) {
       this.emit('restart_track');
       return this.items[this.position];
@@ -91,7 +91,7 @@ class QueueController extends EventEmitter {
 
   // Resets queue to empty state.
   // Emits no events
-  public reset() {
+  public reset = () => {
     this.items = [];
     this.position = -1;
     this.shuffle = false;
@@ -102,7 +102,7 @@ class QueueController extends EventEmitter {
    * Returns tracks in queue.
    * i.e. tracks that have not been played
    */
-  public getQueue() {
+  public getQueue = () => {
     return this.items.slice(this.position);
   }
 
@@ -110,7 +110,7 @@ class QueueController extends EventEmitter {
    * Inverts shuffle value or sets it to passed value
    * @param shuffle {optional}
    */
-  public setShuffle(shuffle?: boolean) {
+  public setShuffle = (shuffle?: boolean) => {
     this.shuffle = shuffle === undefined ? !this.shuffle : shuffle;
   }
 
@@ -118,14 +118,14 @@ class QueueController extends EventEmitter {
    * Inverts repeat value or sets it to passed value
    * @param repeat {optional}
    */
-  public setRepeat(repeat?: boolean) {
+  public setRepeat = (repeat?: boolean) => {
     this.repeat = repeat === undefined ? !this.repeat : repeat;
   }
 
   /**
    * Returns a random index within queue bounds
    */
-  public getRandomIndex() {
+  public getRandomIndex = () => {
     return Math.floor(Math.random() * this.items.length);
   }
 }

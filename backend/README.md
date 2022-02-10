@@ -1,6 +1,6 @@
 [ToDos]
   - Commands
-    * Jump to song in queue
+    * ~~Jump to song in queue~~
     * Remind me
     * Lofi mode
     * ~~*Shuffle & Repeat*~~

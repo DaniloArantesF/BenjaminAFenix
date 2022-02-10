@@ -13,6 +13,7 @@ import { QueueState, selectRepeat, selectShuffle, setQueue, setRepeat, setShuffl
 import { Track } from '../types';
 import { selectAuth } from './authSlice';
 import {
+  resetPlayer,
   selectPlayerState,
   setCurrentTrack,
   updatePlaybackState,
@@ -129,6 +130,7 @@ const useSocket = () => {
         dispatch(setActive(true));
       }
       dispatch(setCurrentChannel(payload.channel));
+      dispatch(resetPlayer())
     });
 
     // TODO: set not active on bot_disconnect
@@ -186,7 +188,6 @@ const useSocket = () => {
 
   const prevTrack = () => {
     if (!currentGuild) return;
-    console.log('prev')
     socket?.emit('prev', { user: username });
   };
 
