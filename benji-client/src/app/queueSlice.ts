@@ -10,12 +10,16 @@ import { QItem } from '../components/Queue/Queue';
 export interface QueueState {
   items: [] | Array<QItem>;
   position: number;
+  shuffle: boolean;
+  repeat: boolean;
 }
 
 // Define initial state using type above
 const initialState: QueueState = {
   items: [],
   position: -1,
+  shuffle: false,
+  repeat: false,
 };
 
 export const queueSlice = createSlice({
@@ -24,6 +28,12 @@ export const queueSlice = createSlice({
   reducers: {
     setQueue: (state, action) => {
       return { ...action.payload };
+    },
+    setShuffle: (state, { payload }) => {
+      return { ...state, shuffle: payload };
+    },
+    setRepeat: (state, { payload }) => {
+      return { ...state, repeat: payload };
     },
     next: (state) => {
       state.position = state.position !== -1 ? (state.position += 1) : -1;
@@ -53,9 +63,11 @@ export const queueSlice = createSlice({
   },
 });
 
-export const { next, previous, setPosition, setQueue, pushTrack, } = queueSlice.actions;
+export const { next, previous, setPosition, setQueue, pushTrack, setShuffle, setRepeat } = queueSlice.actions;
 export const selectPosition = (state: AppState) => state.queue.position;
 export const selectItems = (state: AppState) => state.queue.items;
 export const selectQueue = (state: AppState) => state.queue;
 export const selectQueueLength = (state: AppState) => state.queue.items.length;
+export const selectShuffle = (state: AppState) => state.queue.shuffle;
+export const selectRepeat = (state: AppState) => state.queue.repeat;
 export default queueSlice.reducer;

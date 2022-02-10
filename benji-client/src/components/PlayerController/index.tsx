@@ -10,6 +10,7 @@ import classes from './PlayerController.module.css';
 import { selectPlayerState, selectStatus } from '../../app/playerSlice';
 import { useAppSelector } from '../../app/hooks';
 import Slider from '../Slider/Slider';
+import { selectRepeat, selectShuffle } from '../../app/queueSlice';
 
 interface PlayerControllerProps {
   unpausePlayer: () => void;
@@ -32,35 +33,51 @@ const PlayerController = (props: PlayerControllerProps) => {
     setVolume,
   } = props;
   const status = useAppSelector(selectStatus);
+  const shuffle = useAppSelector(selectShuffle);
+  const repeat = useAppSelector(selectRepeat);
 
   // Used to blur icons, allowing animations to run again
   const interceptClick = (event: BaseSyntheticEvent, next: () => void) => {
     event.currentTarget.blur();
     next();
-  }
+  };
 
   return (
     <>
       <div className={classes.player_container}>
-        <button id="shuffle" className={classes.btn_active} onClick={(event) => interceptClick(event, toggleShuffle)} >
+        <button
+          id="shuffle"
+          className={shuffle ? classes.btn_active : classes.btn_inactive}
+          onClick={(event) => interceptClick(event, toggleShuffle)}
+        >
           <ShuffleIcon />
         </button>
         <button id="back" onClick={(event) => interceptClick(event, prevTrack)}>
           <BackIcon />
         </button>
         {status === 'playing' ? (
-          <button id="pause" onClick={(event) => interceptClick(event, pausePlayer)}>
+          <button
+            id="pause"
+            onClick={(event) => interceptClick(event, pausePlayer)}
+          >
             <PauseIcon />
           </button>
         ) : (
-          <button id="play" onClick={(event) => interceptClick(event, unpausePlayer)}>
+          <button
+            id="play"
+            onClick={(event) => interceptClick(event, unpausePlayer)}
+          >
             <PlayIcon />
           </button>
         )}
         <button id="skip" onClick={(event) => interceptClick(event, nextTrack)}>
           <SkipIcon />
         </button>
-        <button id="repeat" className={classes.btn_inactive}  onClick={(event) => interceptClick(event, toggleRepeat)}>
+        <button
+          id="repeat"
+          className={repeat ? classes.btn_active : classes.btn_inactive}
+          onClick={(event) => interceptClick(event, toggleRepeat)}
+        >
           <RepeatIcon />
         </button>
         <div className={classes.sound_controller}>

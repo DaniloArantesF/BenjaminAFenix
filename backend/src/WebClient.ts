@@ -215,13 +215,17 @@ class WebClient {
   }
 
   public shuffle(socket: Socket, payload: any) {
-    const user = payload;
-    console.log('shuffle');
+    const guildId = this.webClients.get(socket.id)?.guildId;
+    const { player } = this.connections.get(guildId);
+    player.queueController.setShuffle(payload.shuffle);
+    this.server.to(guildId).emit('shuffle', { shuffle: player.queueController.shuffle });
   }
 
   public repeat(socket: Socket, payload: any) {
-    const user = payload;
-    console.log('repeat');
+    const guildId = this.webClients.get(socket.id)?.guildId;
+    const { player } = this.connections.get(guildId);
+    player.queueController.setRepeat(payload.repeat);
+    this.server.to(guildId).emit('repeat', { repeat: player.queueController.repeat });
   }
 
   public volume(socket: Socket, payload: any) {

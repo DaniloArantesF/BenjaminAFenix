@@ -10,11 +10,14 @@ class QueueController extends EventEmitter {
   items: Track[];
   position: number;
   shuffle: boolean;
+  repeat: boolean;
 
   constructor() {
     super();
     this.items = [];
     this.position = -1;
+    this.shuffle = false;
+    this.repeat = false;
   }
 
   public setQueue(queue: Track[], position: number) {
@@ -45,11 +48,18 @@ class QueueController extends EventEmitter {
    * Position is updated and next resource is returned.
    */
   public next(): Track | null {
-    if (this.position + 1 >= this.items.length) {
-      // new pos is out of bounds
-      return null;
+    if (this.repeat) return this.items[this.position];
+
+    if (this.shuffle) {
+      this.position = this.getRandomIndex();
+    } else {
+      if (this.position + 1 >= this.items.length) {
+        // new pos is out of bounds
+        return null;
+      }
+      this.position++;
     }
-    this.position++;
+
     this.emit('queue_update');
     return this.items[this.position];
   }
@@ -57,13 +67,20 @@ class QueueController extends EventEmitter {
   /**
    * Function called to jump to previous song in queue
    * Position is updated and previous resource is returned.
+   * If shuffle or repeat is enabled, it returns the same item
    */
+  // TODO: implement history so it can return to prev random track
   public previous(): Track | null {
-    if (this.position - 1 < 0) {
-      // new pos is out of bounds
-      return null;
+    if (this.shuffle || this.repeat) {
+      return this.items[this.position];
+    } else {
+      if (this.position - 1 < 0) {
+        // new pos is out of bounds
+        return null;
+      }
+      this.position--;
     }
-    this.position--;
+
     this.emit('queue_update');
     return this.items[this.position];
   }
@@ -75,6 +92,8 @@ class QueueController extends EventEmitter {
   public reset() {
     this.items = [];
     this.position = -1;
+    this.shuffle = false;
+    this.repeat = false;
   }
 
   /**
@@ -83,6 +102,29 @@ class QueueController extends EventEmitter {
    */
   public getQueue() {
     return this.items.slice(this.position);
+  }
+
+  /**
+   * Inverts shuffle value or sets it to passed value
+   * @param shuffle {optional}
+   */
+  public setShuffle(shuffle?: boolean) {
+    this.shuffle = shuffle === undefined ? !this.shuffle : shuffle;
+  }
+
+  /**
+   * Inverts repeat value or sets it to passed value
+   * @param repeat {optional}
+   */
+  public setRepeat(repeat?: boolean) {
+    this.repeat = repeat === undefined ? !this.repeat : repeat;
+  }
+
+  /**
+   * Returns a random index within queue bounds
+   */
+  public getRandomIndex() {
+    return Math.floor(Math.random() * this.items.length);
   }
 }
 

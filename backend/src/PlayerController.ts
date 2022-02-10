@@ -188,6 +188,8 @@ class PlayerController extends AudioPlayer {
       queue: {
         items: queueController.items,
         position: queueController.position,
+        shuffle: queueController.shuffle,
+        repeat: queueController.repeat,
       },
     };
   }

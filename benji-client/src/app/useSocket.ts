@@ -9,7 +9,7 @@ import {
   setChannels,
   setCurrentChannel,
 } from './dashboardSlice';
-import { QueueState, setQueue } from './queueSlice';
+import { QueueState, selectRepeat, selectShuffle, setQueue, setRepeat, setShuffle } from './queueSlice';
 import { Track } from '../types';
 import { selectAuth } from './authSlice';
 import {
@@ -33,6 +33,8 @@ const useSocket = () => {
   const dispatch = useAppDispatch();
   const { currentGuild, active, channel } = useAppSelector(selectDashboard);
   const { currentTrack } = useAppSelector(selectPlayerState);
+  const shuffle = useAppSelector(selectShuffle);
+  const repeat = useAppSelector(selectRepeat);
   const { username } = useAppSelector(selectAuth);
   const [socket, setSocket] = useState<Socket>();
   const { getGuildVoiceChannels } = useDiscordAPI();
@@ -101,11 +103,12 @@ const useSocket = () => {
   };
 
   const setUpEvents = () => {
-    socket?.on('connect', () => {
+    if (!socket) return;
+    socket.on('connect', () => {
       console.info('Connected to server!');
     });
 
-    socket?.on('player_update', (payload: any) => {
+    socket.on('player_update', (payload: any) => {
       const queue = payload.queue as QueueState;
       const curTrack = queue.items[queue.position];
       if (!currentTrack || curTrack !== currentTrack) {
@@ -118,7 +121,7 @@ const useSocket = () => {
       }
     });
 
-    socket?.on('channel_update', (payload) => {
+    socket.on('channel_update', (payload) => {
       const channel = payload.channel;
       if (!channel) {
         dispatch(setActive(false));
@@ -131,8 +134,16 @@ const useSocket = () => {
     // TODO: set not active on bot_disconnect
 
     // Triggered periodically to update state of playback
-    socket?.on('playback_state', (payload: PlaybackState) => {
+    socket.on('playback_state', (payload: PlaybackState) => {
       dispatch(updatePlaybackState(payload));
+    });
+
+    socket.on('shuffle', ({ shuffle }) => {
+      dispatch(setShuffle(shuffle));
+    });
+
+    socket.on('repeat', ({ repeat }) => {
+      dispatch(setRepeat(repeat));
     });
   };
 
@@ -175,12 +186,12 @@ const useSocket = () => {
 
   const toggleShuffle = () => {
     if (!currentGuild) return;
-    socket?.emit('shuffle', { user: username });
+    socket?.emit('shuffle', { shuffle: !shuffle });
   };
 
   const toggleRepeat = () => {
     if (!currentGuild) return;
-    socket?.emit('repeat', { user: username });
+    socket?.emit('repeat', { repeat: !repeat });
   };
 
   const setVolume = (volume: number) => {
