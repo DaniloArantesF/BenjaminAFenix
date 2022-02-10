@@ -25,6 +25,8 @@
   --clr-title: #cdc8c2;
 
   --clr-btn: #555555;
+  --clr-btn-inactive: #423f40;
+  --clr-btn-active: #69081F;
 
   /* Shadows */
   --shadow-light: 0 4px 4px rgba(0, 0, 0, 0.25);

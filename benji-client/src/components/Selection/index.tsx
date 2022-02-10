@@ -59,7 +59,7 @@ const ChannelSelection = ({
         active ? classes.active : classes.inactive
       }`}
     >
-      <h1>Select a channel to start!</h1>
+      <h1>Select a channel!</h1>
       {channels.map((channel, index) => {
         return (
           <section

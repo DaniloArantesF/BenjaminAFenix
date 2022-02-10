@@ -42,25 +42,25 @@ const PlayerController = (props: PlayerControllerProps) => {
   return (
     <>
       <div className={classes.player_container}>
-        <button  onClick={(event) => interceptClick(event, toggleShuffle)} >
-          <ShuffleIcon/>
+        <button id="shuffle" className={classes.btn_active} onClick={(event) => interceptClick(event, toggleShuffle)} >
+          <ShuffleIcon />
         </button>
-        <button onClick={(event) => interceptClick(event, prevTrack)}>
+        <button id="back" onClick={(event) => interceptClick(event, prevTrack)}>
           <BackIcon />
         </button>
         {status === 'playing' ? (
-          <button onClick={(event) => interceptClick(event, pausePlayer)}>
+          <button id="pause" onClick={(event) => interceptClick(event, pausePlayer)}>
             <PauseIcon />
           </button>
         ) : (
-          <button onClick={(event) => interceptClick(event, unpausePlayer)}>
+          <button id="play" onClick={(event) => interceptClick(event, unpausePlayer)}>
             <PlayIcon />
           </button>
         )}
-        <button onClick={(event) => interceptClick(event, nextTrack)}>
+        <button id="skip" onClick={(event) => interceptClick(event, nextTrack)}>
           <SkipIcon />
         </button>
-        <button onClick={(event) => interceptClick(event, toggleRepeat)}>
+        <button id="repeat" className={classes.btn_inactive}  onClick={(event) => interceptClick(event, toggleRepeat)}>
           <RepeatIcon />
         </button>
         <div className={classes.sound_controller}>

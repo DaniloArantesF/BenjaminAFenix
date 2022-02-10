@@ -15,12 +15,10 @@
   position: relative;
   border: none;
   background: transparent;
-  z-index: 2;
 }
 
 .player_container button svg {
   position: relative;
-  z-index: -1;
 }
 
 .player_container > * {
@@ -54,4 +52,12 @@
 
 .sound_controller svg {
   transform: scale(0.8);
+}
+
+.btn_inactive svg {
+  fill: var(--clr-btn-inactive);
+}
+
+.btn_active svg {
+  fill: var(--clr-btn-active);
 }
