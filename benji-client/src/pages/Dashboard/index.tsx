@@ -52,6 +52,7 @@ const Dashboard = () => {
   const history = useHistory();
   const {
     socket,
+    setTrack,
     requestTrack,
     joinChannel,
     unpausePlayer,
@@ -168,7 +169,7 @@ const Dashboard = () => {
           />
         </section>
         <section id={classes.queue} className={classes.dashboard__component}>
-          <Queue items={items} />
+          <Queue items={items} setTrack={setTrack} />
         </section>
         <Search requestTrack={requestTrack} />
         <section

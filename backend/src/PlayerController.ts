@@ -81,6 +81,7 @@ class PlayerController extends AudioPlayer {
 
     // Handle update events coming from queue controller
     this.queueController.on('queue_update', this.updatePlayer.bind(this));
+    this.queueController.on('restart_track', this.restartPlayback.bind(this));
   }
 
   /**
@@ -123,6 +124,11 @@ class PlayerController extends AudioPlayer {
     // Update web clients
     // this.channel.to(this.guildId).emit('player_update', this.getPlayerState());
     this.eventBus.dispatch(`player_update`, this.getPlayerState());
+  }
+
+  public restartPlayback() {
+    this.progress = 0;
+    this.playCurrentItem();
   }
 
   /**

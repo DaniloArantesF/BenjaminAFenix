@@ -57,6 +57,7 @@ class WebClient {
       );
       socket.on('get_player', (payload) => this.getPlayer(socket, payload));
       socket.on('join_channel', (payload) => this.joinChannel(socket, payload));
+      socket.on('set_queue_position', (payload) => this.setQueuePosition(socket, payload));
       socket.on('request_track', (payload) =>
         this.requestTrack(socket, payload)
       );
@@ -175,6 +176,15 @@ class WebClient {
     const guild = this.discordClient.getGuild(guildId);
     const { player } = await this.discordClient.joinChannel(guild, channelId);
     socket.emit('player_update', player.getPlayerState());
+  }
+
+  public setQueuePosition(socket: Socket, payload: any) {
+    const position: number = payload.position;
+    const guildId = this.webClients.get(socket.id)?.guildId;
+    if (!guildId) return console.error('Web client not found', payload);
+
+    const { player } = this.connections.get(guildId);
+    player.queueController.setPosition(position);
   }
 
   public requestTrack(socket: Socket, payload: any) {

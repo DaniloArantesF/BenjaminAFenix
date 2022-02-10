@@ -32,6 +32,11 @@ class QueueController extends EventEmitter {
     this.emit('queue_update');
   }
 
+  public setPosition(newPosition: number) {
+    this.position = newPosition;
+    this.emit('queue_update');
+  }
+
   /**
    * Returns current track to be played
    */
@@ -71,13 +76,10 @@ class QueueController extends EventEmitter {
    */
   // TODO: implement history so it can return to prev random track
   public previous(): Track | null {
-    if (this.shuffle || this.repeat) {
+    if (this.position - 1 < 0 || this.shuffle || this.repeat) {
+      this.emit('restart_track');
       return this.items[this.position];
     } else {
-      if (this.position - 1 < 0) {
-        // new pos is out of bounds
-        return null;
-      }
       this.position--;
     }
 

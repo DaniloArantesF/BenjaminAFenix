@@ -157,6 +157,11 @@ const useSocket = () => {
     socket?.emit('join_channel', { guildId, channelId });
   };
 
+  // Changes queue position
+  const setTrack = (position: number) => {
+    socket?.emit('set_queue_position', { position });
+  }
+
   const requestTrack = (track: Track) => {
     if (!currentGuild) return;
     socket?.emit('request_track', {
@@ -181,6 +186,7 @@ const useSocket = () => {
 
   const prevTrack = () => {
     if (!currentGuild) return;
+    console.log('prev')
     socket?.emit('prev', { user: username });
   };
 
@@ -209,6 +215,7 @@ const useSocket = () => {
   return {
     socket,
     setSocket,
+    setTrack,
     requestTrack,
     joinChannel,
     unpausePlayer,

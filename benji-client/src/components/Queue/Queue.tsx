@@ -19,30 +19,32 @@ export interface QItem extends Track {
 
 export type QProps = {
   items: Array<QItem>;
+  setTrack: (p: number) => void;
 };
 
 interface QItemProps {
   item: QItem;
   dragCallback: (event: SyntheticEvent) => void;
-  mouseDownCb: (event: SyntheticEvent) => void;
+  onClickCb: (event: SyntheticEvent) => void;
   mouseUpCb?: (event: SyntheticEvent) => void;
-  active?: boolean
+  active?: boolean;
 }
 
 const DRAGGING_ENABLED = false;
 
-const QueueItem = ({ item, dragCallback, mouseUpCb, active }: QItemProps) => {
+const QueueItem = ({ item, dragCallback, mouseUpCb, active, onClickCb }: QItemProps) => {
   const [hover, setHover] = useState(false); // current item is being hovered
   const { itemPosition, title, channelTitle, duration, user } = item;
 
   return (
     <div
-      draggable="true"
+      // draggable="true"
       className={`${classes.queue__item} ${active && classes.current_item}`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onDrag={dragCallback}
       onMouseUp={mouseUpCb}
+      onClick={onClickCb}
     >
       {(hover && DRAGGING_ENABLED) ? (
         <span>
@@ -66,7 +68,7 @@ const useDragging = () => {
   return { isDragging, setDragging, newItems, setNewItems };
 };
 
-const Queue = ({ items }: QProps) => {
+const Queue = ({ items, setTrack }: QProps) => {
   const dispatch = useAppDispatch();
   const queueLength = useAppSelector(selectQueueLength);
   const position = useAppSelector(selectPosition);
@@ -117,7 +119,6 @@ const Queue = ({ items }: QProps) => {
     mouseY: number,
     itemHeight: number
   ) => {
-    //console.log({ startY, endY, mouseY, itemHeight });
     const position = Math.round((mouseY - startY) / itemHeight); // snap whenitem is halfway
     return minMax(position - 1, 0, queueLength - 1);
   };
@@ -156,7 +157,7 @@ const Queue = ({ items }: QProps) => {
               dragCallback={(event: SyntheticEvent) =>
                 dragHandler(index, event)
               }
-              mouseDownCb={(event: SyntheticEvent) => { }}
+              onClickCb={ () => { setTrack(index) }}
               key={index}
               item={{ ...item, itemPosition: index + 1}}
               active={ index === position }
