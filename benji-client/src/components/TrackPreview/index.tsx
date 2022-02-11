@@ -1,4 +1,4 @@
-import { Track } from "../../types";
+import { Track } from '../../types';
 import classes from './TrackPreview.module.css';
 
 interface TrackPreviewProps {
@@ -9,10 +9,16 @@ const TrackPreview = ({ track }: TrackPreviewProps) => {
   return (
     <div className={classes.track_preview}>
       <div className={classes.track__thumbnail}>
-        { track && <img alt="track thumbnail" src={track.thumbnail} />}
+        {track && <img alt="track thumbnail" src={track.thumbnail} />}
       </div>
       <div className={classes.track__info}>
-        <h1>{track?.title}</h1>
+        <a
+          target="_blank"
+          href={'https://www.youtube.com/watch?v=' + track?.id}
+          className={classes.track__title}
+        >
+          {track?.title}
+        </a>
         <h2>{track?.channelTitle}</h2>
       </div>
     </div>
