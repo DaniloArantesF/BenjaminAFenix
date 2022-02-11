@@ -14,6 +14,7 @@ const TrackPreview = ({ track }: TrackPreviewProps) => {
       <div className={classes.track__info}>
         <a
           target="_blank"
+          rel="noreferrer"
           href={'https://www.youtube.com/watch?v=' + track?.id}
           className={classes.track__title}
         >
