@@ -40,9 +40,8 @@
 }
 
 .navLink {
-  --clr-font-navlink: rgb(165, 165, 165);
   cursor: pointer;
-  color: var(--clr-font-navlink);
+  color: var(--clr-btn);
   font-weight: 900;
 }
 
@@ -164,7 +163,7 @@
 
 .guildIcon.guildActive::before {
   content: '';
-  background-color: var(--clr-font);
+  background-color: var(--clr-title);
   width: 10px;
   height: 10px;
   position: absolute;

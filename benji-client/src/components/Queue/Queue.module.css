@@ -55,7 +55,7 @@
   color: var(--clr-btn);
   font-weight: 600;
   box-shadow: none;
-  background: var(--clr-surface1);;
+  background: var(--clr-surface1);
   position: sticky;
   top: -1em;
   left: 0;
@@ -64,6 +64,7 @@
   margin: 0;
   z-index: 10;
   user-select: none;
+  transition: none;
 }
 
 /* TODO: find a better way to do this later */

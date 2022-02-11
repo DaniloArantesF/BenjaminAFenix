@@ -1,4 +1,4 @@
-import useEffect, { useState } from 'react';
+import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { selectTheme, setTheme as setAppTheme } from '../../app/dashboardSlice';
 import classes from './Switch.module.css';
@@ -8,6 +8,10 @@ import { ReactComponent as DarkIcon } from '../../assets/dark_mode.svg';
 const Switch = () => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector(selectTheme);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
