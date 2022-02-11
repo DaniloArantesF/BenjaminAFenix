@@ -1,0 +1,59 @@
+
+
+.switch_container {
+  position: absolute;
+  right: 10%;
+  top: 2em;
+  display: flex;
+}
+
+.switch {
+  --switch-margins: .2em;
+  --switch-height: 2em;
+  --switch-width: calc(2*var(--switch-height) - var(--switch-margins)); /* 2 switch squares + margins on both sides */
+
+  --slider-height: calc(var(--switch-height) - 2*var(--switch-margins));
+  position: relative;
+  display: flex;
+  width: var(--switch-width);
+  height: var(--switch-height);
+  background-color: var(--clr-surface1);
+  border-radius: var(--border-radius);
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--slider-height);
+  width: var(--slider-height);
+  top: var(--switch-margins);
+  overflow: hidden;
+  transition: all 200ms linear;
+  border-radius: var(--border-radius);
+}
+
+.slider.dark {
+  left: var(--switch-margins);
+  background-color: var(--clr-btn);
+}
+
+.slider.light {
+  left: calc(var(--switch-height));
+  background-color: var(--clr-btn);
+}
+
+.dark svg {
+  fill: var(--clr-surface0);
+}
+
+.light svg {
+  fill: var(--clr-surface0);
+}

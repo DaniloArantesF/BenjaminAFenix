@@ -26,6 +26,7 @@ export interface DashboardState {
   channelSelection: boolean;
   navbar: boolean;
   windowWidth: number;
+  theme: string;
 }
 
 const initialState: DashboardState = {
@@ -37,6 +38,7 @@ const initialState: DashboardState = {
   channelSelection: false,
   navbar: window.innerWidth > 1150, // Only show by default in larger displays
   windowWidth: window.innerWidth,
+  theme: 'dark',
 };
 
 export const dashboardSlice = createSlice({
@@ -84,6 +86,10 @@ export const dashboardSlice = createSlice({
       state.navbar = payload > 1150;
       return state;
     },
+    setTheme: (state, { payload }) => {
+      state.theme = payload.theme;
+      return state;
+    },
   },
 });
 
@@ -95,10 +101,12 @@ export const {
   setChannels,
   setNavbarVisibility,
   setWindowWidth,
+  setTheme,
 } = dashboardSlice.actions;
 export const selectDashboard = (state: AppState) => state.dashboard;
 export const selectUptime = (state: AppState) => {
   if (!state.dashboard.channel) return Date.now();
   return state.dashboard.channel?.timestamp;
 };
+export const selectTheme = (state: AppState) => state.dashboard.theme;
 export default dashboardSlice.reducer;

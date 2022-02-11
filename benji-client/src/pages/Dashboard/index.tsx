@@ -30,8 +30,8 @@ import GuildHeader from '../../components/GuildHeader';
 import TrackPreview from '../../components/TrackPreview';
 import InactiveGuild from '../../components/InactiveGuild';
 import ChannelSelection from '../../components/Selection';
+import Switch from '../../components/Switch';
 
-// TODO: manage layouts better
 export enum breakpoints {
   LARGE = 1150,
   MEDIUM = 850,
@@ -154,6 +154,7 @@ const Dashboard = () => {
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
+      <Switch />
       <div className={classes.dashboard__body}>
         <ChannelSelection
           active={channelSelectionActive}

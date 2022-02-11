@@ -58,6 +58,14 @@
   --dashboard-margin-top: 2em;
 }
 
+[data-theme="light"] {
+  --clr-surface0: #F4F4F5;
+  --clr-surface1: #F2F3F2;
+  --clr-surface2: #131516;
+  --clr-surface3: #0D0D0D;
+  --clr-accent: #DE3B40;
+}
+
 @media screen and (max-width: 1150px) {
   :root {
     --selection-width: 80%;
