@@ -2,22 +2,6 @@
 
 :root {
   /* Colors */
-  --clr-bg-dark: #0e0e12;
-  --clr-bg: var(--clr-bg-dark);
-
-  --clr-surface0-dark: #131619;
-  --clr-surface0: var(--clr-surface0-dark);
-
-  --clr-surface1-dark: #16161b;
-  --clr-surface1: var(--clr-surface1-dark);
-
-  --clr-surface2-dark: #131516;
-  --clr-surface2: var(--clr-surface2-dark);
-
-  --clr-surface3: #343647;
-
-  --clr-accent: #a50e31;
-
   --clr-warning: #d7a936;
   --clr-error: #de4456;
 

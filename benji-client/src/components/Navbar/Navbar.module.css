@@ -80,11 +80,11 @@
   }
 
   .menu_btn svg {
-    fill: white;
+    fill: var(--clr-btn-inactive);
     transition: fill 100ms ease-out;
   }
   .menu_btn:hover svg {
-    fill: var(--clr-accent);
+    fill: var(--clr-btn-active);
   }
 
 }

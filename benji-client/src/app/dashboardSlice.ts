@@ -38,7 +38,7 @@ const initialState: DashboardState = {
   channelSelection: false,
   navbar: window.innerWidth > 1150, // Only show by default in larger displays
   windowWidth: window.innerWidth,
-  theme: 'light',
+  theme: localStorage.getItem('theme') || 'dark',
 };
 
 export const dashboardSlice = createSlice({

@@ -16,6 +16,7 @@ const Switch = () => {
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     dispatch(setAppTheme({ theme: newTheme }));
+    localStorage.setItem('theme', newTheme);
   }
 
   return (
