@@ -209,6 +209,8 @@ class WebClient {
     const guildId = this.webClients.get(socket.id)?.guildId;
     const { player } = this.connections.get(guildId);
     player.pause();
+    clearInterval(player.playerInterval);
+    player.playerInterval = null;
   }
 
   public next = (socket: Socket, payload: any)=>  {
