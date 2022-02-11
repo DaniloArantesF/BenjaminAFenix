@@ -52,7 +52,7 @@
   --max-video-height: 350px;
 
   --margin-top: 300px;
-  --srch-margin-left: 0;
+  --srch-margin-left: 0px;
 
   --dashboard-margin: 2em 1em;
   --dashboard-margin-top: 2em;
@@ -62,16 +62,17 @@
   :root {
     --selection-width: 80%;
     --srch-margin-left: 2em;
+    --search-bar-width: calc(450px - var(--srch-margin-left));
   }
 }
 
 @media screen and (max-width: 915px) {
   :root {
-    --search-bar-width: calc(100% - var(--srch-margin-left));
+    font-size: .9em;
+    --search-bar-width: calc(90% - var(--srch-margin-left));
     --thumb-width: 90px;
     --thumb-height: 60px;
     --margin-bottom: 1em;
-    font-size: .9em;
   }
 }
 
