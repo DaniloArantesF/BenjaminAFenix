@@ -154,13 +154,16 @@ const Dashboard = () => {
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
-      <Switch />
       <div className={classes.dashboard__body}>
         <ChannelSelection
           active={channelSelectionActive}
           setActive={(val: boolean) => setChannelSelectionActive(val)}
           joinChannel={joinChannel}
         />
+        <section id={classes.header}>
+          <Search requestTrack={requestTrack} />
+          <Switch />
+        </section>
         <section id={classes.info} className={classes.dashboard__component}>
           <GuildHeader
             switchHandler={() =>
@@ -172,7 +175,6 @@ const Dashboard = () => {
         <section id={classes.queue} className={classes.dashboard__component}>
           <Queue items={items} setTrack={setTrack} />
         </section>
-        <Search requestTrack={requestTrack} />
         <section
           id={classes.player_controls}
           className={classes.dashboard__component}

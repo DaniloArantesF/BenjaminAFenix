@@ -74,7 +74,7 @@
     display: block;
     width: 2.5em;
     position: absolute;
-    top: calc(var(--dashboard-margin-top) + (var(--search-bar-height)/2));
+    top: calc(var(--dashboard-margin-top) + 1.5 * (var(--search-bar-height)/2));
     left: 2em;
     z-index: 2;
   }

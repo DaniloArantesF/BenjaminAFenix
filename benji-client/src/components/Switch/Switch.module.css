@@ -1,9 +1,6 @@
 
 
 .switch_container {
-  position: absolute;
-  right: 10%;
-  top: calc(var(--dashboard-margin-top) + .5 * var(--search-bar-height));
   display: flex;
 }
 

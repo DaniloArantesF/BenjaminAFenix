@@ -11,7 +11,7 @@
   height: 100%;
   display: grid;
   grid-template-areas:
-    'srch srch'
+    'head head'
     'info btns'
     'que prev'
     'que prev'
@@ -39,6 +39,18 @@
   box-shadow: var(--shadow-light);
   border-radius: var(--border-radius);
   z-index: 0;
+}
+
+#header {
+  position: relative;
+  height: 100%;
+  grid-area: head;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 1em;
+  padding-right: 1em;
 }
 
 #info {

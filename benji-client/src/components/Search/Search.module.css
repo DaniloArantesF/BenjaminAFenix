@@ -3,8 +3,7 @@
   width: var(--search-bar-width);
   height: calc(var(--search-bar-height) + 2em);
   left: var(--srch-margin-left);
-  margin: 0 auto 0 0;
-  grid-area: srch;
+  /* margin: 0 auto 0 0; */
   padding-top: var(--margin-bottom);
   margin-left: var(--srch-margin-left);
 }

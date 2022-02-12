@@ -51,7 +51,7 @@
   --clr-font: #e8e6e3;
   --clr-title: #cdc8c2;
 
-  --clr-btn: #555555;
+  --clr-btn: #777777;
   --clr-btn-inactive: #423f40;
   --clr-btn-active: var(--clr-accent);
 }
@@ -70,7 +70,6 @@
   --clr-btn: #1f1f1f;
   --clr-btn-inactive: #4e4e4e;
   --clr-btn-active: var(--clr-accent);
-
 }
 
 @media screen and (max-width: 1150px) {
@@ -90,7 +89,6 @@
     --margin-bottom: 1em;
   }
 }
-
 
 body {
   height: 100vh;
