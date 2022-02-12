@@ -1,15 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300&display=swap');
 
 :root {
+  /* Breakpoints */
+  --breakpoint-l: 1150px;
+  --breakpoint-m: 800px;
+  --breakpoint-s: 576px;
+
   /* Colors */
   --clr-warning: #d7a936;
   --clr-error: #de4456;
-
-  --clr-font: #e8e6e3;
-  --clr-title: #cdc8c2;
-
-  --clr-btn: #555555;
-  --clr-btn-inactive: #423f40;
 
   /* Shadows */
   --shadow-light: 0 4px 4px rgba(0, 0, 0, 0.25);
@@ -49,6 +48,11 @@
   --clr-surface3: #343647;
   --clr-accent: #9c2c30;
 
+  --clr-font: #e8e6e3;
+  --clr-title: #cdc8c2;
+
+  --clr-btn: #555555;
+  --clr-btn-inactive: #423f40;
   --clr-btn-active: var(--clr-accent);
 }
 
@@ -62,6 +66,7 @@
 
   --clr-font: #3b465c;
   --clr-title: #060606;
+
   --clr-btn: #1f1f1f;
   --clr-btn-inactive: #4e4e4e;
   --clr-btn-active: var(--clr-accent);
@@ -76,7 +81,7 @@
   }
 }
 
-@media screen and (max-width: 915px) {
+@media screen and (max-width: 800px) {
   :root {
     font-size: .9em;
     --search-bar-width: calc(90% - var(--srch-margin-left));

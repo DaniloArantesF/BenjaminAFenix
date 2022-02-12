@@ -29,12 +29,6 @@
   transform: translateX(-50%);
 }
 
-@media screen and (max-width: 1150px) {
-  .selection_container.active, .selection_container.inactive {
-    left: 50%;
-  }
-}
-
 .selection_container > h1 {
   font-size: 1.3em;
   font-weight: 400;
@@ -75,4 +69,12 @@
 .selection__item:hover::before {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* Remove navbar from selection position */
+/* MAYBE: improve this :) */
+@media screen and (max-width: 1150px) {
+  .selection_container.active, .selection_container.inactive {
+    left: 50%;
+  }
 }

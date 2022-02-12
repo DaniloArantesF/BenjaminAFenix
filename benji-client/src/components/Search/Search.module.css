@@ -225,9 +225,3 @@
   fill: var(--clr-accent);
   transform: scale(0.9);
 }
-
-
-@media screen and (max-width: 915px) {
-  .search_container > ul {
-  }
-}

@@ -34,7 +34,7 @@ import Switch from '../../components/Switch';
 
 export enum breakpoints {
   LARGE = 1150,
-  MEDIUM = 850,
+  MEDIUM = 800,
   SMALL = 0,
 }
 

@@ -81,7 +81,7 @@
   margin-top: auto;
 }
 
-@media screen and (max-width: 915px) {
+@media screen and (max-width: 800px) {
   .dashboard__body {
     grid-template-rows: auto repeat(auto-fit, minmax(120px, 1fr));
     grid-template-columns: 1fr;
