@@ -3,6 +3,7 @@ import queueReducer from './queueSlice';
 import playerReducer from './playerSlice';
 import authReducer from './authSlice';
 import dashboardReducer from './dashboardSlice';
+import logReducer from './logSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     queue: queueReducer,
     player: playerReducer,
     auth: authReducer,
+    logs: logReducer,
   },
 });
 

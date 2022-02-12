@@ -31,6 +31,7 @@ import TrackPreview from '../../components/TrackPreview';
 import InactiveGuild from '../../components/InactiveGuild';
 import ChannelSelection from '../../components/Selection';
 import Switch from '../../components/Switch';
+import ActionLog from '../../components/ActionLog';
 
 export enum breakpoints {
   LARGE = 1150,
@@ -189,7 +190,8 @@ const Dashboard = () => {
             setVolume={setVolume}
           />
         </section>
-        <section id={classes.preview} className={classes.dashboard__component}>
+        <section id={classes.side}>
+          <ActionLog />
           {currentTrack && <TrackPreview track={currentTrack} />}
         </section>
       </div>

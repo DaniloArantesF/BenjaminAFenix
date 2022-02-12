@@ -20,6 +20,7 @@ import {
 } from './playerSlice';
 import axios from 'axios';
 import useDiscordAPI from '../libs/Discord';
+import { pushAction } from './logSlice';
 
 const endpoint = `${process.env.REACT_APP_BOT_HOSTNAME}/bot`;
 
@@ -140,6 +141,10 @@ const useSocket = () => {
       dispatch(updatePlaybackState(payload));
     });
 
+    socket.on('pause_player', ({ message }) => {
+      dispatch(pushAction({ message, timestamp: Date.now() }));
+    });
+
     socket.on('shuffle', ({ shuffle }) => {
       dispatch(setShuffle(shuffle));
     });
@@ -151,7 +156,7 @@ const useSocket = () => {
 
   const getGuildPlayer = () => {
     if (!currentGuild) return;
-    socket?.emit('player_connect', { guildId: currentGuild?.id });
+    socket?.emit('player_connect', { username, guildId: currentGuild?.id });
   };
 
   const joinChannel = (guildId: string, channelId: string) => {
@@ -161,34 +166,35 @@ const useSocket = () => {
 
   // Changes queue position
   const setTrack = (position: number) => {
-    socket?.emit('set_queue_position', { position });
+    socket?.emit('set_queue_position', { username, position });
   }
 
   const requestTrack = (track: Track) => {
     if (!currentGuild) return;
     socket?.emit('request_track', {
+      username,
       track,
     });
   };
 
   const unpausePlayer = () => {
     if (!currentGuild) return;
-    socket?.emit('unpause', { user: username });
+    socket?.emit('unpause', { username });
   };
 
   const pausePlayer = () => {
     if (!currentGuild) return;
-    socket?.emit('pause', { user: username });
+    socket?.emit('pause', { username });
   };
 
   const nextTrack = () => {
     if (!currentGuild) return;
-    socket?.emit('next', { user: username });
+    socket?.emit('next', { username });
   };
 
   const prevTrack = () => {
     if (!currentGuild) return;
-    socket?.emit('prev', { user: username });
+    socket?.emit('prev', { username });
   };
 
   const toggleShuffle = () => {

@@ -12,10 +12,10 @@
   display: grid;
   grid-template-areas:
     'head head'
-    'info btns'
-    'que prev'
-    'que prev'
-    'ctrls prev';
+    'info side'
+    'que side'
+    'que side'
+    'ctrls side';
 
   /* VIDEO STUFF, come back to it later */
   /* This is done to keep first column only as wide as video component and enforce 16/9 aspect ratio
@@ -86,11 +86,14 @@
   grid-area: srch;
 }
 
-#preview {
-  grid-area: prev;
-  width: fit-content;
-  height: fit-content;
-  margin-top: auto;
+#side {
+  grid-area: side;
+  position: relative;
+  display: inline-grid;
+  height: 100%;
+  grid-auto-flow: row;
+  align-items: flex-end;
+  justify-content: flex-start;
 }
 
 @media screen and (max-width: 800px) {

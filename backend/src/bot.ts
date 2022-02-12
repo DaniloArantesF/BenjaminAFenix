@@ -6,6 +6,7 @@ import http from 'http';
 import { EventBus } from './EventBus';
 import WebClient from './WebClient';
 dotenv.config();
+import config from './config';
 FileWatcher();
 
 const TOKEN = process.env.DISCORD_TOKEN;
@@ -23,11 +24,6 @@ const intents = [
   Intents.FLAGS.DIRECT_MESSAGE_TYPING,
 ];
 
-// Time in ms where users are not allowed to send more than one
-// interaction. The next command will be run only when cooldown is over.
-// *Note* The discord api requires a reply within 3 seconds. If cooldown is greater than 3000, you need to defer reply and edit it later.
-const COOLDOWN_MS = 2500;
-
 const Bot = (server: http.Server) => {
   const client = new DiscordClient({ intents });
   const webController = new WebClient(server, client);
@@ -40,13 +36,12 @@ const Bot = (server: http.Server) => {
     try {
       const user = interaction.member.user.id;
       const lastInteraction = cooldown.get(user) ?? -1;
-      const timeLeft = lastInteraction === -1 ? 0 : (lastInteraction + COOLDOWN_MS) - Date.now();
+      const timeLeft = lastInteraction === -1 ? 0 : (lastInteraction + config.COOLDOWN_MS) - Date.now();
 
       if (timeLeft > 0) {
         // User is in cooldown
         console.info(`${user} is in cooldown for ${timeLeft}`);
         cooldown.set(user, Date.now());
-        // interaction.deferReply();
         setTimeout(() => {
           command.execute(client, interaction);
         }, timeLeft)
