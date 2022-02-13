@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import axios, { AxiosResponse } from 'axios';
 import logger from '../Logger';
-import config from 'src/config';
+import config from '../config';
 require('dotenv').config();
 
 const clientId = process.env.DISCORD_CLIENT_ID;
