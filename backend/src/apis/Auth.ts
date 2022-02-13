@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import axios, { AxiosResponse } from 'axios';
 import logger from '../Logger';
+import config from 'src/config';
 require('dotenv').config();
 
 const clientId = process.env.DISCORD_CLIENT_ID;
@@ -39,7 +40,7 @@ class Auth {
           client_secret: clientSecret,
           code,
           grant_type: 'authorization_code',
-          redirect_uri: `http://localhost:3000/login`,
+          redirect_uri: `${config.CLIENT_URL}/login`,
           scope: 'identify',
         }),
         {

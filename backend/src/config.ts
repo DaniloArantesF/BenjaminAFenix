@@ -5,4 +5,5 @@ export default {
   // interaction. The next command will be run only when cooldown is over.
   // *Note* The discord api requires a reply within 3 seconds. If cooldown is greater than 3000, you need to defer reply and edit it later.
   COOLDOWN_MS: 2500,
+  CLIENT_URL: 'https://benji.daniloarantesf.me'
 };
