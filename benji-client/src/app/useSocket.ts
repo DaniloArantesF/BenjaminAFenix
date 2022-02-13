@@ -141,8 +141,9 @@ const useSocket = () => {
       dispatch(updatePlaybackState(payload));
     });
 
-    socket.on('pause_player', ({ message }) => {
-      dispatch(pushAction({ message, timestamp: Date.now() }));
+    /* Actions */
+    socket.on('log_message', ({ message, timestamp }) => {
+      dispatch(pushAction({ message, timestamp }));
     });
 
     socket.on('shuffle', ({ shuffle }) => {

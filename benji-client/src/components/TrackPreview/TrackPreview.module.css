@@ -6,6 +6,9 @@
   height: calc(2 * (300px * 9 / 16));
   max-width: 300px;
   background-color: var(--clr-surface1);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-light);
+  overflow: hidden;
 }
 
 .track__thumbnail {

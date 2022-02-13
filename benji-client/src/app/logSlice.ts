@@ -16,7 +16,7 @@ export interface LogState {
 
 // Define initial state using type above
 const initialState: LogState = {
-  items: [{ message: 'helo friend', timestamp: 2 },{ message: 'helo friend', timestamp: 2 }, { message: 'helo friend', timestamp: 2 }],
+  items: [],
 };
 
 export const logSlice = createSlice({
@@ -24,8 +24,8 @@ export const logSlice = createSlice({
   initialState,
   reducers: {
     pushAction: (state, { payload }) => {
-      console.log(payload);
-      state.items = [payload, ...state.items];
+      const LOG_LIMIT = 12;
+      state.items = [payload, ...state.items.slice(0, LOG_LIMIT - 1)];
       return state;
     },
   },

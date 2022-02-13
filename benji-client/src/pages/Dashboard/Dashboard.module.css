@@ -91,9 +91,10 @@
   position: relative;
   display: inline-grid;
   height: 100%;
-  grid-auto-flow: row;
+  width: 300px;
+  grid-template-rows: 1fr auto;
   align-items: flex-end;
-  justify-content: flex-start;
+  row-gap: 1em;
 }
 
 @media screen and (max-width: 800px) {

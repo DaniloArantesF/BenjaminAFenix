@@ -181,28 +181,48 @@ class WebClient {
 
   public setQueuePosition = (socket: Socket, payload: any) => {
     const position: number = payload.position;
-    const guildId = this.webClients.get(socket.id)?.guildId;
+    const { username, guildId } = this.webClients.get(socket.id);
     if (!guildId) return console.error('Web client not found', payload);
 
     const { player } = this.connections.get(guildId);
     player.queueController.setPosition(position);
+    const track = player.queueController.getTrack();
+
+    this.server
+    .to(guildId)
+    .emit('log_message', {
+      message: actions.CHANGE_TRACK(username, track.title),
+      timestamp: Date.now(),
+    });
   };
 
   public requestTrack = (socket: Socket, payload: any) => {
     const track: Track = payload.track;
-    const guildId = this.webClients.get(socket.id)?.guildId;
+    const { username, guildId } = this.webClients.get(socket.id);
     if (!guildId) return console.error('Web client not found', payload);
 
     // console.info(`Pushing ${JSON.stringify(track, null, 2)} to ${guildId}`);
     const { player } = this.connections.get(guildId);
     player.queueController.pushItem(track);
+
+    this.server
+    .to(guildId)
+    .emit('log_message', {
+      message: actions.ADD_TRACK(username, track.title),
+      timestamp: Date.now(),
+    });
   };
 
   public unpause = (socket: Socket, payload: any) => {
-    const user = payload;
-    const guildId = this.webClients.get(socket.id)?.guildId;
+    const { username, guildId } = this.webClients.get(socket.id);
     const { player } = this.connections.get(guildId);
     player.unpause();
+    this.server
+      .to(guildId)
+      .emit('log_message', {
+        message: actions.PLAY(username),
+        timestamp: Date.now(),
+      });
   };
 
   public pause = (socket: Socket, payload: any) => {
@@ -213,50 +233,84 @@ class WebClient {
     player.playerInterval = null;
     this.server
       .to(guildId)
-      .emit('pause_player', { message: actions.PAUSE(username) });
-  };
-
-  public next = (socket: Socket, payload: any) => {
-    const username = payload.username;
-    const guildId = this.webClients.get(socket.id)?.guildId;
-    const { player } = this.connections.get(guildId);
-    const prevTrack = player.queueController.getTrack();
-    player.queueController.next();
-    this.server
-      .to(guildId)
-      .emit('next_track', {
-        message: actions.SKIP_TRACK(username, prevTrack.title),
+      .emit('log_message', {
+        message: actions.PAUSE(username),
+        timestamp: Date.now(),
       });
   };
 
+  public next = (socket: Socket, payload: any) => {
+    const { username, guildId } = this.webClients.get(socket.id);
+    const { player } = this.connections.get(guildId);
+    const prevTrack = player.queueController.getTrack();
+    player.queueController.next();
+
+    // Dont emit event if this is the first track
+    if (prevTrack) {
+      this.server.to(guildId).emit('log_message', {
+        message: actions.SKIP_TRACK(username, prevTrack.title),
+        timestamp: Date.now(),
+      });
+    }
+  };
+
   public prev = (socket: Socket, payload: any) => {
-    const user = payload;
-    const guildId = this.webClients.get(socket.id)?.guildId;
+    const { username, guildId } = this.webClients.get(socket.id);
     const { player } = this.connections.get(guildId);
     player.queueController.previous();
+    const curTrack = player.queueController.getTrack();
+    if (curTrack) {
+      this.server.to(guildId).emit('log_message', {
+        message: actions.PREV_TRACK(username, curTrack.title),
+        timestamp: Date.now(),
+      });
+    }
   };
 
   public shuffle = (socket: Socket, payload: any) => {
-    const guildId = this.webClients.get(socket.id)?.guildId;
+    const { username, guildId } = this.webClients.get(socket.id);
     const { player } = this.connections.get(guildId);
     player.queueController.setShuffle(payload.shuffle);
-    this.server
-      .to(guildId)
-      .emit('shuffle', { shuffle: player.queueController.shuffle });
+    const status = player.queueController.shuffle ? 'on' : 'off';
+
+    this.server.to(guildId).emit('shuffle', {
+      shuffle: player.queueController.shuffle,
+    });
+
+    this.server.to(guildId).emit('log_message', {
+      message: actions.SHUFFLE(username, status),
+      username,
+      timestamp: Date.now(),
+    });
   };
 
   public repeat = (socket: Socket, payload: any) => {
-    const guildId = this.webClients.get(socket.id)?.guildId;
+    const { username, guildId } = this.webClients.get(socket.id);
     const { player } = this.connections.get(guildId);
     player.queueController.setRepeat(payload.repeat);
-    this.server
-      .to(guildId)
-      .emit('repeat', { repeat: player.queueController.repeat });
+    const status = player.queueController.repeat ? 'on' : 'off';
+
+    this.server.to(guildId).emit('repeat', {
+      repeat: player.queueController.repeat,
+    });
+
+    this.server.to(guildId).emit('log_message', {
+      message: actions.REPEAT(username, status),
+      username,
+      timestamp: Date.now(),
+    });
   };
 
   public volume = (socket: Socket, payload: any) => {
+    const { username, guildId } = this.webClients.get(socket.id);
+    const { player } = this.connections.get(guildId);
     const volume = payload.volume;
-    console.log('volume', volume);
+    player.setVolume(volume);
+    this.server.to(guildId).emit('log_message', {
+      message: actions.VOLUME(username, volume),
+      username,
+      timestamp: Date.now(),
+    });
   };
 
   public disconnect = (socket: Socket, payload: any) => {

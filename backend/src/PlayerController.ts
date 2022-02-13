@@ -178,8 +178,10 @@ class PlayerController extends AudioPlayer {
   }
 
   public setVolume = (volume: number) => {
-    this.resource.volume.setVolumeLogarithmic(volume);
     this.volume = volume;
+    if (this.resource) {
+      this.resource.volume.setVolumeLogarithmic(volume);
+    }
   }
 
   public getPlayerState = () => {

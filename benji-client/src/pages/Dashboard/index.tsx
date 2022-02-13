@@ -190,10 +190,12 @@ const Dashboard = () => {
             setVolume={setVolume}
           />
         </section>
-        <section id={classes.side}>
-          <ActionLog />
-          {currentTrack && <TrackPreview track={currentTrack} />}
-        </section>
+        {windowWidth > breakpoints.MEDIUM && (
+          <section id={classes.side}>
+            <ActionLog />
+            {currentTrack && <TrackPreview track={currentTrack} />}
+          </section>
+        )}
       </div>
     </div>
   );

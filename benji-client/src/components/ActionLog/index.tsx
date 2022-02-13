@@ -10,21 +10,25 @@ const ActionItem = ({ message, timestamp }: Action) => {
   const minutes = String(date.getMinutes()).padStart(2, '0');
   return (
     <div className={classes.log__item}>
-      {`${message} at ${hours}:${minutes}`}
+      <span>{`${message}`}</span>
+      <span>{`${hours}:${minutes}`}</span>
     </div>
   );
-}
+};
 
 const ActionLog = () => {
   const items = useAppSelector(selectActionLogs);
 
   return (
     <div className={classes.log_container}>
-      {
-        items.map((item, index) => {
-          return <ActionItem key={index} {...item} />
-        })
-      }
+      <div className={classes.log__header}>
+        <h1>Server Log</h1>
+      </div>
+      <div className={classes.log__body}>
+        {items.map((item, index) => {
+          return <ActionItem key={index} {...item} />;
+        })}
+      </div>
     </div>
   );
 };
