@@ -1,12 +1,12 @@
 import { CommandInteraction, Intents } from 'discord.js';
 import DiscordClient from './DiscordClient';
 import dotenv from 'dotenv';
-import FileWatcher from './util/FileWatcher';
+//import FileWatcher from './util/FileWatcher';
 import http from 'http';
 import WebClient from './WebClient';
 dotenv.config();
 import { COOLDOWN_MS } from './config';
-FileWatcher();
+//FileWatcher();
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const intents = [

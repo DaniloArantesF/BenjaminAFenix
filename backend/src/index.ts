@@ -1,5 +1,5 @@
 import express from 'express';
-import Bot from './Bot';
+import Bot from './bot';
 import http from 'http';
 import cors from 'cors';
 import DiscordClient from './DiscordClient';
@@ -38,9 +38,12 @@ class App {
     this.express.use(express.urlencoded({ extended: true }));
     this.express.use(express.json());
     this.express.use(cors());
-    this.express.options('*', cors({
-      origin: []
-    }));
+    this.express.options(
+      '*',
+      cors({
+        origin: [],
+      })
+    );
     this.express.use(morgan('dev'));
     this.express.use(
       rateLimit({

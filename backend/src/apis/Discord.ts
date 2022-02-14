@@ -1,7 +1,6 @@
 import { Router, Request, Response } from 'express';
 import axios, { AxiosResponse } from 'axios';
 import DiscordClient from '../DiscordClient';
-import { GuildChannel } from 'discord.js/typings/index.js';
 import { DISCORD_API_BASE_URL } from '../config';
 require('dotenv').config();
 
