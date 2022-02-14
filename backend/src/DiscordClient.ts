@@ -1,6 +1,5 @@
 import fs from 'fs';
 import {
-  Channel,
   Client,
   Collection,
   Guild,

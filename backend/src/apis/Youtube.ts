@@ -141,13 +141,18 @@ class YoutubeAPI {
 
   public async search(req: Request, res: Response) {
     const searchQuery = req.query.q as string;
-    let itemCount = Number(req.query.resultsCount as string) || 5;
+    const itemCount = Number(req.query.resultsCount as string) || 5;
 
     if (!searchQuery) {
       return res.sendStatus(400);
     }
-    const items = await searchYoutube(searchQuery, itemCount);
-    return res.send({ items });
+
+    try {
+      const items = await searchYoutube(searchQuery, itemCount);
+      return res.send({ items });
+    } catch (error) {
+      return res.sendStatus(error?.response?.status ?? 500);
+    }
   }
 
   public async getItem(req: Request, res: Response) {
@@ -156,8 +161,12 @@ class YoutubeAPI {
       return res.sendStatus(400);
     }
 
-    const item = await getYoutubeItem(itemId);
-    return res.send({ item });
+    try {
+      const item = await getYoutubeItem(itemId);
+      return res.send({ item });
+    } catch (error) {
+      return res.sendStatus(error?.response?.status ?? 500);
+    }
   }
 }
 

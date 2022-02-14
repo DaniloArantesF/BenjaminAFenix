@@ -60,7 +60,7 @@ class Auth {
         expiresIn,
       });
     } catch (error) {
-      return res.sendStatus(403);
+      return res.sendStatus(error?.response?.status ?? 500);
     }
   }
 
@@ -93,7 +93,7 @@ class Auth {
         expiresIn: authRes.data.expires_in
       });
     } catch (error) {
-      return res.sendStatus(403);
+      return res.sendStatus(error?.response?.status ?? 500);
     }
   }
 }

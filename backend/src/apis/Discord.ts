@@ -51,17 +51,23 @@ class DiscordAPI {
 
   public async getDiscordUser(req: Request, res: Response) {
     const accessToken = req.query.accessToken;
-    const userRes: AxiosResponse<DiscordUserResponse> = await axios.get(
-      `${DISCORD_API_BASE_URL}/users/@me`,
-      {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    if (!accessToken) return res.sendStatus(401);
 
-    const { id, username, avatar } = userRes.data;
-    return res.send({ id, username, avatar });
+    try {
+      const userRes: AxiosResponse<DiscordUserResponse> = await axios.get(
+        `${DISCORD_API_BASE_URL}/users/@me`,
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const { id, username, avatar } = userRes.data;
+      return res.send({ id, username, avatar });
+    } catch (error) {
+      return res.sendStatus(error?.response?.status ?? 500);
+    }
   }
 
   public async getUserConnection(req: Request, res: Response) {
@@ -71,8 +77,12 @@ class DiscordAPI {
     if (!id) return res.sendStatus(400);
 
     // get current guild & channel the user is connected to
-    const connection = this.client.getUserCurrentGuild(id);
-    return res.send(connection);
+    try {
+      const connection = this.client.getUserCurrentGuild(id);
+      return res.send(connection);
+    } catch (error) {
+      return res.sendStatus(error?.response?.status ?? 500);
+    }
   }
 
   public async getUserGuilds(req: Request, res: Response) {
@@ -103,7 +113,7 @@ class DiscordAPI {
       });
       return res.send({ guilds });
     } catch (error) {
-      return res.sendStatus(401);
+      return res.sendStatus(error?.response?.status ?? 500);
     }
   }
 
@@ -112,11 +122,15 @@ class DiscordAPI {
     if (!guildId) return res.sendStatus(400);
     if (!this.client) return res.sendStatus(500);
 
-    const data = this.client.getGuildVoiceChannels(guildId);
-
-    return res.send({
-      channels: data,
-    });
+    try {
+      const data = this.client.getGuildVoiceChannels(guildId);
+      return res.send({
+        channels: data,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.sendStatus(error?.response?.status ?? 500);
+    }
   }
 }
 
