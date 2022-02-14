@@ -5,8 +5,8 @@ import { convertISODurationToMS } from '../util/time';
 import { Router, Request, Response } from 'express';
 import DiscordClient from '../DiscordClient';
 
-const APIKEY = process.env.APIKEY;
-const youtube = google.youtube({ version: 'v3', auth: APIKEY });
+const YT_API_KEY = process.env.YT_API_KEY;
+const youtube = google.youtube({ version: 'v3', auth: YT_API_KEY });
 
 /**
  * Wrapper function for Yotube search API

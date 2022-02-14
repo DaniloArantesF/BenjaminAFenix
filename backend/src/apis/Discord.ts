@@ -1,8 +1,8 @@
 import { Router, Request, Response } from 'express';
 import axios, { AxiosResponse } from 'axios';
 import DiscordClient from '../DiscordClient';
-import logger from '../Logger';
 import { GuildChannel } from 'discord.js/typings/index.js';
+import { DISCORD_API_BASE_URL } from '../config';
 require('dotenv').config();
 
 const clientId = process.env.DISCORD_CLIENT_ID;
@@ -52,7 +52,7 @@ class DiscordAPI {
   public async getDiscordUser(req: Request, res: Response) {
     const accessToken = req.query.accessToken;
     const userRes: AxiosResponse<DiscordUserResponse> = await axios.get(
-      'https://discord.com/api/users/@me',
+      `${DISCORD_API_BASE_URL}/users/@me`,
       {
         headers: {
           authorization: `Bearer ${accessToken}`,
@@ -81,7 +81,7 @@ class DiscordAPI {
 
     try {
       const guildsRes: AxiosResponse<GuildData[]> = await axios.get(
-        'https://discord.com/api/users/@me/guilds',
+        `${DISCORD_API_BASE_URL}/users/@me/guilds`,
         {
           headers: {
             authorization: `Bearer ${accessToken}`,
@@ -103,11 +103,7 @@ class DiscordAPI {
       });
       return res.send({ guilds });
     } catch (error) {
-      logger.error({
-        function: 'getUserGuilds',
-        error: error.data,
-      });
-      return res.status(401);
+      return res.sendStatus(401);
     }
   }
 

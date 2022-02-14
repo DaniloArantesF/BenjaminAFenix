@@ -187,7 +187,7 @@ class WebClient {
     const { player } = this.connections.get(guildId);
     player.queueController.setPosition(position);
     const track = player.queueController.getTrack();
-
+// TODO: HANDLE NULL TRACK
     this.server
     .to(guildId)
     .emit('log_message', {

@@ -12,7 +12,6 @@ import QueueController from './QueueController';
 import { getYoutubeUrl } from './apis/Youtube';
 import { Message } from 'discord.js';
 import { EventBus } from './EventBus';
-import logger from './Logger';
 
 /**
  * Manages player state and holds queue controller
@@ -170,10 +169,6 @@ class PlayerController extends AudioPlayer {
       this.play(resource);
     } catch (error) {
       console.error(error);
-      // logger.error({
-      //   function: 'playCurrentItem',
-      //   error: error.data.error,
-      // });
     }
   }
 

@@ -1,12 +1,11 @@
-import { CommandInteraction, Intents, WebhookClient } from 'discord.js';
+import { CommandInteraction, Intents } from 'discord.js';
 import DiscordClient from './DiscordClient';
 import dotenv from 'dotenv';
 import FileWatcher from './util/FileWatcher';
 import http from 'http';
-import { EventBus } from './EventBus';
 import WebClient from './WebClient';
 dotenv.config();
-import config from './config';
+import { COOLDOWN_MS } from './config';
 FileWatcher();
 
 const TOKEN = process.env.DISCORD_TOKEN;
@@ -36,7 +35,7 @@ const Bot = (server: http.Server) => {
     try {
       const user = interaction.member.user.id;
       const lastInteraction = cooldown.get(user) ?? -1;
-      const timeLeft = lastInteraction === -1 ? 0 : (lastInteraction + config.COOLDOWN_MS) - Date.now();
+      const timeLeft = lastInteraction === -1 ? 0 : (lastInteraction + COOLDOWN_MS) - Date.now();
 
       if (timeLeft > 0) {
         // User is in cooldown

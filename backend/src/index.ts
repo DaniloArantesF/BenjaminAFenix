@@ -8,9 +8,8 @@ import DiscordAPI from './apis/Discord';
 import YoutubeAPI from './apis/Youtube';
 import BotAPI from './apis/';
 import rateLimit from 'express-rate-limit';
-import expressPinoLogger from 'express-pino-logger';
-import logger from './Logger';
-import config from './config';
+import { PORT } from './config';
+import morgan from 'morgan';
 
 class App {
   public express: express.Application;
@@ -30,8 +29,8 @@ class App {
     DiscordAPI.setClient(this.bot);
     BotAPI.setClient(this.bot);
 
-    this.server.listen(config.PORT, () => {
-      console.log(`Server listening at ${config.PORT}`);
+    this.server.listen(PORT, () => {
+      console.log(`Server listening at ${PORT}`);
     });
   }
 
@@ -39,18 +38,18 @@ class App {
     this.express.use(express.urlencoded({ extended: true }));
     this.express.use(express.json());
     this.express.use(cors());
-    this.express.options('*', cors());
-    this.express.use(rateLimit({
-      windowMs: 1000,
-      max: 10,
-      message: 'Exceeded 10 requests/s',
-      headers: true,
+    this.express.options('*', cors({
+      origin: []
     }));
-    // TODO: change in prod
-    // this.express.use(expressPinoLogger({
-    //   logger,
-    //   useLevel: 'http'
-    // }));
+    this.express.use(morgan('dev'));
+    this.express.use(
+      rateLimit({
+        windowMs: 1000,
+        max: 10,
+        message: 'Exceeded 10 requests/s',
+        headers: true,
+      })
+    );
   }
 
   private routes() {
