@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { clearCredentials, fetchCredentials, selectAuth } from '../../app/authSlice';
+import { clearCredentials, fetchCredentials, selectAuth, selectError } from '../../app/authSlice';
 import classes from './Login.module.css';
 import { ReactComponent as Background } from '../../assets/Background.svg';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
@@ -19,7 +19,8 @@ export const BOT_INVITE_URL =
 
 const Login = () => {
   const history = useHistory();
-  const { accessToken, error } = useAppSelector(selectAuth);
+  const { accessToken } = useAppSelector(selectAuth);
+  const error = useAppSelector(selectError);
   const dispatch = useAppDispatch();
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,6 @@ const Login = () => {
   useEffect(() => {
     if (!window) return;
     const param = new URLSearchParams(window.location.search).get('code');
-
     if (param) {
       setCode(param);
     }
@@ -56,6 +56,7 @@ const Login = () => {
   useEffect(() => {
     if (error) {
       // Remove invalid code from url and reset btns
+      console.error(error);
       dispatch(clearCredentials());
       setLoading(false);
       history.push('/login');

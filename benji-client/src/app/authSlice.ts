@@ -2,6 +2,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { AppState } from './store';
 
+export interface Error {
+  message: string;
+  code: number;
+  redirect_path?: string;
+}
+
 export interface AuthState {
   id: string;
   avatar: string;
@@ -10,7 +16,7 @@ export interface AuthState {
   refreshToken: string;
   refreshTimeout?: NodeJS.Timeout;
   expiration: number;
-  error: any;
+  error: Error | null;
 }
 
 export interface ErrorPayload {
@@ -45,9 +51,7 @@ export const fetchCredentials = createAsyncThunk(
         expiration: Date.now() + expiresIn * 1000,
       };
     } catch (err) {
-      let error = err as any;
-      const { data, status } = error;
-      return rejectWithValue({ error: 'Invalid Code!' });
+      return rejectWithValue({ code: 400, message: 'Invalid Code!', redirect_path: '/login' });
     }
   }
 );
@@ -70,8 +74,7 @@ export const refreshCredentials = createAsyncThunk(
         expiration: Date.now() + expiresIn * 1000,
       };
     } catch (error) {
-      console.error('Error refreshing tokens');
-      return rejectWithValue(error);
+      rejectWithValue({ code: 401, message: 'Error refreshing tokens', redirect_path: '/login' });
     }
   }
 );
@@ -82,7 +85,7 @@ export const authSlice = createSlice({
   reducers: {
     clearCredentials: (state) => {
       localStorage.clear();
-      return { ...initialState, accessToken: '', refreshToken: '', };
+      return { ...initialState, accessToken: '', refreshToken: '', error: null };
     },
     setUser: (state, { payload }) => {
       localStorage.setItem('id', payload.id);
@@ -120,12 +123,14 @@ export const authSlice = createSlice({
       state.error = null;
     });
     builder.addCase(fetchCredentials.rejected, (state, { payload }) => {
+      const { code, message, redirect_path } = payload as Error;
       if (payload) {
-        state.error = payload;
+        state.error = { code, message, redirect_path};
       }
     });
 
     builder.addCase(refreshCredentials.fulfilled, (state, { payload }) => {
+      if (!payload) return;
       state.accessToken = payload.accessToken;
       state.refreshToken = payload.refreshToken;
       state.expiration = payload.expiration;
@@ -135,8 +140,11 @@ export const authSlice = createSlice({
       localStorage.setItem('expiration', `${payload.expiration}`);
     });
 
-    builder.addCase(refreshCredentials.rejected, (state, { error }) => {
-      state.error = 'Error refreshing credentials';
+    builder.addCase(refreshCredentials.rejected, (state, { payload }) => {
+      const { code, message, redirect_path } = payload as Error;
+      if (payload) {
+        state.error = { code, message, redirect_path};
+      }
     });
   },
 });

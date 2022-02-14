@@ -26,9 +26,10 @@ class Auth {
   public async getAccessToken(req: Request, res: Response) {
     const code = req.body?.code;
     if (!code) {
+      console.log("no token")
       return res.sendStatus(400);
     }
-
+    console.log("alalalalalalal", code)
     try {
       const authRes: AxiosResponse<DiscordTokenResponse> = await axios.post(
         `${DISCORD_API_BASE_URL}/oauth2/token`,
@@ -53,13 +54,14 @@ class Auth {
         expires_in: expiresIn,
         refresh_token: refreshToken,
       } = authRes.data;
-
+      console.log("here")
       res.send({
         accessToken,
         refreshToken,
         expiresIn,
       });
     } catch (error) {
+      //console.log(error.response.data)
       return res.sendStatus(error?.response?.status ?? 500);
     }
   }

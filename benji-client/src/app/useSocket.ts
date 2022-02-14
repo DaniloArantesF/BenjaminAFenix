@@ -11,7 +11,7 @@ import {
 } from './dashboardSlice';
 import { QueueState, selectRepeat, selectShuffle, setQueue, setRepeat, setShuffle } from './queueSlice';
 import { Track } from '../types';
-import { selectAuth } from './authSlice';
+import { selectAuth, setError } from './authSlice';
 import {
   resetPlayer,
   selectPlayerState,
@@ -92,6 +92,7 @@ const useSocket = () => {
       );
       return true;
     } catch (error) {
+      dispatch(setError({ code: 503, message: 'Bot is offline or not responding.', redirect_path: '/offline' }));
       return false;
     }
   };

@@ -112,7 +112,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (error) {
-      history.push('/offline');
+      history.push(error.redirect_path ?? '/login');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);

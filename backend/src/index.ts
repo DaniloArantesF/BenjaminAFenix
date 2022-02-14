@@ -8,7 +8,7 @@ import DiscordAPI from './apis/Discord';
 import YoutubeAPI from './apis/Youtube';
 import BotAPI from './apis/';
 import rateLimit from 'express-rate-limit';
-import { PORT } from './config';
+import { PORT, CLIENT_URL } from './config';
 import morgan from 'morgan';
 
 class App {
@@ -41,7 +41,8 @@ class App {
     this.express.options(
       '*',
       cors({
-        origin: [],
+        origin: [CLIENT_URL],
+        methods: [ 'GET', 'POST' ]
       })
     );
     this.express.use(morgan('dev'));
