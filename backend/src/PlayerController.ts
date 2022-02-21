@@ -164,6 +164,7 @@ class PlayerController extends AudioPlayer {
         inlineVolume: true, // Creates volume transformer allowing volume settings
       });
       this.resource = resource;
+      this.volume = Math.min(Math.max(this.volume, 0.0), 1.0);
       resource.volume.setVolumeLogarithmic(this.volume);
       this.status = AudioPlayerStatus.Playing;
       this.play(resource);
@@ -175,6 +176,8 @@ class PlayerController extends AudioPlayer {
   public setVolume = (volume: number) => {
     this.volume = volume;
     if (this.resource) {
+      // Clamp volume in case value is not normalized
+      volume = Math.min(Math.max(volume, 0.0), 1.0);
       this.resource.volume.setVolumeLogarithmic(volume);
     }
   }

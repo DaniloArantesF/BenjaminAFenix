@@ -211,6 +211,7 @@ const useSocket = () => {
 
   const setVolume = (volume: number) => {
     if (!currentGuild) return;
+    volume = volume / 100;
     socket?.emit('volume', { volume });
   };
 
