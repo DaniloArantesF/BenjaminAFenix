@@ -2,7 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import Inspector from 'inspector-api';
 
-const PORT = 3001;
+const PORT = 8001;
 
 const Profiler = async () => {
   const app = express();
@@ -35,4 +35,4 @@ const Profiler = async () => {
   })
 };
 
-export default Profiler;
+export default () => Profiler();

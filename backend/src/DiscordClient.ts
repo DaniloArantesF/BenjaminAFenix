@@ -129,7 +129,13 @@ class DiscordClient extends Client {
     channelId: string
   ): Promise<DiscordConnection | null> => {
     try {
-      this.disconnect(guild.id);
+      // Cleanup old connection and transfer queue
+      if (this.connections.get(guild?.id)?.connection) {
+        const oldConnection = this.connections.get(guild.id);
+        if (oldConnection.channel.id === channelId) return this.connections.get(guild?.id);
+
+        this.disconnect(guild.id);
+      }
 
       const connection = joinVoiceChannel({
         channelId,
@@ -304,7 +310,7 @@ class DiscordClient extends Client {
   public disconnect = (guildId: string) => {
     const connection = this.connections.get(guildId);
     if (!connection) return;
-    clearInterval(connection.player.playerInterval);
+    clearInterval(connection?.player?.playerInterval);
     connection.player.stop();
     connection.player = null;
     connection.connection.destroy();

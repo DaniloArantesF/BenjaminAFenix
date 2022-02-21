@@ -197,11 +197,13 @@ class WebClient {
   };
 
   public requestTrack = (socket: Socket, payload: any) => {
-    const track: Track = payload.track;
+    const track: Track = payload?.track;
+    if (!track) return;
+    if (!this.webClients.has(socket.id)) {
+      // TODO: send error payload and redirect client
+      return console.error('Web client not found', payload);
+    }
     const { username, guildId } = this.webClients.get(socket.id);
-    if (!guildId) return console.error('Web client not found', payload);
-
-    // console.info(`Pushing ${JSON.stringify(track, null, 2)} to ${guildId}`);
     const { player } = this.connections.get(guildId);
     player.queueController.pushItem(track);
 
