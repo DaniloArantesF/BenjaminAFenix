@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
-import { setError } from '../app/authSlice';
+import { selectToken, setError } from '../app/authSlice';
 import { Channel, Guild } from '../app/dashboardSlice';
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 
 const useDiscord = () => {
   const dispatch = useAppDispatch();
+  const token = useAppSelector(selectToken);
 
   // TODO: send auth
   const getGuildVoiceChannels = async (guildId: string) => {
@@ -12,7 +13,7 @@ const useDiscord = () => {
       const res: AxiosResponse<any> = await axios.get(
         `${process.env.REACT_APP_BOT_HOSTNAME}/discord/channels`,
         {
-          params: { guildId },
+          params: { guildId, token },
         }
       );
       return res.data.channels;

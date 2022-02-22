@@ -22,6 +22,7 @@ const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
       setUptime(getUptime(channel?.timestamp ?? 0));
     }, 1000);
 
+    document.title = `Benji @ ${channel?.name}`
     return () => {
       if (interval)
         clearInterval(interval);

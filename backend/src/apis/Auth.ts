@@ -75,7 +75,7 @@ class Auth {
           },
         }
       );
-
+      console.log(userRes.data);
       const { id, username, avatar } = userRes.data;
       const token = jwt.sign(
         {

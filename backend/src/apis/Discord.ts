@@ -122,11 +122,13 @@ class DiscordAPI {
   // TODO: CHECK AUTH HERE
   public async getGuildVoiceChannels(req: Request, res: Response) {
     const guildId = req.query.guildId as string;
+    if (!req.query.token) return res.sendStatus(401);
+    const { userId } = jwt.decode(req.query.token as string) as TokenPayload;
     if (!guildId) return res.sendStatus(400);
     if (!this.client) return res.sendStatus(500);
 
     try {
-      const data = this.client.getGuildVoiceChannels(guildId);
+      const data = await this.client.getGuildVoiceChannels(guildId, userId);
       return res.send({
         channels: data,
       });

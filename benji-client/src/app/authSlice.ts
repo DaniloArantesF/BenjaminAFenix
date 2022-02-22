@@ -162,4 +162,5 @@ export const { clearCredentials, setUser, setCredentials, setRefreshTimeout, set
 export const selectAuth = (state: AppState) => state.auth;
 export const selectError = (state: AppState) => state.auth.error;
 export const selectRefreshTimeout = (state: AppState) => state.auth.refreshTimeout;
+export const selectToken = (state: AppState) => state.auth.token;
 export default authSlice.reducer;

@@ -266,19 +266,24 @@ class DiscordClient extends Client {
     });
   }
 
-  public getGuildVoiceChannels = (guildId: string) => {
+  public getGuildVoiceChannels = async (guildId: string, userId: string) => {
     // Check if bot is present in this guild
     if (!this.guilds.cache.get(guildId)) {
       return [];
     }
 
+    const user = await this.guilds.cache.get(guildId).members.fetch(userId);
+    const filteredChannels = this.guilds.cache.get(guildId).channels.cache.filter((c) => c.permissionsFor(user).has("VIEW_CHANNEL"))
+
     const channels = [
-      ...this.guilds.cache.get(guildId).channels.cache.map((i) => i),
+      ...filteredChannels.map((i) => i)
     ] as GuildChannel[];
     const voiceChannels = channels.filter((curChannel) => {
       return curChannel.isVoice();
     });
-    const data = voiceChannels.map(({ type, id, name, members }) => {
+
+    const data = voiceChannels.map((channel) => {
+      const { type, id, name, members } = channel;
       let onlineCount = members.size;
       // Dont count bot in users online
       if (members.get(this.user.id)) {
