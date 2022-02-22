@@ -94,7 +94,10 @@
   width: 300px;
   grid-template-rows: 1fr auto;
   align-items: flex-end;
-  row-gap: 1em;
+}
+
+#preview {
+  margin-top: 0.5em;
 }
 
 @media screen and (max-width: 800px) {

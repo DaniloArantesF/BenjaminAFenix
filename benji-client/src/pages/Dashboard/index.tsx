@@ -136,9 +136,6 @@ const Dashboard = () => {
       const avatar = localStorage.getItem('avatar');
       const username = localStorage.getItem('username');
       dispatch(setUser({ id, avatar, username }));
-    } else {
-      //const userData = await getUserData(token);
-      //dispatch(setUser(userData));
     }
 
     // Get user guilds

@@ -9,6 +9,7 @@
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-light);
   overflow: hidden;
+  margin-top: 1em;
 }
 
 .track__thumbnail {

@@ -7,7 +7,6 @@ const useDiscord = () => {
   const dispatch = useAppDispatch();
   const token = useAppSelector(selectToken);
 
-  // TODO: send auth
   const getGuildVoiceChannels = async (guildId: string) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
