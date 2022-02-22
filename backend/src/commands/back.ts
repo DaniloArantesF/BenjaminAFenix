@@ -1,5 +1,4 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { AudioPlayerStatus } from '@discordjs/voice';
 import { Command } from '../DiscordClient';
 
 export const command: Command = {

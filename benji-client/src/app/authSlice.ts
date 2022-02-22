@@ -1,6 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 import type { AppState } from './store';
+
+export interface TokenPayload {
+  userId: string;
+  username: string;
+  avatar: string;
+  accessToken: string;
+  refreshToken: string;
+  iat: number;
+  exp: number;
+}
 
 export interface Error {
   message: string;
@@ -17,6 +28,7 @@ export interface AuthState {
   refreshTimeout?: NodeJS.Timeout;
   expiration: number;
   error: Error | null;
+  token: string;
 }
 
 export interface ErrorPayload {
@@ -29,6 +41,7 @@ const initialState: AuthState = {
   username: localStorage.getItem('username') || '',
   accessToken: localStorage.getItem('accessToken') || '',
   refreshToken: localStorage.getItem('refreshToken') || '',
+  token: localStorage.getItem('token') || '',
   expiration: 0,
   error: null,
 };
@@ -39,16 +52,20 @@ export const fetchCredentials = createAsyncThunk(
   async (code: string, { rejectWithValue }) => {
     try {
       const { data } = (await axios.post(
-        `${process.env.REACT_APP_BOT_HOSTNAME}/auth/code`,
+        `${process.env.REACT_APP_BOT_HOSTNAME}/auth/login`,
         {
           code,
         }
       )) as any;
-      const expiresIn = data.expiresIn;
+
+      const token = data.token;
+      const decoded = jwtDecode(token) as any;
+
       return {
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-        expiration: Date.now() + expiresIn * 1000,
+        token,
+        accessToken: decoded.accessToken,
+        refreshToken: decoded.refreshToken,
+        expiration: decoded.exp * 1000,
       };
     } catch (err) {
       return rejectWithValue({ code: 400, message: 'Invalid Code!', redirect_path: '/login' });
@@ -58,20 +75,21 @@ export const fetchCredentials = createAsyncThunk(
 
 export const refreshCredentials = createAsyncThunk(
   'refresh',
-  async (refreshToken: string, { rejectWithValue }) => {
+  async (token: string, { rejectWithValue }) => {
     try {
       const { data } = (await axios.post(
         `${process.env.REACT_APP_BOT_HOSTNAME}/auth/refresh`,
         {
-          refreshToken,
+          token,
         }
       )) as any;
-
-      const expiresIn = data.expiresIn;
+      const newToken = data.token;
+      const decoded = jwtDecode(newToken) as any;
       return {
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-        expiration: Date.now() + expiresIn * 1000,
+        token: newToken,
+        accessToken: decoded.accessToken,
+        refreshToken: decoded.refreshToken,
+        expiration: decoded.exp * 1000,
       };
     } catch (error) {
       rejectWithValue({ code: 401, message: 'Error refreshing tokens', redirect_path: '/login' });
@@ -116,7 +134,9 @@ export const authSlice = createSlice({
       state.accessToken = payload.accessToken;
       state.refreshToken = payload.refreshToken;
       state.expiration = payload.expiration;
-
+      state.token = payload.token;
+      
+      localStorage.setItem('token', payload.token);
       localStorage.setItem('accessToken', payload.accessToken);
       localStorage.setItem('refreshToken', payload.refreshToken);
       localStorage.setItem('expiration', `${payload.expiration}`);
@@ -134,7 +154,9 @@ export const authSlice = createSlice({
       state.accessToken = payload.accessToken;
       state.refreshToken = payload.refreshToken;
       state.expiration = payload.expiration;
+      state.token = payload.token;
 
+      localStorage.setItem('token', payload.token);
       localStorage.setItem('accessToken', payload.accessToken);
       localStorage.setItem('refreshToken', payload.refreshToken);
       localStorage.setItem('expiration', `${payload.expiration}`);
@@ -153,4 +175,5 @@ export const { clearCredentials, setUser, setCredentials, setRefreshTimeout, set
   authSlice.actions;
 export const selectAuth = (state: AppState) => state.auth;
 export const selectError = (state: AppState) => state.auth.error;
+export const selectRefreshTimeout = (state: AppState) => state.auth.refreshTimeout;
 export default authSlice.reducer;

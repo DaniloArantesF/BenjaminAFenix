@@ -7,7 +7,7 @@ require('dotenv').config();
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 
-interface DiscordUserResponse {
+export interface DiscordUserResponse {
   id: string;
   username: string;
   avatar: string;

@@ -1,11 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
-import { selectError, setError } from '../app/authSlice';
+import { setError } from '../app/authSlice';
 import { Channel, Guild } from '../app/dashboardSlice';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useAppDispatch } from '../app/hooks';
 
 const useDiscord = () => {
   const dispatch = useAppDispatch();
-  const error = useAppSelector(selectError);
 
   const getGuildVoiceChannels = async (guildId: string) => {
     try {

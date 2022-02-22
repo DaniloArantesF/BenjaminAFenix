@@ -47,6 +47,8 @@ const Dashboard = () => {
     refreshToken,
     expiration,
     id: userId,
+    refreshTimeout,
+    token
   } = useAppSelector(selectAuth);
   const { currentTrack } = useAppSelector(selectPlayerState);
   const { windowWidth } = useAppSelector(selectDashboard);
@@ -92,21 +94,22 @@ const Dashboard = () => {
    * A new interval will be set when the expiration is updated.
    */
   useEffect(() => {
+    if (expiration === 0 || !accessToken) return;
     const expiresIn = expiration - Date.now(); // Time in ms until expiration
-    const refresh = () => {
-      //console.log('Refreshing tokens...');
-      dispatch(refreshCredentials(refreshToken));
-    };
 
     // Refresh right away
     if (expiresIn < 0) {
-      return refresh();
+      return refreshTokens();
     }
-    const interval = setTimeout(
-      refresh,
-      expiresIn - 5 * 60 * 1000 // refresh token 5 min before
-    );
-    dispatch(setRefreshTimeout(interval));
+
+    if (!refreshTimeout) {
+      const interval = setTimeout(
+        refreshTokens,
+        expiresIn - (5 * 60 * 1000) // refresh token 5 min before
+      );
+      dispatch(setRefreshTimeout(interval));
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expiration]);
 
@@ -148,6 +151,10 @@ const Dashboard = () => {
     // Restore guild from last session
     const lastGuild: Guild = JSON.parse(localStorage.getItem('guild') || '{}');
     if (lastGuild?.id) dispatch(setCurrentGuild(lastGuild));
+  };
+
+  const refreshTokens = () => {
+    dispatch(refreshCredentials(token));
   };
 
   if (!active) return <InactiveGuild joinChannel={joinChannel} />;
