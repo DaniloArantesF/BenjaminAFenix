@@ -23,8 +23,6 @@ export interface AuthState {
   id: string;
   avatar: string;
   username: string;
-  accessToken: string;
-  refreshToken: string;
   refreshTimeout?: NodeJS.Timeout;
   expiration: number;
   error: Error | null;
@@ -36,11 +34,9 @@ export interface ErrorPayload {
 }
 
 const initialState: AuthState = {
-  id: localStorage.getItem('id') || '',
-  avatar: localStorage.getItem('avatar') || '',
-  username: localStorage.getItem('username') || '',
-  accessToken: localStorage.getItem('accessToken') || '',
-  refreshToken: localStorage.getItem('refreshToken') || '',
+  id: '',
+  avatar: '',
+  username: '',
   token: localStorage.getItem('token') || '',
   expiration: 0,
   error: null,
@@ -63,8 +59,6 @@ export const fetchCredentials = createAsyncThunk(
 
       return {
         token,
-        accessToken: decoded.accessToken,
-        refreshToken: decoded.refreshToken,
         expiration: decoded.exp * 1000,
       };
     } catch (err) {
@@ -87,8 +81,6 @@ export const refreshCredentials = createAsyncThunk(
       const decoded = jwtDecode(newToken) as any;
       return {
         token: newToken,
-        accessToken: decoded.accessToken,
-        refreshToken: decoded.refreshToken,
         expiration: decoded.exp * 1000,
       };
     } catch (error) {
@@ -103,7 +95,7 @@ export const authSlice = createSlice({
   reducers: {
     clearCredentials: (state) => {
       localStorage.clear();
-      return { ...initialState, accessToken: '', refreshToken: '', error: null };
+      return { ...initialState, token: '', error: null };
     },
     setUser: (state, { payload }) => {
       localStorage.setItem('id', payload.id);
@@ -112,9 +104,11 @@ export const authSlice = createSlice({
       return { ...state, ...payload };
     },
     setCredentials: (state, { payload }) => {
-      state.accessToken = payload.accessToken;
-      state.refreshToken = payload.refreshToken;
-      return state;
+      const { userId, avatar, username } = jwtDecode(payload.token) as TokenPayload;
+      localStorage.setItem('id', userId);
+      localStorage.setItem('avatar', avatar);
+      localStorage.setItem('username', username);
+      return { ...state, token: payload.token, id: userId, avatar, username };
     },
     setRefreshTimeout: (state, { payload }) => {
       if (state.refreshTimeout) {
@@ -131,14 +125,10 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     // Builder callback is used as it provides correctly typed reducers from action creators
     builder.addCase(fetchCredentials.fulfilled, (state, { payload }) => {
-      state.accessToken = payload.accessToken;
-      state.refreshToken = payload.refreshToken;
       state.expiration = payload.expiration;
       state.token = payload.token;
-      
+
       localStorage.setItem('token', payload.token);
-      localStorage.setItem('accessToken', payload.accessToken);
-      localStorage.setItem('refreshToken', payload.refreshToken);
       localStorage.setItem('expiration', `${payload.expiration}`);
       state.error = null;
     });
@@ -151,14 +141,10 @@ export const authSlice = createSlice({
 
     builder.addCase(refreshCredentials.fulfilled, (state, { payload }) => {
       if (!payload) return;
-      state.accessToken = payload.accessToken;
-      state.refreshToken = payload.refreshToken;
       state.expiration = payload.expiration;
       state.token = payload.token;
 
       localStorage.setItem('token', payload.token);
-      localStorage.setItem('accessToken', payload.accessToken);
-      localStorage.setItem('refreshToken', payload.refreshToken);
       localStorage.setItem('expiration', `${payload.expiration}`);
     });
 

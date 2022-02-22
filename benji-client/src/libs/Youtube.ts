@@ -11,7 +11,7 @@ export const getYoutubeItem = async (itemId: string) => {
     );
     return res.data.item;
   } catch (error) {
-    console.error('Error getting user guilds');
+    console.error('Error fetching item');
     return {
       channelId: '',
       channelTitle: '',

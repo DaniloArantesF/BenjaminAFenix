@@ -3,8 +3,8 @@ import Queue from '../../components/Queue/Queue';
 import YoutubeEmbed from '../../components/YoutubeEmbed/YoutubeEmbed';
 import Navbar from '../../components/Navbar/Navbar';
 import Search from '../../components/Search/Search';
-import { useEffect, useRef, useState } from 'react';
-import { selectItems, selectPosition } from '../../app/queueSlice';
+import { useEffect, useState } from 'react';
+import { selectItems, } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   selectAuth,
@@ -43,8 +43,6 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
   const {
-    accessToken,
-    refreshToken,
     expiration,
     id: userId,
     refreshTimeout,
@@ -67,12 +65,12 @@ const Dashboard = () => {
     setVolume,
     leaveChannel,
   } = useSocket();
-  const { active, currentGuild, channels } = useAppSelector(selectDashboard);
+  const { active } = useAppSelector(selectDashboard);
   const [channelSelectionActive, setChannelSelectionActive] = useState(false);
   const { getUserData, getUserGuilds } = useDiscordAPI();
   const error = useAppSelector(selectError);
   useEffect(() => {
-    if (!accessToken) {
+    if (!token) {
       history.push('/login');
     }
     if (window) {
@@ -94,7 +92,7 @@ const Dashboard = () => {
    * A new interval will be set when the expiration is updated.
    */
   useEffect(() => {
-    if (expiration === 0 || !accessToken) return;
+    if (expiration === 0 || !token) return;
     const expiresIn = expiration - Date.now(); // Time in ms until expiration
 
     // Refresh right away
@@ -122,16 +120,15 @@ const Dashboard = () => {
 
   const init = async () => {
     // Check that token is present
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
+    const token = localStorage.getItem('token');
 
     // Redirect to login if not
-    if (!accessToken || !refreshToken) {
+    if (!token) {
       return history.push('/login');
     }
 
     // Set credentials
-    dispatch(setCredentials({ accessToken, refreshToken }));
+    dispatch(setCredentials({ token }));
 
     // Set user Data
     if (localStorage.getItem('username')) {
@@ -140,12 +137,12 @@ const Dashboard = () => {
       const username = localStorage.getItem('username');
       dispatch(setUser({ id, avatar, username }));
     } else {
-      const userData = await getUserData(accessToken);
-      dispatch(setUser(userData));
+      //const userData = await getUserData(token);
+      //dispatch(setUser(userData));
     }
 
     // Get user guilds
-    const userGuilds = await getUserGuilds(accessToken);
+    const userGuilds = await getUserGuilds(token);
     dispatch(setUserGuilds(userGuilds));
 
     // Restore guild from last session

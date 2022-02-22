@@ -3,6 +3,8 @@ import axios, { AxiosResponse } from 'axios';
 import DiscordClient from '../DiscordClient';
 import { DISCORD_API_BASE_URL } from '../config';
 require('dotenv').config();
+import jwt from 'jsonwebtoken';
+import { TokenPayload } from './Auth';
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
@@ -49,9 +51,10 @@ class DiscordAPI {
   }
 
   public async getDiscordUser(req: Request, res: Response) {
-    const accessToken = req.query.accessToken;
-    if (!accessToken) return res.sendStatus(401);
+    const token = req.query.token as string;
+    if (!token) return res.sendStatus(401);
 
+    const { accessToken } = jwt.decode(token) as TokenPayload;
     try {
       const userRes: AxiosResponse<DiscordUserResponse> = await axios.get(
         `${DISCORD_API_BASE_URL}/users/@me`,
@@ -70,14 +73,13 @@ class DiscordAPI {
   }
 
   public async getUserConnection(req: Request, res: Response) {
-    const accessToken = req.query.accessToken;
-    const id = req.query.id as string;
-    if (!accessToken) return res.sendStatus(401);
-    if (!id) return res.sendStatus(400);
+    const token = req.query.token as string;
+    if (!token) return res.sendStatus(401);
 
+    const { userId } = jwt.decode(token) as TokenPayload;
     // get current guild & channel the user is connected to
     try {
-      const connection = this.client.getUserCurrentGuild(id);
+      const connection = this.client.getUserCurrentGuild(userId);
       return res.send(connection);
     } catch (error) {
       return res.sendStatus(error?.response?.status ?? 500);
@@ -85,9 +87,10 @@ class DiscordAPI {
   }
 
   public async getUserGuilds(req: Request, res: Response) {
-    const accessToken = req.query.accessToken;
-    if (!accessToken) return res.sendStatus(401);
+    const token = req.query.token as string;
+    if (!token) return res.sendStatus(401);
 
+    const { accessToken } = jwt.decode(token) as TokenPayload;
     try {
       const guildsRes: AxiosResponse<GuildData[]> = await axios.get(
         `${DISCORD_API_BASE_URL}/users/@me/guilds`,
@@ -116,6 +119,7 @@ class DiscordAPI {
     }
   }
 
+  // TODO: CHECK AUTH HERE
   public async getGuildVoiceChannels(req: Request, res: Response) {
     const guildId = req.query.guildId as string;
     if (!guildId) return res.sendStatus(400);

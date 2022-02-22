@@ -85,7 +85,7 @@ class Auth {
           accessToken,
           refreshToken,
         }, process.env.JWT_SECRET_KEY,
-        { expiresIn: "10m" }
+        { expiresIn }
       );
 
       return res.send({ token });

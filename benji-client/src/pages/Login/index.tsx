@@ -19,7 +19,7 @@ export const BOT_INVITE_URL =
 
 const Login = () => {
   const history = useHistory();
-  const { accessToken } = useAppSelector(selectAuth);
+  const { token } = useAppSelector(selectAuth);
   const error = useAppSelector(selectError);
   const dispatch = useAppDispatch();
   const [code, setCode] = useState<string>();
@@ -45,10 +45,10 @@ const Login = () => {
    * access token is present
    */
   useEffect(() => {
-    if (!accessToken) return;
+    if (!token) return;
     history.push('/');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
+  }, [token]);
 
   /**
    * Handle API Errors

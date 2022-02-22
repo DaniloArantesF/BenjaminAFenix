@@ -6,6 +6,7 @@ import { useAppDispatch } from '../app/hooks';
 const useDiscord = () => {
   const dispatch = useAppDispatch();
 
+  // TODO: send auth
   const getGuildVoiceChannels = async (guildId: string) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
@@ -16,53 +17,50 @@ const useDiscord = () => {
       );
       return res.data.channels;
     } catch (error) {
-      console.error('Error getting user guilds');
-      !error && dispatch(setError('Error getting user guilds'));
+      !error && dispatch(setError({ message: 'Error fetching voice channels', code: 401, redirect_path: '/login' }));
       return [];
     }
   };
 
-  const getUserData = async (accessToken: string) => {
+  const getUserData = async (token: string) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
         `${process.env.REACT_APP_BOT_HOSTNAME}/discord/user`,
         {
-          params: { accessToken },
+          params: { token },
         }
       );
       const { id, username, avatar } = res.data;
       return { id, username, avatar };
     } catch (error) {
-      console.error('Error getting user');
-      !error && dispatch(setError('Error getting user data'));
+      !error && dispatch(setError({ message: 'Error getting user data', code: 401, redirect_path: '/login' }));
       return { id: '', username: '', avatar: '' };
     }
   };
 
-  const getUserGuilds = async (accessToken: string) => {
+  const getUserGuilds = async (token: string) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
         `${process.env.REACT_APP_BOT_HOSTNAME}/discord/guilds`,
         {
-          params: { accessToken },
+          params: { token },
         }
       );
 
       const guilds: Guild[] = res.data.guilds;
       return guilds;
     } catch (error) {
-      console.error('Error getting user guilds');
-      !error && dispatch(setError('Error getting user guilds'));
+      !error && dispatch(setError({ message: 'Error getting user guilds', code: 401, redirect_path: '/login' }));
       return [];
     }
   };
 
-  const getUserVoiceChannel = async (accessToken: string, id: string) => {
+  const getUserVoiceChannel = async (token: string, id: string) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
         `${process.env.REACT_APP_BOT_HOSTNAME}/discord/connection`,
         {
-          params: { accessToken, id },
+          params: { token },
         }
       );
 
