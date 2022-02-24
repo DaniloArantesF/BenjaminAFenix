@@ -1,11 +1,11 @@
 module.exports = {
   apps : [{
-    name: 'bot-client',
+    name: 'client',
     script: 'cd benji-client/ && npm run dev',
     watch: './benji-client/'
   },
     {
-      name: 'bot-server',
+      name: 'bot',
       script: 'cd backend/ && npm run dev'
     }
   ],

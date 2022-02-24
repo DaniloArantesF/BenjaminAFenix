@@ -7,9 +7,11 @@ import Auth from './apis/Auth';
 import DiscordAPI from './apis/Discord';
 import YoutubeAPI from './apis/Youtube';
 import BotAPI from './apis/';
+import MetricsAPI from './apis/Metrics';
 import rateLimit from 'express-rate-limit';
 import { PORT, CLIENT_URL } from './config';
 import morgan from 'morgan';
+import promBundle from 'express-prom-bundle';
 
 class App {
   public express: express.Application;
@@ -54,13 +56,14 @@ class App {
         headers: true,
       })
     );
-  }
+ }
 
   private routes() {
     this.express.use('/', BotAPI.router);
     this.express.use('/auth', Auth.router);
     this.express.use('/discord', DiscordAPI.router);
     this.express.use('/youtube', YoutubeAPI.router);
+    this.express.use('/metrics', MetricsAPI.router);
   }
 }
 

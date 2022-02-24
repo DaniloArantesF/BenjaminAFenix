@@ -8,7 +8,7 @@ const Profiler = async () => {
   const app = express();
   const inspector = new Inspector();
   await inspector.profiler.enable();
-  console.log("Profiler Enabled!")
+
   const start = async () => {
     await inspector.profiler.start();
   };
