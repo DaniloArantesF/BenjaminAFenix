@@ -2,10 +2,10 @@
   position: relative;
   display: grid;
   grid-template-areas:
-  "LOGO"
-  "FORM"
-  "FOOTER";
-  grid-template-rows: auto .8fr var(--footer-height);
+    "LOGO"
+    "FORM"
+    "FOOTER";
+  grid-template-rows: auto 0.8fr var(--footer-height);
   height: 100vh;
   width: 100vw;
   overflow: hidden;
@@ -29,18 +29,16 @@
   gap: 1em;
 }
 
-
 .login_container > section > * {
   width: minmax(50%, 300px);
   background-color: var(--clr-surface0);
-  padding: .5em 2em;
+  padding: 0.5em 2em;
   color: var(--clr-font);
   display: grid;
-  grid-template-rows: 2em minmax(fit-content, .4fr) minmax(fit-content, .6fr);
+  grid-template-rows: 2em minmax(fit-content, 0.4fr) minmax(fit-content, 0.6fr);
   align-items: center;
   justify-items: center;
   gap: 1em;
-
 }
 
 .login_container > section > * h1 {

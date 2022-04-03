@@ -1,15 +1,15 @@
-
-
 .switch_container {
   display: flex;
 }
 
 .switch {
-  --switch-margins: .2em;
+  --switch-margins: 0.2em;
   --switch-height: 2em;
-  --switch-width: calc(2*var(--switch-height) - var(--switch-margins)); /* 2 switch squares + margins on both sides */
+  --switch-width: calc(
+    2 * var(--switch-height) - var(--switch-margins)
+  ); /* 2 switch squares + margins on both sides */
 
-  --slider-height: calc(var(--switch-height) - 2*var(--switch-margins));
+  --slider-height: calc(var(--switch-height) - 2 * var(--switch-margins));
   position: relative;
   display: flex;
   width: var(--switch-width);

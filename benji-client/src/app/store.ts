@@ -1,9 +1,9 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import queueReducer from './queueSlice';
-import playerReducer from './playerSlice';
-import authReducer from './authSlice';
-import dashboardReducer from './dashboardSlice';
-import logReducer from './logSlice';
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import queueReducer from "./queueSlice";
+import playerReducer from "./playerSlice";
+import authReducer from "./authSlice";
+import dashboardReducer from "./dashboardSlice";
+import logReducer from "./logSlice";
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +23,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   AppState,
   unknown,
   Action<string>
-  >
+>;
 
 export default store;

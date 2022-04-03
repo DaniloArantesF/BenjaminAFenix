@@ -1,8 +1,8 @@
 // Each slice file should define a type for its initial state value
 // so that createSlice can correctly infer the type of state in each case
 // reducer
-import { createSlice, } from '@reduxjs/toolkit';
-import type { AppState } from './store';
+import { createSlice } from "@reduxjs/toolkit";
+import type { AppState } from "./store";
 
 export interface Action {
   message: string;
@@ -20,7 +20,7 @@ const initialState: LogState = {
 };
 
 export const logSlice = createSlice({
-  name: 'log',
+  name: "log",
   initialState,
   reducers: {
     pushAction: (state, { payload }) => {

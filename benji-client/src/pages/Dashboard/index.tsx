@@ -1,11 +1,11 @@
-import classes from './Dashboard.module.css';
-import Queue from '../../components/common/Queue/Queue';
-import YoutubeEmbed from '../../components/common/YoutubeEmbed';
-import Navbar from '../../components/common/Navbar/Navbar';
-import Search from '../../components/common/SearchBar/Search';
-import { useEffect, useState } from 'react';
-import { selectItems, } from '../../app/queueSlice';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import classes from "./Dashboard.module.css";
+import Queue from "../../components/common/Queue/Queue";
+import YoutubeEmbed from "../../components/common/YoutubeEmbed";
+import Navbar from "../../components/common/Navbar/Navbar";
+import Search from "../../components/common/SearchBar/Search";
+import { useEffect, useState } from "react";
+import { selectItems } from "../../app/queueSlice";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import {
   selectAuth,
   setUser,
@@ -13,25 +13,25 @@ import {
   refreshCredentials,
   setRefreshTimeout,
   selectError,
-} from '../../app/authSlice';
+} from "../../app/authSlice";
 import {
   Guild,
   selectDashboard,
   setCurrentGuild,
   setWindowWidth,
-} from '../../app/dashboardSlice';
-import { setUserGuilds } from '../../app/dashboardSlice';
-import { useHistory } from 'react-router';
-import useSocket from '../../app/useSocket';
-import PlayerController from '../../components/common/PlayerController';
-import useDiscordAPI from '../../libs/Discord';
-import { selectPlayerState } from '../../app/playerSlice';
-import GuildHeader from '../../components/ui/GuildHeader';
-import TrackPreview from '../../components/ui/TrackPreview';
-import InactiveGuild from '../../components/ui/InactiveGuild';
-import ChannelSelection from '../../components/ui/Selection';
-import Switch from '../../components/ui/Switch';
-import ActionLog from '../../components/ui/ActionLog';
+} from "../../app/dashboardSlice";
+import { setUserGuilds } from "../../app/dashboardSlice";
+import { useHistory } from "react-router";
+import useSocket from "../../app/useSocket";
+import PlayerController from "../../components/common/PlayerController";
+import useDiscordAPI from "../../libs/Discord";
+import { selectPlayerState } from "../../app/playerSlice";
+import GuildHeader from "../../components/ui/GuildHeader";
+import TrackPreview from "../../components/ui/TrackPreview";
+import InactiveGuild from "../../components/ui/InactiveGuild";
+import ChannelSelection from "../../components/ui/Selection";
+import Switch from "../../components/ui/Switch";
+import ActionLog from "../../components/ui/ActionLog";
 
 export enum breakpoints {
   LARGE = 1150,
@@ -46,7 +46,7 @@ const Dashboard = () => {
     expiration,
     id: userId,
     refreshTimeout,
-    token
+    token,
   } = useAppSelector(selectAuth);
   const { currentTrack } = useAppSelector(selectPlayerState);
   const { windowWidth } = useAppSelector(selectDashboard);
@@ -71,11 +71,11 @@ const Dashboard = () => {
   const error = useAppSelector(selectError);
   useEffect(() => {
     if (!token) {
-      history.push('/login');
+      history.push("/login");
     }
     if (window) {
       // Window resizes should affect the sidebar position
-      window.addEventListener('resize', function (event: UIEvent) {
+      window.addEventListener("resize", function (event: UIEvent) {
         // fixing window is not defined see https://bit.ly/3k8w4lr
         const win = event.target as Window;
         if (event.target && win.innerWidth !== windowWidth)
@@ -103,7 +103,7 @@ const Dashboard = () => {
     if (!refreshTimeout) {
       const interval = setTimeout(
         refreshTokens,
-        expiresIn - (5 * 60 * 1000) // refresh token 5 min before
+        expiresIn - 5 * 60 * 1000 // refresh token 5 min before
       );
       dispatch(setRefreshTimeout(interval));
     }
@@ -113,28 +113,28 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (error) {
-      history.push(error.redirect_path ?? '/login');
+      history.push(error.redirect_path ?? "/login");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   const init = async () => {
     // Check that token is present
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     // Redirect to login if not
     if (!token) {
-      return history.push('/login');
+      return history.push("/login");
     }
 
     // Set credentials
     dispatch(setCredentials({ token }));
 
     // Set user Data
-    if (localStorage.getItem('username')) {
-      const id = localStorage.getItem('id');
-      const avatar = localStorage.getItem('avatar');
-      const username = localStorage.getItem('username');
+    if (localStorage.getItem("username")) {
+      const id = localStorage.getItem("id");
+      const avatar = localStorage.getItem("avatar");
+      const username = localStorage.getItem("username");
       dispatch(setUser({ id, avatar, username }));
     }
 
@@ -143,7 +143,7 @@ const Dashboard = () => {
     dispatch(setUserGuilds(userGuilds));
 
     // Restore guild from last session
-    const lastGuild: Guild = JSON.parse(localStorage.getItem('guild') || '{}');
+    const lastGuild: Guild = JSON.parse(localStorage.getItem("guild") || "{}");
     if (lastGuild?.id) dispatch(setCurrentGuild(lastGuild));
   };
 

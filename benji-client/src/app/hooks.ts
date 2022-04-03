@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
-import type { ChangeEvent } from 'react';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import type { AppState, AppDispatch } from './store';
+import { useEffect, useRef } from "react";
+import type { ChangeEvent } from "react";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import type { AppState, AppDispatch } from "./store";
 
 export const useForm =
   <TContent>(defaultValues: TContent) =>
@@ -12,11 +12,11 @@ export const useForm =
     const form = event.target as HTMLFormElement;
     const elements = Array.from(form.elements) as HTMLInputElement[];
     const data = elements
-      .filter((element) => element.hasAttribute('name'))
+      .filter((element) => element.hasAttribute("name"))
       .reduce(
         (object, element) => ({
           ...object,
-          [`${element.getAttribute('name')}`]: element.value,
+          [`${element.getAttribute("name")}`]: element.value,
         }),
         defaultValues
       );

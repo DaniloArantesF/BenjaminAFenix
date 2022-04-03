@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import btn1 from './Button1.module.css';
-import btn2 from './Button2.module.css';
-import btn3 from './Button3.module.css';
-import { useAppDispatch } from '../../../app/hooks';
-import { ActionCreator } from 'redux';
-import type { InputHandler } from '../../../types';
+import React, { useEffect, useRef, useState } from "react";
+import btn1 from "./Button1.module.css";
+import btn2 from "./Button2.module.css";
+import btn3 from "./Button3.module.css";
+import { useAppDispatch } from "../../../app/hooks";
+import { ActionCreator } from "redux";
+import type { InputHandler } from "../../../types";
 
 interface ButtonProps {
   type?: string;
@@ -22,7 +22,7 @@ const Button = ({ children, action, isActive, onClick, type }: ButtonProps) => {
 
   useEffect(() => {
     switch (type) {
-      case 'btn-large':
+      case "btn-large":
         setClasses(btn2);
         break;
       default:
@@ -35,8 +35,7 @@ const Button = ({ children, action, isActive, onClick, type }: ButtonProps) => {
     if (action) dispatch(action());
     if (onClick) onClick();
     event.target.blur();
-    if (btnRef.current)
-      btnRef.current.blur();
+    if (btnRef.current) btnRef.current.blur();
   };
 
   return (

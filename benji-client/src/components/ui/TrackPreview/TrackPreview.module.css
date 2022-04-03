@@ -29,7 +29,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 0 .5em;
+  padding: 0 0.5em;
 }
 
 .track__title {

@@ -29,7 +29,7 @@
 .search_container > ul {
   position: absolute;
   width: 100%;
-  top: calc(var(--search-bar-height) + .8em);
+  top: calc(var(--search-bar-height) + 0.8em);
   left: 50%;
   transform: translateX(-50%);
   display: inline-flex;
@@ -76,7 +76,7 @@
 }
 
 .search__item:hover::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;

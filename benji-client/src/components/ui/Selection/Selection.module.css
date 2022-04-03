@@ -1,5 +1,3 @@
-
-
 .selection_container {
   background: var(--clr-surface2);
   width: 100%;
@@ -55,7 +53,7 @@
 }
 
 .selection__item::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
@@ -75,7 +73,8 @@
 /* Remove navbar from selection position */
 /* MAYBE: improve this :) */
 @media screen and (max-width: 1150px) {
-  .selection_container.active, .selection_container.inactive {
+  .selection_container.active,
+  .selection_container.inactive {
     left: 50%;
   }
 }

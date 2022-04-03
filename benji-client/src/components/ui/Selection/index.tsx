@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
-import { Channel, selectDashboard, } from '../../../app/dashboardSlice';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import classes from './Selection.module.css';
+import { useEffect, useRef } from "react";
+import { Channel, selectDashboard } from "../../../app/dashboardSlice";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import classes from "./Selection.module.css";
 
 interface ChannelSelectionProps {
   joinChannel: (guildId: string, channelId: string) => void;
@@ -20,14 +20,14 @@ const ChannelSelection = ({
   useEffect(() => {
     if (!setActive || !window) return;
     if (active) {
-      window.addEventListener('click', handleWindowClick);
+      window.addEventListener("click", handleWindowClick);
     } else {
-      window.removeEventListener('click', handleWindowClick);
+      window.removeEventListener("click", handleWindowClick);
     }
 
     return () => {
-      window.removeEventListener('click', handleWindowClick);
-    }
+      window.removeEventListener("click", handleWindowClick);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
 
