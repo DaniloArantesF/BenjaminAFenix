@@ -1,10 +1,10 @@
 import classes from './InactiveGuild.module.css';
-import Navbar from '../../components/Navbar/Navbar';
+import Navbar from '../../common/Navbar/Navbar';
 import ChannelSelection from '../Selection';
-import { useAppSelector } from '../../app/hooks';
-import { selectDashboard } from '../../app/dashboardSlice';
+import { useAppSelector } from '../../../app/hooks';
+import { selectDashboard } from '../../../app/dashboardSlice';
 import Button from '../Button/Button';
-import { BOT_INVITE_URL } from '../../pages/Login';
+import { BOT_INVITE_URL } from '../../../pages/Login';
 
 interface InactiveGuildProps {
   joinChannel: (guildId: string, channelId: string) => void;

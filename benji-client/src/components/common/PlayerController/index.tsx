@@ -1,16 +1,16 @@
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
-import { ReactComponent as BackIcon } from '../../assets/back.svg';
-import { ReactComponent as SkipIcon } from '../../assets/skip.svg';
-import { ReactComponent as PlayIcon } from '../../assets/play.svg';
-import { ReactComponent as RepeatIcon } from '../../assets/repeat.svg';
-import { ReactComponent as ShuffleIcon } from '../../assets/shuffle.svg';
-import { ReactComponent as SoundIcon } from '../../assets/sound.svg';
-import { ReactComponent as PauseIcon } from '../../assets/pause.svg';
+import { ReactComponent as BackIcon } from '../../../assets/back.svg';
+import { ReactComponent as SkipIcon } from '../../../assets/skip.svg';
+import { ReactComponent as PlayIcon } from '../../../assets/play.svg';
+import { ReactComponent as RepeatIcon } from '../../../assets/repeat.svg';
+import { ReactComponent as ShuffleIcon } from '../../../assets/shuffle.svg';
+import { ReactComponent as SoundIcon } from '../../../assets/sound.svg';
+import { ReactComponent as PauseIcon } from '../../../assets/pause.svg';
 import classes from './PlayerController.module.css';
-import { selectPlayerState, selectStatus } from '../../app/playerSlice';
-import { useAppSelector } from '../../app/hooks';
-import Slider from '../Slider/Slider';
-import { selectRepeat, selectShuffle } from '../../app/queueSlice';
+import { selectPlayerState, selectStatus } from '../../../app/playerSlice';
+import { useAppSelector } from '../../../app/hooks';
+import Slider from '../../ui/Slider/Slider';
+import { selectRepeat, selectShuffle } from '../../../app/queueSlice';
 
 interface PlayerControllerProps {
   unpausePlayer: () => void;

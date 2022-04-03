@@ -1,7 +1,7 @@
 import { BaseSyntheticEvent } from 'react';
 
 export interface Command {
-  aliases?: Array<string>;
+  aliases?: string[];
   description: string;
   execute: (...args: any[]) => void;
   id: number;

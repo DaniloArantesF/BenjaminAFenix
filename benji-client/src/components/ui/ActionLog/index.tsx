@@ -1,7 +1,7 @@
-import { useAppSelector } from '../../app/hooks';
-import { selectActionLogs } from '../../app/logSlice';
+import { useAppSelector } from '../../../app/hooks';
+import { selectActionLogs } from '../../../app/logSlice';
 import classes from './ActionLog.module.css';
-import type { Action } from '../../app/logSlice';
+import type { Action } from '../../../app/logSlice';
 import { timeStamp } from 'console';
 
 const ActionItem = ({ message, timestamp }: Action) => {

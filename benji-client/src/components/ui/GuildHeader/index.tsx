@@ -1,10 +1,10 @@
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
-import { selectDashboard } from '../../app/dashboardSlice';
-import { useAppSelector } from '../../app/hooks';
-import { getDiscordAvatar } from '../../libs/Discord';
-import { msToMinSec } from '../../util/util';
-import { ReactComponent as ExitIcon } from '../../assets/exit.svg';
-import { ReactComponent as SwitchIcon } from '../../assets/switch.svg';
+import { selectDashboard } from '../../../app/dashboardSlice';
+import { useAppSelector } from '../../../app/hooks';
+import { getDiscordAvatar } from '../../../libs/Discord';
+import { msToMinSec } from '../../../util/util';
+import { ReactComponent as ExitIcon } from '../../../assets/exit.svg';
+import { ReactComponent as SwitchIcon } from '../../../assets/switch.svg';
 
 import classes from './GuildHeader.module.css';
 

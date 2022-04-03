@@ -1,8 +1,8 @@
 import classes from './Dashboard.module.css';
-import Queue from '../../components/Queue/Queue';
-import YoutubeEmbed from '../../components/YoutubeEmbed/YoutubeEmbed';
-import Navbar from '../../components/Navbar/Navbar';
-import Search from '../../components/Search/Search';
+import Queue from '../../components/common/Queue/Queue';
+import YoutubeEmbed from '../../components/common/YoutubeEmbed';
+import Navbar from '../../components/common/Navbar/Navbar';
+import Search from '../../components/common/SearchBar/Search';
 import { useEffect, useState } from 'react';
 import { selectItems, } from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
@@ -23,15 +23,15 @@ import {
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
 import useSocket from '../../app/useSocket';
-import PlayerController from '../../components/PlayerController';
+import PlayerController from '../../components/common/PlayerController';
 import useDiscordAPI from '../../libs/Discord';
 import { selectPlayerState } from '../../app/playerSlice';
-import GuildHeader from '../../components/GuildHeader';
-import TrackPreview from '../../components/TrackPreview';
-import InactiveGuild from '../../components/InactiveGuild';
-import ChannelSelection from '../../components/Selection';
-import Switch from '../../components/Switch';
-import ActionLog from '../../components/ActionLog';
+import GuildHeader from '../../components/ui/GuildHeader';
+import TrackPreview from '../../components/ui/TrackPreview';
+import InactiveGuild from '../../components/ui/InactiveGuild';
+import ChannelSelection from '../../components/ui/Selection';
+import Switch from '../../components/ui/Switch';
+import ActionLog from '../../components/ui/ActionLog';
 
 export enum breakpoints {
   LARGE = 1150,

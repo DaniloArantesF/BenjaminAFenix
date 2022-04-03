@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useRef, useState } from 'react';
-import { useAppSelector } from '../../app/hooks';
-import { selectPlayerState } from '../../app/playerSlice';
+import { useAppSelector } from '../../../app/hooks';
+import { selectPlayerState } from '../../../app/playerSlice';
 import classes from './Slider.module.css';
 
 interface SliderProps {

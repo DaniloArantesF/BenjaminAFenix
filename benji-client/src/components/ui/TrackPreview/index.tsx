@@ -1,4 +1,4 @@
-import { Track } from '../../types';
+import { Track } from '../../../types';
 import classes from './TrackPreview.module.css';
 
 interface TrackPreviewProps {

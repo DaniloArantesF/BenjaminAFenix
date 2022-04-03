@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { selectTheme, setTheme as setAppTheme } from '../../app/dashboardSlice';
+import { useAppSelector, useAppDispatch } from '../../../app/hooks';
+import { selectTheme, setTheme as setAppTheme } from '../../../app/dashboardSlice';
 import classes from './Switch.module.css';
-import { ReactComponent as LightIcon } from '../../assets/light_mode.svg';
-import { ReactComponent as DarkIcon } from '../../assets/dark_mode.svg';
+import { ReactComponent as LightIcon } from '../../../assets/light_mode.svg';
+import { ReactComponent as DarkIcon } from '../../../assets/dark_mode.svg';
 
 const Switch = () => {
   const dispatch = useAppDispatch();

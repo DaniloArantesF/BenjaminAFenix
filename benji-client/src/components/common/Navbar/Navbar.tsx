@@ -1,17 +1,17 @@
 import React, { BaseSyntheticEvent, useEffect, useLayoutEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 import classes from './Navbar.module.css';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { ReactComponent as Logo } from '../../assets/Logo.svg';
-import { ReactComponent as MenuIcon } from '../../assets/menu.svg';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { ReactComponent as Logo } from '../../../assets/Logo.svg';
+import { ReactComponent as MenuIcon } from '../../../assets/menu.svg';
 import {
   Guild,
   selectDashboard,
   setCurrentGuild,
   setNavbarVisibility,
-} from '../../app/dashboardSlice';
-import { clearCredentials } from '../../app/authSlice';
-import { getDiscordAvatar } from '../../libs/Discord';
+} from '../../../app/dashboardSlice';
+import { clearCredentials } from '../../../app/authSlice';
+import { getDiscordAvatar } from '../../../libs/Discord';
 
 const Navbar = () => {
   const dispatch = useAppDispatch();

@@ -5,7 +5,7 @@ import { clearCredentials, fetchCredentials, selectAuth, selectError } from '../
 import classes from './Login.module.css';
 import { ReactComponent as Background } from '../../assets/Background.svg';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
-import Button from '../../components/Button/Button';
+import Button from '../../components/ui/Button/Button';
 
 if (!process.env.REACT_APP_HOSTNAME) {
   console.error('Hostname is not defined!');

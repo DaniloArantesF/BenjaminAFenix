@@ -4,7 +4,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppState } from './store';
 import type { Track } from '../types';
-import { QItem } from '../components/Queue/Queue';
+import { QItem } from '../components/common/Queue/Queue';
 
 // define type for slice state
 export interface QueueState {

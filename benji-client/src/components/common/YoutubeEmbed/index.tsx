@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import classes from './YoutubeEmbed.module.css';
-import { YoutubeProps } from '../../types/youtube';
+import { YoutubeProps } from '../../../types/youtube';
 import YouTube from 'react-youtube';
 import { YouTubePlayer } from 'youtube-player/dist/types';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectStatus } from '../../app/playerSlice';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { selectStatus } from '../../../app/playerSlice';
 const AUTOPLAY = 0;
 
 const YoutubeEmbed = ({ embedId }: YoutubeProps) => {
