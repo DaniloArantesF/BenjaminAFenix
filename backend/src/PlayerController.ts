@@ -5,13 +5,13 @@ import {
   AudioPlayer,
   AudioResource,
   AudioPlayerPlayingState,
-} from '@discordjs/voice';
-import ytdl from 'ytdl-core';
-import type { Track } from './DiscordClient';
-import QueueController from './QueueController';
-import { getYoutubeUrl } from './apis/Youtube';
-import { Message } from 'discord.js';
-import { EventBus } from './EventBus';
+} from "@discordjs/voice";
+import ytdl from "ytdl-core";
+import type { Track } from "./DiscordClient";
+import QueueController from "./QueueController";
+import { getYoutubeUrl } from "./apis/Youtube";
+import { Message } from "discord.js";
+import { EventBus } from "./EventBus";
 
 /**
  * Manages player state and holds queue controller
@@ -41,13 +41,13 @@ class PlayerController extends AudioPlayer {
 
     /* Player Events */
     this.on(AudioPlayerStatus.Idle, () => {
-      console.info('Playing next title...');
+      console.info("Playing next title...");
       this.progress = 0;
       const nextTrack = this.queueController.next();
 
       // make playr idle if no song left
       if (!nextTrack) {
-        console.info('No next title, going idle...');
+        console.info("No next title, going idle...");
         // Stop tracking player state
         clearInterval(this.playerInterval);
         this.status = AudioPlayerStatus.Idle;
@@ -79,8 +79,8 @@ class PlayerController extends AudioPlayer {
     });
 
     // Handle update events coming from queue controller
-    this.queueController.on('queue_update', this.updatePlayer.bind(this));
-    this.queueController.on('restart_track', this.restartPlayback.bind(this));
+    this.queueController.on("queue_update", this.updatePlayer.bind(this));
+    this.queueController.on("restart_track", this.restartPlayback.bind(this));
   }
 
   /**
@@ -89,7 +89,7 @@ class PlayerController extends AudioPlayer {
    * to get new track to play.
    */
   public updatePlayer = () => {
-    console.info('Checking updates to player...');
+    console.info("Checking updates to player...");
     let track;
 
     // Idle can either mean player has not been played or
@@ -123,12 +123,12 @@ class PlayerController extends AudioPlayer {
     // Update web clients
     // this.channel.to(this.guildId).emit('player_update', this.getPlayerState());
     this.eventBus.dispatch(`player_update`, this.getPlayerState());
-  }
+  };
 
   public restartPlayback = () => {
     this.progress = 0;
     this.playCurrentItem();
-  }
+  };
 
   /**
    * Periodically broadcast playback state to all web clients connected to this player instance.
@@ -141,21 +141,21 @@ class PlayerController extends AudioPlayer {
     this.progress = state.playbackDuration;
     const timestamp = Date.now();
 
-    this.eventBus.dispatch('playback_state', {
+    this.eventBus.dispatch("playback_state", {
       guildId: this.guildId,
       status: this.status,
       volume: this.volume,
       progress: this.progress,
       timestamp,
     });
-  }
+  };
 
   private playCurrentItem = () => {
     const item = this.currentTrack;
 
     try {
       const stream = ytdl(getYoutubeUrl(item.id), {
-        filter: 'audioonly',
+        filter: "audioonly",
         // tslint:disable-next-line: no-bitwise
         highWaterMark: 1 << 25,
       });
@@ -171,7 +171,7 @@ class PlayerController extends AudioPlayer {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   public setVolume = (volume: number) => {
     this.volume = volume;
@@ -180,7 +180,7 @@ class PlayerController extends AudioPlayer {
       volume = Math.min(Math.max(volume, 0.0), 1.0);
       this.resource.volume.setVolumeLogarithmic(volume);
     }
-  }
+  };
 
   public getPlayerState = () => {
     const { currentTrack, progress, queueController, status, volume } = this;
@@ -198,7 +198,7 @@ class PlayerController extends AudioPlayer {
         repeat: queueController.repeat,
       },
     };
-  }
+  };
 }
 
 export default PlayerController;

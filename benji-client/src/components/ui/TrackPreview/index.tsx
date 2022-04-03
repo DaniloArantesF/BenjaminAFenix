@@ -1,5 +1,5 @@
-import { Track } from '../../../types';
-import classes from './TrackPreview.module.css';
+import { Track } from "../../../types";
+import classes from "./TrackPreview.module.css";
 
 interface TrackPreviewProps {
   track: Track | null;
@@ -15,7 +15,7 @@ const TrackPreview = ({ track }: TrackPreviewProps) => {
         <a
           target="_blank"
           rel="noreferrer"
-          href={'https://www.youtube.com/watch?v=' + track?.id}
+          href={"https://www.youtube.com/watch?v=" + track?.id}
           className={classes.track__title}
         >
           {track?.title}

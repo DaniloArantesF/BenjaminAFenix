@@ -1,16 +1,16 @@
-import { Router, Request, Response } from 'express';
-import client from 'prom-client';
+import { Router, Request, Response } from "express";
+import client from "prom-client";
 
 const register = new client.Registry();
-client.collectDefaultMetrics({register});
+client.collectDefaultMetrics({ register });
 
 class MetricsAPI {
-  router: Router
+  router: Router;
 
   constructor() {
     this.router = Router();
-    this.router.get('/', async (req: Request, res: Response) => {
-      res.setHeader('Content-Type', register.contentType);
+    this.router.get("/", async (req: Request, res: Response) => {
+      res.setHeader("Content-Type", register.contentType);
       res.send(await register.metrics());
     });
   }

@@ -1,14 +1,14 @@
-import { CommandInteraction, Intents } from 'discord.js';
-import DiscordClient from './DiscordClient';
-import dotenv from 'dotenv';
+import { CommandInteraction, Intents } from "discord.js";
+import DiscordClient from "./DiscordClient";
+import dotenv from "dotenv";
 // import FileWatcher from './util/FileWatcher';
-import http from 'http';
-import WebClient from './WebClient';
+import http from "http";
+import WebClient from "./WebClient";
 dotenv.config();
-import { COOLDOWN_MS } from './config';
+import { COOLDOWN_MS } from "./config";
 // FileWatcher();
 
-import Profiler from './util/Profiler';
+import Profiler from "./util/Profiler";
 Profiler();
 
 const TOKEN = process.env.DISCORD_TOKEN;
@@ -31,14 +31,15 @@ const Bot = (server: http.Server) => {
   const webController = new WebClient(server, client);
   const cooldown = DiscordClient.userCooldown;
 
-  client.on('interactionCreate', async (interaction: CommandInteraction) => {
+  client.on("interactionCreate", async (interaction: CommandInteraction) => {
     const command = DiscordClient.commands.get(interaction.commandName);
     if (!command) return;
 
     try {
       const user = interaction.member.user.id;
       const lastInteraction = cooldown.get(user) ?? -1;
-      const timeLeft = lastInteraction === -1 ? 0 : (lastInteraction + COOLDOWN_MS) - Date.now();
+      const timeLeft =
+        lastInteraction === -1 ? 0 : lastInteraction + COOLDOWN_MS - Date.now();
 
       if (timeLeft > 0) {
         // User is in cooldown
@@ -46,14 +47,14 @@ const Bot = (server: http.Server) => {
         cooldown.set(user, Date.now());
         setTimeout(() => {
           command.execute(client, interaction);
-        }, timeLeft)
+        }, timeLeft);
       } else {
         cooldown.set(user, Date.now());
         command.execute(client, interaction);
       }
     } catch (error) {
       console.error(error);
-      await interaction.reply({ content: 'Deu ruim meu bom', ephemeral: true });
+      await interaction.reply({ content: "Deu ruim meu bom", ephemeral: true });
     }
   });
 

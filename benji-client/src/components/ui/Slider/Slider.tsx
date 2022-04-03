@@ -1,7 +1,7 @@
-import { MouseEvent, useEffect, useRef, useState } from 'react';
-import { useAppSelector } from '../../../app/hooks';
-import { selectPlayerState } from '../../../app/playerSlice';
-import classes from './Slider.module.css';
+import { MouseEvent, useEffect, useRef, useState } from "react";
+import { useAppSelector } from "../../../app/hooks";
+import { selectPlayerState } from "../../../app/playerSlice";
+import classes from "./Slider.module.css";
 
 interface SliderProps {
   changeCb: (value: number) => void;
@@ -87,9 +87,7 @@ const Slider = ({ changeCb }: SliderProps) => {
           <span ref={activeTrackRef} className={classes.track__left} />
         </div>
       </div>
-      <div className={ classes.volume_counter}>
-        { value }
-      </div>
+      <div className={classes.volume_counter}>{value}</div>
     </div>
   );
 };

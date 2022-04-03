@@ -3,13 +3,13 @@
  * This class is responsible for managing clients, handling
  * commands and relaying back to the bot controller
  */
-import { Namespace, Server, Socket } from 'socket.io';
-import http from 'http';
-import DiscordClient, { DiscordConnection, Track } from './DiscordClient';
-import { EventBus } from './EventBus';
-import { AudioPlayerStatus } from '@discordjs/voice';
-import { QueueState } from './QueueController';
-import actions from './util/actions';
+import { Namespace, Server, Socket } from "socket.io";
+import http from "http";
+import DiscordClient, { DiscordConnection, Track } from "./DiscordClient";
+import { EventBus } from "./EventBus";
+import { AudioPlayerStatus } from "@discordjs/voice";
+import { QueueState } from "./QueueController";
+import actions from "./util/actions";
 
 // Web clients are created in the connection event handler
 // Each web client is connected to one guild at a time
@@ -47,44 +47,44 @@ class WebClient {
   eventBus: EventBus;
 
   constructor(server: http.Server, discordClient: DiscordClient) {
-    this.io = new Server(server, { cors: { origin: '*' } });
+    this.io = new Server(server, { cors: { origin: "*" } });
     this.discordClient = discordClient;
     this.connections = this.discordClient.connections;
     this.webClients = new Map();
-    this.server = this.io.of('/bot');
-    this.server.on('connection', (socket: Socket) => {
-      socket.on('player_connect', (payload) =>
+    this.server = this.io.of("/bot");
+    this.server.on("connection", (socket: Socket) => {
+      socket.on("player_connect", (payload) =>
         this.createConnection(socket, payload)
       );
-      socket.on('get_player', (payload) => this.getPlayer(socket, payload));
-      socket.on('join_channel', (payload) => this.joinChannel(socket, payload));
-      socket.on('set_queue_position', (payload) =>
+      socket.on("get_player", (payload) => this.getPlayer(socket, payload));
+      socket.on("join_channel", (payload) => this.joinChannel(socket, payload));
+      socket.on("set_queue_position", (payload) =>
         this.setQueuePosition(socket, payload)
       );
-      socket.on('request_track', (payload) =>
+      socket.on("request_track", (payload) =>
         this.requestTrack(socket, payload)
       );
-      socket.on('unpause', (payload) => this.unpause(socket, payload));
-      socket.on('pause', (payload) => this.pause(socket, payload));
-      socket.on('next', (payload) => this.next(socket, payload));
-      socket.on('prev', (payload) => this.prev(socket, payload));
-      socket.on('shuffle', (payload) => this.shuffle(socket, payload));
-      socket.on('repeat', (payload) => this.repeat(socket, payload));
-      socket.on('volume', (payload) => this.volume(socket, payload));
-      socket.on('disconnect', (payload) => this.disconnect(socket, payload));
-      socket.on('leave_channel', (payload) =>
+      socket.on("unpause", (payload) => this.unpause(socket, payload));
+      socket.on("pause", (payload) => this.pause(socket, payload));
+      socket.on("next", (payload) => this.next(socket, payload));
+      socket.on("prev", (payload) => this.prev(socket, payload));
+      socket.on("shuffle", (payload) => this.shuffle(socket, payload));
+      socket.on("repeat", (payload) => this.repeat(socket, payload));
+      socket.on("volume", (payload) => this.volume(socket, payload));
+      socket.on("disconnect", (payload) => this.disconnect(socket, payload));
+      socket.on("leave_channel", (payload) =>
         this.leaveChannel(socket, payload)
       );
     });
 
     this.eventBus = EventBus.getInstance();
-    this.eventBus.register('player_update', this.handlePlayerUpdate.bind(this));
+    this.eventBus.register("player_update", this.handlePlayerUpdate.bind(this));
     this.eventBus.register(
-      'playback_state',
+      "playback_state",
       this.handlePlaybackUpdate.bind(this)
     );
     this.eventBus.register(
-      'channel_update',
+      "channel_update",
       this.handleChannelUpdate.bind(this)
     );
   }
@@ -125,7 +125,7 @@ class WebClient {
         guildId,
         channel.id
       );
-      socket.emit('channel_update', {
+      socket.emit("channel_update", {
         channel: {
           name: channel.name,
           id: channel.id,
@@ -134,7 +134,7 @@ class WebClient {
         },
       });
     } else {
-      socket.emit('channel_update', {
+      socket.emit("channel_update", {
         channel: null,
       });
     }
@@ -146,19 +146,19 @@ class WebClient {
 
     // Check if bot is active in this guild
     if (!this.connections.get(guildId)) {
-      return socket.emit('not_active');
+      return socket.emit("not_active");
     }
 
     // Otherwise send queue to client
     const { player } = this.connections.get(guildId);
-    socket.emit('player_update', player.getPlayerState());
+    socket.emit("player_update", player.getPlayerState());
   };
 
   public getChannel = (socket: Socket, payload: any) => {
     const { guildId } = payload;
 
     if (!this.connections.get(guildId)) {
-      return socket.emit('not_active');
+      return socket.emit("not_active");
     }
 
     const { channel, timestamp } = this.connections.get(guildId);
@@ -166,7 +166,7 @@ class WebClient {
       guildId,
       channel.id
     );
-    socket.emit('channel_update', {
+    socket.emit("channel_update", {
       channel: { name: channel.name, id: channel.id, onlineCount, timestamp },
     });
   };
@@ -176,21 +176,19 @@ class WebClient {
 
     const guild = this.discordClient.getGuild(guildId);
     const { player } = await this.discordClient.joinChannel(guild, channelId);
-    socket.emit('player_update', player.getPlayerState());
+    socket.emit("player_update", player.getPlayerState());
   };
 
   public setQueuePosition = (socket: Socket, payload: any) => {
     const position: number = payload.position;
     const { username, guildId } = this.webClients.get(socket.id);
-    if (!guildId) return console.error('Web client not found', payload);
+    if (!guildId) return console.error("Web client not found", payload);
 
     const { player } = this.connections.get(guildId);
     player.queueController.setPosition(position);
     const track = player.queueController.getTrack();
-// TODO: HANDLE NULL TRACK
-    this.server
-    .to(guildId)
-    .emit('log_message', {
+    // TODO: HANDLE NULL TRACK
+    this.server.to(guildId).emit("log_message", {
       message: actions.CHANGE_TRACK(username, track.title),
       timestamp: Date.now(),
     });
@@ -201,15 +199,13 @@ class WebClient {
     if (!track) return;
     if (!this.webClients.has(socket.id)) {
       // TODO: send error payload and redirect client
-      return console.error('Web client not found', payload);
+      return console.error("Web client not found", payload);
     }
     const { username, guildId } = this.webClients.get(socket.id);
     const { player } = this.connections.get(guildId);
     player.queueController.pushItem(track);
 
-    this.server
-    .to(guildId)
-    .emit('log_message', {
+    this.server.to(guildId).emit("log_message", {
       message: actions.ADD_TRACK(username, track.title),
       timestamp: Date.now(),
     });
@@ -219,12 +215,10 @@ class WebClient {
     const { username, guildId } = this.webClients.get(socket.id);
     const { player } = this.connections.get(guildId);
     player.unpause();
-    this.server
-      .to(guildId)
-      .emit('log_message', {
-        message: actions.PLAY(username),
-        timestamp: Date.now(),
-      });
+    this.server.to(guildId).emit("log_message", {
+      message: actions.PLAY(username),
+      timestamp: Date.now(),
+    });
   };
 
   public pause = (socket: Socket, payload: any) => {
@@ -233,12 +227,10 @@ class WebClient {
     player.pause();
     clearInterval(player.playerInterval);
     player.playerInterval = null;
-    this.server
-      .to(guildId)
-      .emit('log_message', {
-        message: actions.PAUSE(username),
-        timestamp: Date.now(),
-      });
+    this.server.to(guildId).emit("log_message", {
+      message: actions.PAUSE(username),
+      timestamp: Date.now(),
+    });
   };
 
   public next = (socket: Socket, payload: any) => {
@@ -249,7 +241,7 @@ class WebClient {
 
     // Dont emit event if this is the first track
     if (prevTrack) {
-      this.server.to(guildId).emit('log_message', {
+      this.server.to(guildId).emit("log_message", {
         message: actions.SKIP_TRACK(username, prevTrack.title),
         timestamp: Date.now(),
       });
@@ -262,7 +254,7 @@ class WebClient {
     player.queueController.previous();
     const curTrack = player.queueController.getTrack();
     if (curTrack) {
-      this.server.to(guildId).emit('log_message', {
+      this.server.to(guildId).emit("log_message", {
         message: actions.PREV_TRACK(username, curTrack.title),
         timestamp: Date.now(),
       });
@@ -273,13 +265,13 @@ class WebClient {
     const { username, guildId } = this.webClients.get(socket.id);
     const { player } = this.connections.get(guildId);
     player.queueController.setShuffle(payload.shuffle);
-    const status = player.queueController.shuffle ? 'on' : 'off';
+    const status = player.queueController.shuffle ? "on" : "off";
 
-    this.server.to(guildId).emit('shuffle', {
+    this.server.to(guildId).emit("shuffle", {
       shuffle: player.queueController.shuffle,
     });
 
-    this.server.to(guildId).emit('log_message', {
+    this.server.to(guildId).emit("log_message", {
       message: actions.SHUFFLE(username, status),
       username,
       timestamp: Date.now(),
@@ -290,13 +282,13 @@ class WebClient {
     const { username, guildId } = this.webClients.get(socket.id);
     const { player } = this.connections.get(guildId);
     player.queueController.setRepeat(payload.repeat);
-    const status = player.queueController.repeat ? 'on' : 'off';
+    const status = player.queueController.repeat ? "on" : "off";
 
-    this.server.to(guildId).emit('repeat', {
+    this.server.to(guildId).emit("repeat", {
       repeat: player.queueController.repeat,
     });
 
-    this.server.to(guildId).emit('log_message', {
+    this.server.to(guildId).emit("log_message", {
       message: actions.REPEAT(username, status),
       username,
       timestamp: Date.now(),
@@ -308,7 +300,7 @@ class WebClient {
     const { player } = this.connections.get(guildId);
     const volume = payload.volume;
     player.setVolume(volume);
-    this.server.to(guildId).emit('log_message', {
+    this.server.to(guildId).emit("log_message", {
       message: actions.VOLUME(username, volume),
       username,
       timestamp: Date.now(),
@@ -325,12 +317,12 @@ class WebClient {
 
   public handlePlayerUpdate = (payload: PlayerState) => {
     const { guildId, currentTrack, progress, status, volume, queue } = payload;
-    this.server.to(guildId).emit('player_update', payload);
+    this.server.to(guildId).emit("player_update", payload);
   };
 
   public handlePlaybackUpdate = (payload: PlaybackState) => {
     const { guildId, status, volume, progress, timestamp } = payload;
-    this.server.to(guildId).emit('playback_state', payload);
+    this.server.to(guildId).emit("playback_state", payload);
   };
 
   public handleChannelUpdate = (payload: any) => {
@@ -339,7 +331,7 @@ class WebClient {
       guildId,
       channel.id
     );
-    this.server.to(guildId).emit('channel_update', {
+    this.server.to(guildId).emit("channel_update", {
       channel: {
         name: channel.name,
         id: channel.id,
@@ -352,7 +344,7 @@ class WebClient {
   public leaveChannel = (socket: Socket, payload: any) => {
     const { guildId } = payload;
     this.discordClient.disconnect(guildId);
-    this.server.to(guildId).emit('channel_update', {
+    this.server.to(guildId).emit("channel_update", {
       channel: null,
     });
   };

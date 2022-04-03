@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
-import axios, { AxiosResponse } from 'axios';
-import { CLIENT_URL, DISCORD_API_BASE_URL } from '../config';
-import jwt from 'jsonwebtoken';
-import { DiscordUserResponse } from './Discord';
+import { Router, Request, Response } from "express";
+import axios, { AxiosResponse } from "axios";
+import { CLIENT_URL, DISCORD_API_BASE_URL } from "../config";
+import jwt from "jsonwebtoken";
+import { DiscordUserResponse } from "./Discord";
 
-require('dotenv').config();
+require("dotenv").config();
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
@@ -32,9 +32,9 @@ class Auth {
 
   constructor() {
     this.router = Router();
-    this.router.post('/code', this.getAccessToken);
-    this.router.post('/refresh', this.refreshAccessToken);
-    this.router.post('/login', this.logIn);
+    this.router.post("/code", this.getAccessToken);
+    this.router.post("/refresh", this.refreshAccessToken);
+    this.router.post("/login", this.logIn);
   }
 
   /** Given a code, get access token and create jwt token with user info */
@@ -49,14 +49,14 @@ class Auth {
           client_id: clientId,
           client_secret: clientSecret,
           code,
-          grant_type: 'authorization_code',
+          grant_type: "authorization_code",
           redirect_uri: `${CLIENT_URL}/login`,
-          scope: 'identify',
+          scope: "identify",
         }),
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: 'application/json',
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
           },
         }
       );
@@ -84,7 +84,8 @@ class Auth {
           avatar,
           accessToken,
           refreshToken,
-        }, process.env.JWT_SECRET_KEY,
+        },
+        process.env.JWT_SECRET_KEY,
         { expiresIn }
       );
 
@@ -92,7 +93,7 @@ class Auth {
     } catch (error) {
       return res.sendStatus(error?.response?.status ?? 500);
     }
-  }
+  };
 
   public async getAccessToken(req: Request, res: Response) {
     const code = req.body?.code;
@@ -107,14 +108,14 @@ class Auth {
           client_id: clientId,
           client_secret: clientSecret,
           code,
-          grant_type: 'authorization_code',
+          grant_type: "authorization_code",
           redirect_uri: `${CLIENT_URL}/login`,
-          scope: 'identify',
+          scope: "identify",
         }),
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: 'application/json',
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
           },
         }
       );
@@ -142,7 +143,10 @@ class Auth {
     }
 
     try {
-      const { userId, username, avatar, refreshToken } = jwt.verify(token, process.env.JWT_SECRET_KEY) as TokenPayload;
+      const { userId, username, avatar, refreshToken } = jwt.verify(
+        token,
+        process.env.JWT_SECRET_KEY
+      ) as TokenPayload;
 
       const authRes: AxiosResponse<DiscordTokenResponse> = await axios.post(
         `${DISCORD_API_BASE_URL}/oauth2/token`,
@@ -150,12 +154,12 @@ class Auth {
           client_id: clientId,
           client_secret: clientSecret,
           refresh_token: refreshToken,
-          grant_type: 'refresh_token',
+          grant_type: "refresh_token",
         }),
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: 'application/json',
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
           },
         }
       );
@@ -167,7 +171,8 @@ class Auth {
           avatar,
           accessToken: authRes.data.access_token,
           refreshToken: authRes.data.refresh_token,
-        }, process.env.JWT_SECRET_KEY,
+        },
+        process.env.JWT_SECRET_KEY,
         { expiresIn: authRes.data.expires_in }
       );
 

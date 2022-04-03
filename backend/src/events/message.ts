@@ -1,9 +1,9 @@
-import type { APIMessage } from 'discord-api-types';
+import type { APIMessage } from "discord-api-types";
 
 module.exports = {
-	name: 'messageCreate',
+  name: "messageCreate",
   execute(message: APIMessage) {
     // console.log(message.content)
     const value = message.content;
-	},
+  },
 };

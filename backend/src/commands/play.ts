@@ -1,50 +1,50 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { AudioPlayerStatus } from '@discordjs/voice';
-import ytdl from 'ytdl-core';
-import { Track, Command, Services } from '../DiscordClient';
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { AudioPlayerStatus } from "@discordjs/voice";
+import ytdl from "ytdl-core";
+import { Track, Command, Services } from "../DiscordClient";
 import {
   getIdFromUrl,
   getYoutubeItem,
   getYoutubeUrl,
   searchYoutube,
-} from '../apis/Youtube';
-import { MessageEmbed } from 'discord.js';
+} from "../apis/Youtube";
+import { MessageEmbed } from "discord.js";
 
 export const PlayEmbed = (topItems: Track[]) => {
   const fields = [
-    { name: 'Currently Playing', value: topItems[0].title, inline: true },
+    { name: "Currently Playing", value: topItems[0].title, inline: true },
   ];
   if (topItems.length > 1) {
-    fields.push({ name: 'Up Next', value: topItems[1].title, inline: true });
+    fields.push({ name: "Up Next", value: topItems[1].title, inline: true });
   }
 
   return new MessageEmbed()
-    .setColor('#b700ff')
-    .setTitle('Queue')
+    .setColor("#b700ff")
+    .setTitle("Queue")
     .setURL(getYoutubeUrl(topItems[0].id))
     .setThumbnail(
-      'https://media1.tenor.com/images/75f1a082d67bcd34cc4960131e905bed/tenor.gif?itemid=5505046'
+      "https://media1.tenor.com/images/75f1a082d67bcd34cc4960131e905bed/tenor.gif?itemid=5505046"
     )
-    .addFields(...fields, { name: '\u200B', value: '\u200B' } /* blank field */)
-    .setFooter('To see full queue use /queue');
+    .addFields(...fields, { name: "\u200B", value: "\u200B" } /* blank field */)
+    .setFooter("To see full queue use /queue");
 };
 
 export const command: Command = {
   data: new SlashCommandBuilder()
-    .setName('play')
-    .setDescription('Plays specified song or unpauses playback')
+    .setName("play")
+    .setDescription("Plays specified song or unpauses playback")
     .addStringOption((option) =>
       option
-        .setName('song')
-        .setDescription('<Url | Id | Query>')
+        .setName("song")
+        .setDescription("<Url | Id | Query>")
         .setRequired(false)
     ),
   async execute(client, interaction) {
     const channelId = await client.getUserVoiceChannel(interaction);
     if (!channelId) {
-      return interaction.reply('Entra num canal de voz mongol');
+      return interaction.reply("Entra num canal de voz mongol");
     }
-    const request = interaction.options.getString('song');
+    const request = interaction.options.getString("song");
     let connection = client.connections.get(interaction.guild.id);
 
     if (!request) {
@@ -53,18 +53,18 @@ export const command: Command = {
         const player = connection.player;
         if (player.status === AudioPlayerStatus.Playing) {
           // [Error] Player is not paused
-          return interaction.reply('ta me tirando porra');
+          return interaction.reply("ta me tirando porra");
         } else {
           // Unpause if player is paused
           player.unpause();
           return interaction.reply({
-            content: 'tuts tuts caralho',
+            content: "tuts tuts caralho",
             ephemeral: true,
           });
         }
       } else {
         // [Error] No connection && no input
-        return interaction.reply('ta me tirando porra');
+        return interaction.reply("ta me tirando porra");
       }
     }
 
@@ -97,12 +97,12 @@ export const command: Command = {
       user: interaction.user.tag,
       thumbnail: item.thumbnails.high.url,
       service: Services.Youtube,
-    }
+    };
 
     // Pushing item will push item into guild's queue & trigger a player update
     // Player update checks for queue's current track and plays if not playing
     connection.player.queueController.pushItem(track);
-    interaction.reply('sente esse som cuzao');
+    interaction.reply("sente esse som cuzao");
 
     // Remove old embeds and save new
     if (connection.player.lastEmbed) {
@@ -112,7 +112,7 @@ export const command: Command = {
       embeds: [PlayEmbed(connection.player.queueController.topItems())],
     });
   },
-  usage: '/play <url, id, >',
+  usage: "/play <url, id, >",
   // TODO: add examples
-  aliases: ['p'],
+  aliases: ["p"],
 };

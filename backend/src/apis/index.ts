@@ -1,8 +1,8 @@
-import { Router, Request, Response } from 'express';
-import Bot from '../bot';
-import axios, { AxiosResponse } from 'axios';
-import DiscordClient from '../DiscordClient';
-require('dotenv').config();
+import { Router, Request, Response } from "express";
+import Bot from "../bot";
+import axios, { AxiosResponse } from "axios";
+import DiscordClient from "../DiscordClient";
+require("dotenv").config();
 
 class BotAPI {
   router: Router;
@@ -10,7 +10,7 @@ class BotAPI {
 
   constructor() {
     this.router = Router();
-    this.router.get('/status', this.getBotStatus);
+    this.router.get("/status", this.getBotStatus);
   }
 
   public setClient(client: DiscordClient) {
@@ -18,7 +18,7 @@ class BotAPI {
   }
 
   public async getBotStatus(req: Request, res: Response) {
-    res.send({ status: 'online' });
+    res.send({ status: "online" });
   }
 }
 

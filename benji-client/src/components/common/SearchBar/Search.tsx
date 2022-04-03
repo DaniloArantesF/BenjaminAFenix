@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import classes from './Search.module.css';
-import SearchBar from './SearchBar';
-import { YoutubeItem } from '../../../types/youtube';
-import type { InputHandler, Track } from '../../../types';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { getYoutubeItem, searchYoutube } from '../../../libs/Youtube';
-import { selectAuth } from '../../../app/authSlice';
+import React, { useEffect, useRef, useState } from "react";
+import classes from "./Search.module.css";
+import SearchBar from "./SearchBar";
+import { YoutubeItem } from "../../../types/youtube";
+import type { InputHandler, Track } from "../../../types";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { getYoutubeItem, searchYoutube } from "../../../libs/Youtube";
+import { selectAuth } from "../../../app/authSlice";
 
 type SearchItemProps = {
   item: YoutubeItem;
@@ -18,7 +18,7 @@ interface SearchProps {
 
 const Search = ({ requestTrack }: SearchProps) => {
   const dispatch = useAppDispatch();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [items, setItems] = useState<Array<YoutubeItem>>([]);
   const [loading, setLoading] = useState(false);
   const { username } = useAppSelector(selectAuth);
@@ -76,10 +76,10 @@ const Search = ({ requestTrack }: SearchProps) => {
   };
 
   useEffect(() => {
-    window.addEventListener('click', checkDismiss);
+    window.addEventListener("click", checkDismiss);
 
     return () => {
-      window.removeEventListener('click', checkDismiss);
+      window.removeEventListener("click", checkDismiss);
     };
   }, []);
 
@@ -117,7 +117,7 @@ const Search = ({ requestTrack }: SearchProps) => {
   const searchSubmitHandler: InputHandler = async (event) => {
     event.preventDefault();
     setLoading(true);
-    setQuery('');
+    setQuery("");
     const data = await searchYoutube(query);
     setItems(data || []);
     setLoading(false);

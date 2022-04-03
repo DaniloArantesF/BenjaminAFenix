@@ -12,11 +12,11 @@
   display: grid;
   position: relative;
   grid-template-areas:
-    'srch srch'
-    'info btns'
-    'que prev'
-    'que prev'
-    'ctrls prev';
+    "srch srch"
+    "info btns"
+    "que prev"
+    "que prev"
+    "ctrls prev";
   grid-template-columns: minmax(auto, 800px) auto;
   grid-template-rows: auto minmax(120px, 0.5fr) minmax(400px, 1fr) minmax(
       auto,

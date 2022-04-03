@@ -1,4 +1,4 @@
-.btn_container > button{
+.btn_container > button {
   --border-width: 4px;
   --duration: 100ms;
   width: 100px;
@@ -11,8 +11,8 @@
   cursor: pointer;
   line-height: 1.2;
   font-weight: 700;
-  font-size: clamp(.8em, 50%, 100%);
-  padding: .5em 1em;
+  font-size: clamp(0.8em, 50%, 100%);
+  padding: 0.5em 1em;
   letter-spacing: 0.05em;
   border-radius: calc(var(--btn-border-radius) / 2);
 }
@@ -24,15 +24,16 @@
   font-weight: 900;
   transition: color var(--duration) calc(var(--duration) / 3);
   transition: box-shadow var(--duration);
-  transition-timing-function: cubic-bezier(0,1.5,1,1.5);
+  transition-timing-function: cubic-bezier(0, 1.5, 1, 1.5);
   transition: background-color calc(var(--duration) * 3) ease-out;
   position: relative;
   border-radius: var(--border-radius);
 }
 
-.btn_border::before, .btn_border::after {
+.btn_border::before,
+.btn_border::after {
   border: 0 solid transparent;
-  content: '';
+  content: "";
   pointer-events: none;
   position: absolute;
   width: 0;
@@ -57,7 +58,6 @@
   animation: click 100ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 
-
 @keyframes click {
   0% {
   }
@@ -74,7 +74,8 @@
   color: black;
 }
 
-.btn_border:hover::before, .btn_border:hover::after {
+.btn_border:hover::before,
+.btn_border:hover::after {
   border-color: var(--clr-font);
   transition: border-color 0s, width var(--duration), height var(--duration);
   width: 100%;
@@ -94,13 +95,15 @@
   background: var(--clr-font);
 }
 
-.btn_border.btn_inactive, .btn_border.btn_inactive *  {
+.btn_border.btn_inactive,
+.btn_border.btn_inactive * {
   opacity: 20%;
   color: var(--clr-surface1);
   animation: none;
   cursor: default;
 }
 
-.btn_border.btn_inactive:hover::before, .btn_border.btn_inactive:hover::after {
+.btn_border.btn_inactive:hover::before,
+.btn_border.btn_inactive:hover::after {
   display: none;
 }

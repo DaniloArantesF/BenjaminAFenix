@@ -1,7 +1,7 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard/';
-import Offline from './pages/Offline/';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard/";
+import Offline from "./pages/Offline/";
 
 function App() {
   return (

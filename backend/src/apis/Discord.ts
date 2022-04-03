@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
-import axios, { AxiosResponse } from 'axios';
-import DiscordClient from '../DiscordClient';
-import { DISCORD_API_BASE_URL } from '../config';
-require('dotenv').config();
-import jwt from 'jsonwebtoken';
-import { TokenPayload } from './Auth';
+import { Router, Request, Response } from "express";
+import axios, { AxiosResponse } from "axios";
+import DiscordClient from "../DiscordClient";
+import { DISCORD_API_BASE_URL } from "../config";
+require("dotenv").config();
+import jwt from "jsonwebtoken";
+import { TokenPayload } from "./Auth";
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
@@ -39,10 +39,10 @@ class DiscordAPI {
 
   constructor() {
     this.router = Router();
-    this.router.get('/user', this.getDiscordUser.bind(this));
-    this.router.get('/guilds', this.getUserGuilds.bind(this));
-    this.router.get('/channels', this.getGuildVoiceChannels.bind(this));
-    this.router.get('/connection', this.getUserConnection.bind(this));
+    this.router.get("/user", this.getDiscordUser.bind(this));
+    this.router.get("/guilds", this.getUserGuilds.bind(this));
+    this.router.get("/channels", this.getGuildVoiceChannels.bind(this));
+    this.router.get("/connection", this.getUserConnection.bind(this));
     this.client = null;
   }
 
@@ -104,7 +104,7 @@ class DiscordAPI {
       /**
        * Check which guilds the bot is a member and cleanup data
        */
-      const guilds = guildsRes.data.map(({ id, name, icon, owner, }) => {
+      const guilds = guildsRes.data.map(({ id, name, icon, owner }) => {
         return {
           id,
           name,

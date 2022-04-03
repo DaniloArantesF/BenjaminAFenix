@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import jwtDecode from 'jwt-decode';
-import type { AppState } from './store';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
+import type { AppState } from "./store";
 
 export interface TokenPayload {
   userId: string;
@@ -34,17 +34,17 @@ export interface ErrorPayload {
 }
 
 const initialState: AuthState = {
-  id: '',
-  avatar: '',
-  username: '',
-  token: localStorage.getItem('token') || '',
+  id: "",
+  avatar: "",
+  username: "",
+  token: localStorage.getItem("token") || "",
   expiration: 0,
   error: null,
 };
 
 // Payload creator
 export const fetchCredentials = createAsyncThunk(
-  'login',
+  "login",
   async (code: string, { rejectWithValue }) => {
     try {
       const { data } = (await axios.post(
@@ -62,13 +62,17 @@ export const fetchCredentials = createAsyncThunk(
         expiration: decoded.exp * 1000,
       };
     } catch (err) {
-      return rejectWithValue({ code: 400, message: 'Invalid Code!', redirect_path: '/login' });
+      return rejectWithValue({
+        code: 400,
+        message: "Invalid Code!",
+        redirect_path: "/login",
+      });
     }
   }
 );
 
 export const refreshCredentials = createAsyncThunk(
-  'refresh',
+  "refresh",
   async (token: string, { rejectWithValue }) => {
     try {
       const { data } = (await axios.post(
@@ -84,30 +88,36 @@ export const refreshCredentials = createAsyncThunk(
         expiration: decoded.exp * 1000,
       };
     } catch (error) {
-      rejectWithValue({ code: 401, message: 'Error refreshing tokens', redirect_path: '/login' });
+      rejectWithValue({
+        code: 401,
+        message: "Error refreshing tokens",
+        redirect_path: "/login",
+      });
     }
   }
 );
 
 export const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     clearCredentials: (state) => {
       localStorage.clear();
-      return { ...initialState, token: '', error: null };
+      return { ...initialState, token: "", error: null };
     },
     setUser: (state, { payload }) => {
-      localStorage.setItem('id', payload.id);
-      localStorage.setItem('avatar', payload.avatar);
-      localStorage.setItem('username', payload.username);
+      localStorage.setItem("id", payload.id);
+      localStorage.setItem("avatar", payload.avatar);
+      localStorage.setItem("username", payload.username);
       return { ...state, ...payload };
     },
     setCredentials: (state, { payload }) => {
-      const { userId, avatar, username } = jwtDecode(payload.token) as TokenPayload;
-      localStorage.setItem('id', userId);
-      localStorage.setItem('avatar', avatar);
-      localStorage.setItem('username', username);
+      const { userId, avatar, username } = jwtDecode(
+        payload.token
+      ) as TokenPayload;
+      localStorage.setItem("id", userId);
+      localStorage.setItem("avatar", avatar);
+      localStorage.setItem("username", username);
       return { ...state, token: payload.token, id: userId, avatar, username };
     },
     setRefreshTimeout: (state, { payload }) => {
@@ -120,7 +130,7 @@ export const authSlice = createSlice({
     setError: (state, { payload }) => {
       state.error = payload;
       return state;
-    }
+    },
   },
   extraReducers: (builder) => {
     // Builder callback is used as it provides correctly typed reducers from action creators
@@ -128,14 +138,14 @@ export const authSlice = createSlice({
       state.expiration = payload.expiration;
       state.token = payload.token;
 
-      localStorage.setItem('token', payload.token);
-      localStorage.setItem('expiration', `${payload.expiration}`);
+      localStorage.setItem("token", payload.token);
+      localStorage.setItem("expiration", `${payload.expiration}`);
       state.error = null;
     });
     builder.addCase(fetchCredentials.rejected, (state, { payload }) => {
       const { code, message, redirect_path } = payload as Error;
       if (payload) {
-        state.error = { code, message, redirect_path};
+        state.error = { code, message, redirect_path };
       }
     });
 
@@ -144,23 +154,29 @@ export const authSlice = createSlice({
       state.expiration = payload.expiration;
       state.token = payload.token;
 
-      localStorage.setItem('token', payload.token);
-      localStorage.setItem('expiration', `${payload.expiration}`);
+      localStorage.setItem("token", payload.token);
+      localStorage.setItem("expiration", `${payload.expiration}`);
     });
 
     builder.addCase(refreshCredentials.rejected, (state, { payload }) => {
       const { code, message, redirect_path } = payload as Error;
       if (payload) {
-        state.error = { code, message, redirect_path};
+        state.error = { code, message, redirect_path };
       }
     });
   },
 });
 
-export const { clearCredentials, setUser, setCredentials, setRefreshTimeout, setError } =
-  authSlice.actions;
+export const {
+  clearCredentials,
+  setUser,
+  setCredentials,
+  setRefreshTimeout,
+  setError,
+} = authSlice.actions;
 export const selectAuth = (state: AppState) => state.auth;
 export const selectError = (state: AppState) => state.auth.error;
-export const selectRefreshTimeout = (state: AppState) => state.auth.refreshTimeout;
+export const selectRefreshTimeout = (state: AppState) =>
+  state.auth.refreshTimeout;
 export const selectToken = (state: AppState) => state.auth.token;
 export default authSlice.reducer;

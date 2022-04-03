@@ -1,11 +1,11 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { AudioPlayerStatus } from '@discordjs/voice';
-import { Command } from '../DiscordClient';
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { AudioPlayerStatus } from "@discordjs/voice";
+import { Command } from "../DiscordClient";
 
 export const command: Command = {
   data: new SlashCommandBuilder()
-    .setName('stop')
-    .setDescription('Stops playback'),
+    .setName("stop")
+    .setDescription("Stops playback"),
   async execute(client, interaction) {
     // Get guild to disconnect
     const guildId = interaction.guild.id;
@@ -18,14 +18,14 @@ export const command: Command = {
       (player.status !== AudioPlayerStatus.Playing &&
         player.status !== AudioPlayerStatus.Paused)
     ) {
-      return interaction.reply('Nenhuma musica tocando');
+      return interaction.reply("Nenhuma musica tocando");
     }
 
     // Pause player
-    interaction.reply({ content: 'blz', ephemeral: true });
+    interaction.reply({ content: "blz", ephemeral: true });
     player.stop();
     player.queueController.reset();
   },
-  usage: '/stop',
+  usage: "/stop",
   aliases: [],
 };

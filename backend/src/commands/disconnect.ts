@@ -1,10 +1,10 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { Command } from '../DiscordClient';
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { Command } from "../DiscordClient";
 
 export const command: Command = {
   data: new SlashCommandBuilder()
-    .setName('disconnect')
-    .setDescription('Disconnects bot from server'),
+    .setName("disconnect")
+    .setDescription("Disconnects bot from server"),
   async execute(client, interaction) {
     // Get guild to disconnect
     const guildId = interaction.guild.id;
@@ -18,6 +18,6 @@ export const command: Command = {
     interaction.reply("flw mens :rocket:");
     client.disconnect(guildId);
   },
-  usage: '/disconnect',
-  aliases: ['leave'],
+  usage: "/disconnect",
+  aliases: ["leave"],
 };

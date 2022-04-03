@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events';
-import type { Track } from './DiscordClient';
+import { EventEmitter } from "events";
+import type { Track } from "./DiscordClient";
 
 export interface QueueState {
   items: Track[];
@@ -20,33 +20,33 @@ class QueueController extends EventEmitter {
     this.repeat = false;
   }
 
-  public setQueue = (queue: Track[],  position: number) => {
+  public setQueue = (queue: Track[], position: number) => {
     this.items = [...queue];
     this.position = position;
-    this.emit('queue_update');
-  }
+    this.emit("queue_update");
+  };
 
   public pushItem = (item: Track) => {
     // console.log(JSON.stringify(item, null, 2));
     this.items = [...this.items, item];
-    this.emit('queue_update');
-  }
+    this.emit("queue_update");
+  };
 
   public setPosition = (newPosition: number) => {
     this.position = newPosition;
-    this.emit('queue_update');
-  }
+    this.emit("queue_update");
+  };
 
   /**
    * Returns current track to be played
    */
   public getTrack = () => {
     return this.items[this.position];
-  }
+  };
 
   public topItems = () => {
     return this.items.slice(this.position, this.position + 2);
-  }
+  };
 
   /**
    * Function called to jump to next song in queue
@@ -65,9 +65,9 @@ class QueueController extends EventEmitter {
       this.position++;
     }
 
-    this.emit('queue_update');
+    this.emit("queue_update");
     return this.items[this.position];
-  }
+  };
 
   /**
    * Function called to jump to previous song in queue
@@ -77,15 +77,15 @@ class QueueController extends EventEmitter {
   // TODO: implement history so it can return to prev random track
   public previous = (): Track | null => {
     if (this.position - 1 < 0 || this.shuffle || this.repeat) {
-      this.emit('restart_track');
+      this.emit("restart_track");
       return this.items[this.position];
     } else {
       this.position--;
     }
 
-    this.emit('queue_update');
+    this.emit("queue_update");
     return this.items[this.position];
-  }
+  };
 
   // TODO: public insertTrack() {}
 
@@ -96,7 +96,7 @@ class QueueController extends EventEmitter {
     this.position = -1;
     this.shuffle = false;
     this.repeat = false;
-  }
+  };
 
   /**
    * Returns tracks in queue.
@@ -104,7 +104,7 @@ class QueueController extends EventEmitter {
    */
   public getQueue = () => {
     return this.items.slice(this.position);
-  }
+  };
 
   /**
    * Inverts shuffle value or sets it to passed value
@@ -112,7 +112,7 @@ class QueueController extends EventEmitter {
    */
   public setShuffle = (shuffle?: boolean) => {
     this.shuffle = shuffle === undefined ? !this.shuffle : shuffle;
-  }
+  };
 
   /**
    * Inverts repeat value or sets it to passed value
@@ -120,14 +120,14 @@ class QueueController extends EventEmitter {
    */
   public setRepeat = (repeat?: boolean) => {
     this.repeat = repeat === undefined ? !this.repeat : repeat;
-  }
+  };
 
   /**
    * Returns a random index within queue bounds
    */
   public getRandomIndex = () => {
     return Math.floor(Math.random() * this.items.length);
-  }
+  };
 }
 
 export default QueueController;

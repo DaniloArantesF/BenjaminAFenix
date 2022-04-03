@@ -62,7 +62,7 @@
 
   .navbar_container.active {
     left: 0;
-    transition: left 500ms cubic-bezier(0.22, 1, 0.36, 1);;
+    transition: left 500ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .navbar_container.hidden {
@@ -74,7 +74,9 @@
     display: block;
     width: 2.5em;
     position: absolute;
-    top: calc(var(--dashboard-margin-top) + 1.5 * (var(--search-bar-height)/2));
+    top: calc(
+      var(--dashboard-margin-top) + 1.5 * (var(--search-bar-height) / 2)
+    );
     left: 2em;
     z-index: 2;
   }
@@ -86,7 +88,6 @@
   .menu_btn:hover svg {
     fill: var(--clr-btn-active);
   }
-
 }
 
 .guilds_container {
@@ -95,10 +96,10 @@
   max-height: 100%;
   overflow: auto;
   grid-template-rows: repeat(auto-fill, 1fr);
-  gap: .5em;
+  gap: 0.5em;
   justify-content: flex-start;
   align-items: center;
-  padding: .1em;
+  padding: 0.1em;
 }
 
 /* Hide Scrollbar */
@@ -106,8 +107,8 @@
   display: none;
 }
 .guilds_container {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .guilds_container::-webkit-scrollbar {
@@ -147,13 +148,12 @@
   border-radius: 50%;
 }
 
-
 .guildIcon.guildActive {
   grid-row: 1;
   transform: translateX(50px);
   border-radius: 15px;
   transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
-              border-radius 500ms cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .guildIcon.guildActive img {
@@ -162,7 +162,7 @@
 }
 
 .guildIcon.guildActive::before {
-  content: '';
+  content: "";
   background-color: var(--clr-title);
   width: 10px;
   height: 10px;
@@ -189,4 +189,3 @@
   justify-content: center;
   align-items: flex-start;
 }
-

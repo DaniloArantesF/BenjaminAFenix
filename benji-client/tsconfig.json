@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "DOM.Iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "DOM.Iterable", "esnext"],
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -20,10 +16,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "typings.d.ts",
-    "./src"
-  ],
+  "include": ["typings.d.ts", "./src"],
   "rules": {
     "no-unused-vars": 0,
     "@typescript-eslint/no-unused-vars": 0

@@ -1,10 +1,10 @@
 // Each slice file should define a type for its initial state value
 // so that createSlice can correctly infer the type of state in each case
 // reducer
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { AppState } from './store';
-import type { Track } from '../types';
-import { QItem } from '../components/common/Queue/Queue';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { AppState } from "./store";
+import type { Track } from "../types";
+import { QItem } from "../components/common/Queue/Queue";
 
 // define type for slice state
 export interface QueueState {
@@ -23,7 +23,7 @@ const initialState: QueueState = {
 };
 
 export const queueSlice = createSlice({
-  name: 'queue',
+  name: "queue",
   initialState,
   reducers: {
     setQueue: (state, action) => {
@@ -53,17 +53,24 @@ export const queueSlice = createSlice({
     pushTrack: (state, action: PayloadAction<Track>) => {
       let newItem: QItem = {
         itemPosition: state.items.length + 1,
-        ...action.payload
+        ...action.payload,
       };
       state.items = [...state.items, newItem];
-      if (state.position === -1)
-        state.position = 0;
+      if (state.position === -1) state.position = 0;
       return state;
-    }
+    },
   },
 });
 
-export const { next, previous, setPosition, setQueue, pushTrack, setShuffle, setRepeat } = queueSlice.actions;
+export const {
+  next,
+  previous,
+  setPosition,
+  setQueue,
+  pushTrack,
+  setShuffle,
+  setRepeat,
+} = queueSlice.actions;
 export const selectPosition = (state: AppState) => state.queue.position;
 export const selectItems = (state: AppState) => state.queue.items;
 export const selectQueue = (state: AppState) => state.queue;

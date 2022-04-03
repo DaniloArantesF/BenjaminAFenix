@@ -1,9 +1,9 @@
 export interface Registry {
-  unregister: (args?:any) => void;
+  unregister: (args?: any) => void;
 }
 
 export interface Callable {
-  [key: string]: (args?:any) => void;
+  [key: string]: (args?: any) => void;
 }
 
 export interface Subscriber {
@@ -12,7 +12,7 @@ export interface Subscriber {
 
 export interface IEventBus {
   dispatch<T>(event: string, arg?: T): void;
-  register(event: string, callback: (args?:any) => void): Registry;
+  register(event: string, callback: (args?: any) => void): Registry;
 }
 
 // TODO: add namespace
@@ -21,7 +21,6 @@ export class EventBus implements IEventBus {
   private static instance?: EventBus = undefined;
   private static nextId = 0;
   private subscribers: Subscriber;
-
 
   private constructor() {
     this.subscribers = {};
@@ -36,7 +35,7 @@ export class EventBus implements IEventBus {
     Object.keys(subscriber).forEach((key) => subscriber[key](arg));
   }
 
-  public register(event: string, callback: (args?:any) => void) {
+  public register(event: string, callback: (args?: any) => void) {
     const id = this.getNextId();
 
     if (!this.subscribers[event]) {

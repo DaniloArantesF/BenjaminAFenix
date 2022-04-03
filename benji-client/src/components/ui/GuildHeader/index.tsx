@@ -1,12 +1,12 @@
-import { BaseSyntheticEvent, useEffect, useState } from 'react';
-import { selectDashboard } from '../../../app/dashboardSlice';
-import { useAppSelector } from '../../../app/hooks';
-import { getDiscordAvatar } from '../../../libs/Discord';
-import { msToMinSec } from '../../../util/util';
-import { ReactComponent as ExitIcon } from '../../../assets/exit.svg';
-import { ReactComponent as SwitchIcon } from '../../../assets/switch.svg';
+import { BaseSyntheticEvent, useEffect, useState } from "react";
+import { selectDashboard } from "../../../app/dashboardSlice";
+import { useAppSelector } from "../../../app/hooks";
+import { getDiscordAvatar } from "../../../libs/Discord";
+import { msToMinSec } from "../../../util/util";
+import { ReactComponent as ExitIcon } from "../../../assets/exit.svg";
+import { ReactComponent as SwitchIcon } from "../../../assets/switch.svg";
 
-import classes from './GuildHeader.module.css';
+import classes from "./GuildHeader.module.css";
 
 interface props {
   switchHandler: () => void;
@@ -18,16 +18,15 @@ const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
 
   // TODO: try using useLayoutEffect here ?
   useEffect(() => {
-    const interval = setInterval(function() {
+    const interval = setInterval(function () {
       setUptime(getUptime(channel?.timestamp ?? 0));
     }, 1000);
 
-    document.title = `Benji @ ${channel?.name}`
+    document.title = `Benji @ ${channel?.name}`;
     return () => {
-      if (interval)
-        clearInterval(interval);
-    }
-  }, [ channel ]);
+      if (interval) clearInterval(interval);
+    };
+  }, [channel]);
 
   function getUptime(start: number) {
     return msToMinSec(start ? Date.now() - start : 0);
@@ -39,13 +38,13 @@ const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
   const interceptClick = (event: BaseSyntheticEvent, next: () => void) => {
     event.currentTarget.blur();
     next();
-  }
+  };
 
   return (
     <div className={classes.guild_header}>
       {guild.icon ? (
         <img
-          src={getDiscordAvatar('guild', guild.id, guild.icon)}
+          src={getDiscordAvatar("guild", guild.id, guild.icon)}
           alt={guild.name}
         />
       ) : (
@@ -54,7 +53,7 @@ const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
 
       <div className={classes.guild_header__body}>
         <h1>
-          {guild.name} {channel ? `/ ${channel.name}` : ''}
+          {guild.name} {channel ? `/ ${channel.name}` : ""}
         </h1>
         <h2>{channel?.onlineCount || 0} online</h2>
         <h2>{uptime}</h2>

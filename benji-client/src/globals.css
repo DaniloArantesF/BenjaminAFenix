@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300&display=swap");
 
 :root {
   /* Breakpoints */
@@ -41,7 +41,7 @@
 }
 
 [data-theme="dark"] {
-  --clr-bg: #0E0E12;
+  --clr-bg: #0e0e12;
   --clr-surface0: #131619;
   --clr-surface1: #16161b;
   --clr-surface2: #131516;
@@ -57,12 +57,12 @@
 }
 
 [data-theme="light"] {
-  --clr-bg: #F4F4F5;
-  --clr-surface0: #F2F3F2;
+  --clr-bg: #f4f4f5;
+  --clr-surface0: #f2f3f2;
   --clr-surface1: #f1f1f1;
   --clr-surface2: #f1f1f1;
   --clr-surface3: #cccccc;
-  --clr-accent: #DE3B40;
+  --clr-accent: #de3b40;
 
   --clr-font: #3b465c;
   --clr-title: #060606;
@@ -82,7 +82,7 @@
 
 @media screen and (max-width: 800px) {
   :root {
-    font-size: .9em;
+    font-size: 0.9em;
     --search-bar-width: calc(90% - var(--srch-margin-left));
     --thumb-width: 90px;
     --thumb-height: 60px;
@@ -96,7 +96,7 @@ body {
   background: var(--clr-bg);
   color: var(--clr-font);
   overflow: hidden;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 *,

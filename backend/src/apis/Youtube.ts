@@ -1,12 +1,12 @@
-import { google } from 'googleapis';
-require('dotenv').config();
-import type { ItemsEntity, YoutubeItem } from './Youtube.d';
-import { convertISODurationToMS } from '../util/time';
-import { Router, Request, Response } from 'express';
-import DiscordClient from '../DiscordClient';
+import { google } from "googleapis";
+require("dotenv").config();
+import type { ItemsEntity, YoutubeItem } from "./Youtube.d";
+import { convertISODurationToMS } from "../util/time";
+import { Router, Request, Response } from "express";
+import DiscordClient from "../DiscordClient";
 
 const YT_API_KEY = process.env.YT_API_KEY;
-const youtube = google.youtube({ version: 'v3', auth: YT_API_KEY });
+const youtube = google.youtube({ version: "v3", auth: YT_API_KEY });
 
 /**
  * Wrapper function for Yotube search API
@@ -19,12 +19,12 @@ export async function searchYoutube(
 ): Promise<YoutubeItem[]> {
   if (!maxResults) maxResults = 1;
   const search = await youtube.search.list({
-    part: ['snippet'],
+    part: ["snippet"],
     q: query,
     maxResults,
-    safeSearch: 'none',
-    type: ['video'],
-    videoCategoryId: '10',
+    safeSearch: "none",
+    type: ["video"],
+    videoCategoryId: "10",
   });
 
   const items = await Promise.all(
@@ -58,7 +58,7 @@ export async function searchYoutube(
 export async function getYoutubeItem(id: string): Promise<YoutubeItem> {
   //
   const { data } = await youtube.videos.list({
-    part: ['snippet', 'contentDetails'],
+    part: ["snippet", "contentDetails"],
     id: [id],
   });
 
@@ -90,7 +90,7 @@ export async function getYoutubeItem(id: string): Promise<YoutubeItem> {
 export function getIdFromUrl(url: string): string {
   // Check if url contains parameters
   const idParam = url.search(/watch\?v=/);
-  let id = '';
+  let id = "";
 
   if (idParam !== -1) {
     // +8 to skip watch?v= and +11 for id length
@@ -104,7 +104,7 @@ export function getIdFromUrl(url: string): string {
 
   if (id.length < 11) {
     console.error(`Possible error parsing ${url}`);
-    return '';
+    return "";
   }
   return id;
 }
@@ -115,7 +115,7 @@ export function getYoutubeUrl(id: string) {
 
 export async function getItemDuration(id: string) {
   const { data } = await youtube.videos.list({
-    part: ['contentDetails'],
+    part: ["contentDetails"],
     id: [id],
   });
 
@@ -131,8 +131,8 @@ class YoutubeAPI {
   constructor() {
     this.router = Router();
     this.client = null;
-    this.router.get('/', this.getItem.bind(this));
-    this.router.get('/search', this.search.bind(this));
+    this.router.get("/", this.getItem.bind(this));
+    this.router.get("/search", this.search.bind(this));
   }
 
   public setClient(client: DiscordClient) {

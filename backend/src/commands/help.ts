@@ -1,8 +1,8 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { Track, Command } from '../DiscordClient';
-import { getYoutubeUrl } from '../apis/Youtube';
-import { MessageEmbed } from 'discord.js';
-import DiscordClient from '../DiscordClient';
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { Track, Command } from "../DiscordClient";
+import { getYoutubeUrl } from "../apis/Youtube";
+import { MessageEmbed } from "discord.js";
+import DiscordClient from "../DiscordClient";
 
 export const HelpEmbed = () => {
   const fields = [];
@@ -12,10 +12,10 @@ export const HelpEmbed = () => {
   }
 
   return new MessageEmbed()
-    .setColor('#b700ff')
-    .setTitle('Bot Commands :scroll:')
+    .setColor("#b700ff")
+    .setTitle("Bot Commands :scroll:")
     .setThumbnail(
-      'https://media1.tenor.com/images/75f1a082d67bcd34cc4960131e905bed/tenor.gif?itemid=5505046'
+      "https://media1.tenor.com/images/75f1a082d67bcd34cc4960131e905bed/tenor.gif?itemid=5505046"
     )
     .addFields(...fields)
     .setFooter("To more info on a command use '/help <command>'");
@@ -29,25 +29,25 @@ export const CommandHelpEmbed = (name: string) => {
 
   // TODO: set constraints name, description cant be empty
   return new MessageEmbed()
-    .setColor('#b700ff')
+    .setColor("#b700ff")
     .setTitle(`/${cmd.data.name}`)
     .setDescription(cmd.data.description)
-    .addField('\u200B', `Usage: \'${cmd.usage}\'`);
+    .addField("\u200B", `Usage: \'${cmd.usage}\'`);
 };
 
 export const command: Command = {
   data: new SlashCommandBuilder()
-    .setName('help')
-    .setDescription('Displays bot commands')
+    .setName("help")
+    .setDescription("Displays bot commands")
     .addStringOption((option) =>
       option
-        .setName('command')
-        .setDescription('Get info on a command')
+        .setName("command")
+        .setDescription("Get info on a command")
         .setRequired(false)
     ),
   async execute(client, interaction) {
     const connection = client.connections.get(interaction.guild.id);
-    const arg = interaction.options.getString('command');
+    const arg = interaction.options.getString("command");
 
     if (arg) {
       return interaction.reply({
@@ -60,6 +60,6 @@ export const command: Command = {
       ephemeral: true,
     });
   },
-  usage: '/help',
-  aliases: ['h', 'halp'],
+  usage: "/help",
+  aliases: ["h", "halp"],
 };

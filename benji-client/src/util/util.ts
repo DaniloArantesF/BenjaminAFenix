@@ -1,4 +1,4 @@
-import { parse } from 'tinyduration';
+import { parse } from "tinyduration";
 
 export type Duration = {
   [index: string]: number | undefined;
@@ -25,9 +25,9 @@ export const msToMinSec = (ms: number) => {
     hours += 1;
   }
 
-  return `${hours ? hours + ':' : ''}${
-    minutes ? (minutes < 10 ? '0' : '') + minutes : '00'
-  }:${seconds ? (seconds < 10 ? '0' : '') + seconds : '00'}`;
+  return `${hours ? hours + ":" : ""}${
+    minutes ? (minutes < 10 ? "0" : "") + minutes : "00"
+  }:${seconds ? (seconds < 10 ? "0" : "") + seconds : "00"}`;
 };
 
 export const convertISODurationToMS = (isoDuration: string) => {

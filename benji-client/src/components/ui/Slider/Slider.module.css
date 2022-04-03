@@ -1,4 +1,3 @@
-
 .slider_container {
   display: inline-flex;
   align-items: center;
@@ -33,7 +32,7 @@
 }
 
 .track__left::before {
-  content: '';
+  content: "";
   position: absolute;
   top: calc(-1em / 8);
   right: calc(-1em / 8);

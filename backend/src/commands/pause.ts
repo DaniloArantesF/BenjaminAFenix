@@ -1,11 +1,11 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { AudioPlayerStatus } from '@discordjs/voice';
-import { Command } from '../DiscordClient';
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { AudioPlayerStatus } from "@discordjs/voice";
+import { Command } from "../DiscordClient";
 
 export const command: Command = {
   data: new SlashCommandBuilder()
-    .setName('pause')
-    .setDescription('Pauses current playback'),
+    .setName("pause")
+    .setDescription("Pauses current playback"),
   async execute(client, interaction) {
     // Get guild to pause player
     const guildId = interaction.guild.id;
@@ -20,6 +20,6 @@ export const command: Command = {
     interaction.reply({ content: "Pausado, chefe", ephemeral: true });
     player.pause();
   },
-  usage: '/pause',
-  aliases: ['p'],
+  usage: "/pause",
+  aliases: ["p"],
 };

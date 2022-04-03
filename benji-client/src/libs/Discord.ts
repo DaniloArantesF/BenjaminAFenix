@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from 'axios';
-import { selectToken, setError } from '../app/authSlice';
-import { Channel, Guild } from '../app/dashboardSlice';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import axios, { AxiosResponse } from "axios";
+import { selectToken, setError } from "../app/authSlice";
+import { Channel, Guild } from "../app/dashboardSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 
 const useDiscord = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,14 @@ const useDiscord = () => {
       );
       return res.data.channels;
     } catch (error) {
-      !error && dispatch(setError({ message: 'Error fetching voice channels', code: 401, redirect_path: '/login' }));
+      !error &&
+        dispatch(
+          setError({
+            message: "Error fetching voice channels",
+            code: 401,
+            redirect_path: "/login",
+          })
+        );
       return [];
     }
   };
@@ -33,8 +40,15 @@ const useDiscord = () => {
       const { id, username, avatar } = res.data;
       return { id, username, avatar };
     } catch (error) {
-      !error && dispatch(setError({ message: 'Error getting user data', code: 401, redirect_path: '/login' }));
-      return { id: '', username: '', avatar: '' };
+      !error &&
+        dispatch(
+          setError({
+            message: "Error getting user data",
+            code: 401,
+            redirect_path: "/login",
+          })
+        );
+      return { id: "", username: "", avatar: "" };
     }
   };
 
@@ -50,7 +64,14 @@ const useDiscord = () => {
       const guilds: Guild[] = res.data.guilds;
       return guilds;
     } catch (error) {
-      !error && dispatch(setError({ message: 'Error getting user guilds', code: 401, redirect_path: '/login' }));
+      !error &&
+        dispatch(
+          setError({
+            message: "Error getting user guilds",
+            code: 401,
+            redirect_path: "/login",
+          })
+        );
       return [];
     }
   };
@@ -69,8 +90,8 @@ const useDiscord = () => {
         channel: res.data.channel as Channel,
       };
     } catch (error) {
-      console.error('Error getting user connection');
-      !error && dispatch(setError('Error getting user connection'));
+      console.error("Error getting user connection");
+      !error && dispatch(setError("Error getting user connection"));
       return {
         guild: null,
         channel: null,
@@ -95,21 +116,20 @@ const useDiscord = () => {
  * @returns
  */
 export const getDiscordAvatar = (
-  type = 'user',
+  type = "user",
   id: string,
   avatarHash: string,
   size = 64
 ) => {
-  const baseUrl = 'https://cdn.discordapp.com/';
+  const baseUrl = "https://cdn.discordapp.com/";
   const userPath = `avatars/${id}/${avatarHash}.png`;
   const guildPath = `icons/${id}/${avatarHash}.png`;
 
-  if (type === 'user') {
+  if (type === "user") {
     return baseUrl + userPath + `?size=${size}`;
-  } else if (type === 'guild') {
+  } else if (type === "guild") {
     return baseUrl + guildPath + `?size=${size}`;
   }
 };
-
 
 export default useDiscord;
