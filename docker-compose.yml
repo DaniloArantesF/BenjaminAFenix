@@ -1,0 +1,22 @@
+
+services:
+  api:
+    container_name: api
+    build:
+      dockerfile: Dockerfile
+      context: "./backend"
+    ports:
+      - "8000:8000"
+    restart: always
+
+  client:
+    container_name: client
+    build:
+      dockerfile: Dockerfile
+      context: "./benji-client"
+    ports:
+      - "3000:80"
+    links:
+      - api
+    environment:
+      - CHOKIDAR_USEPOLLING=true
