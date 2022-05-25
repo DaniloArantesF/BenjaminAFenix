@@ -11,11 +11,11 @@
   height: 100%;
   display: grid;
   grid-template-areas:
-    "head head"
-    "info side"
-    "que side"
-    "que side"
-    "ctrls side";
+    'head head'
+    'info side'
+    'que side'
+    'que side'
+    'ctrls side';
 
   /* VIDEO STUFF, come back to it later */
   /* This is done to keep first column only as wide as video component and enforce 16/9 aspect ratio

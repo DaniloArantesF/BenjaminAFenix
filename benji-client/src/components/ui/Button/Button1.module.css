@@ -33,7 +33,7 @@
 .btn_border::before,
 .btn_border::after {
   border: 0 solid transparent;
-  content: "";
+  content: '';
   pointer-events: none;
   position: absolute;
   width: 0;

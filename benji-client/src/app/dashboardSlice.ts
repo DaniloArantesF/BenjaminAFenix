@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { msToMinSec } from "../util/util";
-import type { AppState } from "./store";
+import { createSlice } from '@reduxjs/toolkit';
+import { msToMinSec } from '../util/util';
+import type { AppState } from './store';
 
 export interface Guild {
   id: string;
@@ -32,17 +32,17 @@ export interface DashboardState {
 const initialState: DashboardState = {
   currentGuild: null,
   channels: [],
-  channel: { name: "", id: "", onlineCount: 0, timestamp: 0 },
+  channel: { name: '', id: '', onlineCount: 0, timestamp: 0 },
   guilds: [],
   active: false,
   channelSelection: false,
   navbar: window.innerWidth > 1150, // Only show by default in larger displays
   windowWidth: window.innerWidth,
-  theme: localStorage.getItem("theme") || "dark",
+  theme: localStorage.getItem('theme') || 'dark',
 };
 
 export const dashboardSlice = createSlice({
-  name: "dashboard",
+  name: 'dashboard',
   initialState,
   reducers: {
     setUserGuilds: (state, { payload }) => {
@@ -59,7 +59,7 @@ export const dashboardSlice = createSlice({
     },
     setCurrentGuild: (state, { payload }) => {
       state.currentGuild = payload;
-      localStorage.setItem("guild", JSON.stringify(payload));
+      localStorage.setItem('guild', JSON.stringify(payload));
       return state;
     },
     setCurrentChannel: (state, { payload }) => {

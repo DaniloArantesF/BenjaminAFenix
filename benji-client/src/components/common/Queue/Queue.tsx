@@ -1,17 +1,17 @@
-import React, { SyntheticEvent, useRef, useState } from "react";
-import { Track } from "../../../types";
-import { msToMinSec } from "../../../util/util";
-import { useAppSelector, useAppDispatch } from "../../../app/hooks";
+import React, { SyntheticEvent, useRef, useState } from 'react';
+import { Track } from '../../../types';
+import { msToMinSec } from '../../../util/util';
+import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   selectPosition,
   selectQueue,
   selectQueueLength,
   setQueue,
-} from "../../../app/queueSlice";
-import classes from "./Queue.module.css";
-import { ReactComponent as DraggableIcon } from "../../../assets/draggable.svg";
-import { selectPlayerState } from "../../../app/playerSlice";
-import { selectDashboard } from "../../../app/dashboardSlice";
+} from '../../../app/queueSlice';
+import classes from './Queue.module.css';
+import { ReactComponent as DraggableIcon } from '../../../assets/draggable.svg';
+import { selectPlayerState } from '../../../app/playerSlice';
+import { selectDashboard } from '../../../app/dashboardSlice';
 
 export interface QItem extends Track {
   itemPosition: number;
@@ -83,7 +83,7 @@ const Queue = ({ items, setTrack }: QProps) => {
   const { isDragging, setDragging, newItems, setNewItems } = useDragging();
 
   const endDrag = (event: any) => {
-    event.target.style = ""; // Reset CSS used to change row
+    event.target.style = ''; // Reset CSS used to change row
     if (newItems) {
       // Reset hook
       dispatch(setQueue({ items: newItems, position }));
@@ -116,7 +116,7 @@ const Queue = ({ items, setTrack }: QProps) => {
       tmp.splice(newIndex, 0, item);
       setNewItems(tmp);
     } else {
-      target.style.gridRow = "";
+      target.style.gridRow = '';
     }
   };
 

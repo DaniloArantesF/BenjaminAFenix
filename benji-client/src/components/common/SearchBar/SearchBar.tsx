@@ -1,7 +1,7 @@
-import { useRef } from "react";
-import classes from "./Search.module.css";
-import { ReactComponent as SearchIcon } from "../../../assets/search.svg";
-import type { InputHandler } from "../../../types";
+import React, { useRef } from 'react';
+import classes from './Search.module.css';
+import { ReactComponent as SearchIcon } from '../../../assets/search.svg';
+import type { InputHandler } from '../../../types';
 
 type SearchBarProps = {
   inputCallback: InputHandler;
@@ -18,11 +18,11 @@ const SearchBar = ({
 
   const submitIntercept: InputHandler = (event) => {
     if (inputRef && inputRef.current) {
-      if (inputRef.current.value === "") {
+      if (inputRef.current.value === '') {
         // Input is empty, dont proceed
         return new Promise((res) => res(0));
       }
-      inputRef.current.value = "";
+      inputRef.current.value = '';
       inputRef.current.blur();
     }
     return submitCallback(event);
@@ -41,9 +41,9 @@ const SearchBar = ({
       <form onSubmit={submitIntercept}>
         <label>
           <input
-            autoComplete={"false"}
+            autoComplete={'false'}
             className={classes.search_input}
-            placeholder={"Add a song!"}
+            placeholder={'Add a song!'}
             onChange={inputCallback}
             ref={inputRef}
           />

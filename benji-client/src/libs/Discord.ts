@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from "axios";
-import { selectToken, setError } from "../app/authSlice";
-import { Channel, Guild } from "../app/dashboardSlice";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import axios, { AxiosResponse } from 'axios';
+import { selectToken, setError } from '../app/authSlice';
+import { Channel, Guild } from '../app/dashboardSlice';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 
 const useDiscord = () => {
   const dispatch = useAppDispatch();
@@ -20,9 +20,9 @@ const useDiscord = () => {
       !error &&
         dispatch(
           setError({
-            message: "Error fetching voice channels",
+            message: 'Error fetching voice channels',
             code: 401,
-            redirect_path: "/login",
+            redirect_path: '/login',
           })
         );
       return [];
@@ -43,12 +43,12 @@ const useDiscord = () => {
       !error &&
         dispatch(
           setError({
-            message: "Error getting user data",
+            message: 'Error getting user data',
             code: 401,
-            redirect_path: "/login",
+            redirect_path: '/login',
           })
         );
-      return { id: "", username: "", avatar: "" };
+      return { id: '', username: '', avatar: '' };
     }
   };
 
@@ -67,9 +67,9 @@ const useDiscord = () => {
       !error &&
         dispatch(
           setError({
-            message: "Error getting user guilds",
+            message: 'Error getting user guilds',
             code: 401,
-            redirect_path: "/login",
+            redirect_path: '/login',
           })
         );
       return [];
@@ -90,8 +90,8 @@ const useDiscord = () => {
         channel: res.data.channel as Channel,
       };
     } catch (error) {
-      console.error("Error getting user connection");
-      !error && dispatch(setError("Error getting user connection"));
+      console.error('Error getting user connection');
+      !error && dispatch(setError('Error getting user connection'));
       return {
         guild: null,
         channel: null,
@@ -116,18 +116,18 @@ const useDiscord = () => {
  * @returns
  */
 export const getDiscordAvatar = (
-  type = "user",
+  type = 'user',
   id: string,
   avatarHash: string,
   size = 64
 ) => {
-  const baseUrl = "https://cdn.discordapp.com/";
+  const baseUrl = 'https://cdn.discordapp.com/';
   const userPath = `avatars/${id}/${avatarHash}.png`;
   const guildPath = `icons/${id}/${avatarHash}.png`;
 
-  if (type === "user") {
+  if (type === 'user') {
     return baseUrl + userPath + `?size=${size}`;
-  } else if (type === "guild") {
+  } else if (type === 'guild') {
     return baseUrl + guildPath + `?size=${size}`;
   }
 };

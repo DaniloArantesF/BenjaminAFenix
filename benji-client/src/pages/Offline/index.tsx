@@ -1,6 +1,7 @@
-import classes from "./Offline.module.css";
-import { ReactComponent as Background } from "../../assets/Background.svg";
-import { ReactComponent as Logo } from "../../assets/Logo.svg";
+import React from 'react';
+import classes from './Offline.module.css';
+import { ReactComponent as Background } from '../../assets/Background.svg';
+import { ReactComponent as Logo } from '../../assets/Logo.svg';
 
 const OfflinePage = () => {
   return (

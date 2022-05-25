@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent } from "react";
+import { BaseSyntheticEvent } from 'react';
 
 export interface Command {
   aliases?: string[];

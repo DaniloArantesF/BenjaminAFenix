@@ -1,4 +1,4 @@
-import { parse } from "tinyduration";
+import { parse } from 'tinyduration';
 
 export type Duration = {
   [index: string]: number | undefined;
@@ -12,8 +12,8 @@ export type Duration = {
 
 export const msToMinSec = (ms: number) => {
   let hours = Math.floor(ms / 3600000);
-  let minutes: number = Math.floor((ms % 3600000) / 60000);
-  let seconds: number = Number((((ms % 3600000) % 60000) / 1000).toFixed(0));
+  let minutes = Math.floor((ms % 3600000) / 60000);
+  let seconds = Number((((ms % 3600000) % 60000) / 1000).toFixed(0));
 
   if (seconds === 60) {
     minutes++;
@@ -25,9 +25,9 @@ export const msToMinSec = (ms: number) => {
     hours += 1;
   }
 
-  return `${hours ? hours + ":" : ""}${
-    minutes ? (minutes < 10 ? "0" : "") + minutes : "00"
-  }:${seconds ? (seconds < 10 ? "0" : "") + seconds : "00"}`;
+  return `${hours ? hours + ':' : ''}${
+    minutes ? (minutes < 10 ? '0' : '') + minutes : '00'
+  }:${seconds ? (seconds < 10 ? '0' : '') + seconds : '00'}`;
 };
 
 export const convertISODurationToMS = (isoDuration: string) => {
@@ -40,7 +40,7 @@ export const convertISODurationToMS = (isoDuration: string) => {
     seconds: 1000,
   };
   let durationMilli = 0;
-  let durationObj = parse(isoDuration);
+  const durationObj = parse(isoDuration);
 
   for (let period in durationObj) {
     let curPeriod = (durationObj as Duration)[period];

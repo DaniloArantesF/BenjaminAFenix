@@ -1,7 +1,7 @@
-import { MouseEvent, useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../../../app/hooks";
-import { selectPlayerState } from "../../../app/playerSlice";
-import classes from "./Slider.module.css";
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import { useAppSelector } from '../../../app/hooks';
+import { selectPlayerState } from '../../../app/playerSlice';
+import classes from './Slider.module.css';
 
 interface SliderProps {
   changeCb: (value: number) => void;
@@ -54,8 +54,8 @@ const Slider = ({ changeCb }: SliderProps) => {
    */
   const handleUpdate = (event: MouseEvent) => {
     if (!sliderRef?.current) return 0;
-    let slider = sliderRef.current.getBoundingClientRect();
-    let mouseX = event.clientX - slider.x;
+    const slider = sliderRef.current.getBoundingClientRect();
+    const mouseX = event.clientX - slider.x;
     const newValue = Math.max(
       0,
       Math.min(100, Math.ceil((mouseX * 100) / slider.width))

@@ -32,7 +32,7 @@
 }
 
 .track__left::before {
-  content: "";
+  content: '';
   position: absolute;
   top: calc(-1em / 8);
   right: calc(-1em / 8);

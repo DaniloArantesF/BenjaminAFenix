@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import { YoutubeItem } from "../types/youtube";
+import axios, { AxiosResponse } from 'axios';
+import { YoutubeItem } from '../types/youtube';
 
 export const getYoutubeItem = async (itemId: string) => {
   try {
@@ -11,22 +11,22 @@ export const getYoutubeItem = async (itemId: string) => {
     );
     return res.data.item;
   } catch (error) {
-    console.error("Error fetching item");
+    console.error('Error fetching item');
     return {
-      channelId: "",
-      channelTitle: "",
-      description: "",
-      id: "",
-      publishedAt: "",
-      publishTime: "",
+      channelId: '',
+      channelTitle: '',
+      description: '',
+      id: '',
+      publishedAt: '',
+      publishTime: '',
       thumbnails: {
         default: {
-          url: "",
+          url: '',
           width: 0,
           height: 0,
         },
       },
-      title: "",
+      title: '',
       duration: 0,
     } as YoutubeItem;
   }
@@ -45,6 +45,6 @@ export const searchYoutube = async (query: string, resultsCount = 5) => {
     );
     return res.data.items;
   } catch (error) {
-    console.error("Error searching youtube");
+    console.error('Error searching youtube');
   }
 };

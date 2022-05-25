@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "./hooks";
-import socketIOClient, { Socket } from "socket.io-client";
+import { useState, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from './hooks';
+import socketIOClient, { Socket } from 'socket.io-client';
 import {
   Channel,
   Guild,
@@ -8,7 +8,7 @@ import {
   setActive,
   setChannels,
   setCurrentChannel,
-} from "./dashboardSlice";
+} from './dashboardSlice';
 import {
   QueueState,
   selectRepeat,
@@ -16,18 +16,18 @@ import {
   setQueue,
   setRepeat,
   setShuffle,
-} from "./queueSlice";
-import { Track } from "../types";
-import { selectAuth, setError } from "./authSlice";
+} from './queueSlice';
+import { Track } from '../types';
+import { selectAuth, setError } from './authSlice';
 import {
   resetPlayer,
   selectPlayerState,
   setCurrentTrack,
   updatePlaybackState,
-} from "./playerSlice";
-import axios from "axios";
-import useDiscordAPI from "../libs/Discord";
-import { pushAction } from "./logSlice";
+} from './playerSlice';
+import axios from 'axios';
+import useDiscordAPI from '../libs/Discord';
+import { pushAction } from './logSlice';
 
 const endpoint = `${process.env.REACT_APP_BOT_HOSTNAME}/bot`;
 
@@ -54,10 +54,10 @@ const useSocket = () => {
 
     connect();
     return () => {
-      socket?.off("connect");
-      socket?.off("not_active");
-      socket?.off("player_update");
-      socket?.off("playback_state");
+      socket?.off('connect');
+      socket?.off('not_active');
+      socket?.off('player_update');
+      socket?.off('playback_state');
       socket?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,8 +102,8 @@ const useSocket = () => {
       dispatch(
         setError({
           code: 503,
-          message: "Bot is offline or not responding.",
-          redirect_path: "/offline",
+          message: 'Bot is offline or not responding.',
+          redirect_path: '/offline',
         })
       );
       return false;
@@ -120,11 +120,11 @@ const useSocket = () => {
 
   const setUpEvents = () => {
     if (!socket) return;
-    socket.on("connect", () => {
-      console.info("Connected to server!");
+    socket.on('connect', () => {
+      console.info('Connected to server!');
     });
 
-    socket.on("player_update", (payload: any) => {
+    socket.on('player_update', (payload: any) => {
       const queue = payload.queue as QueueState;
       const curTrack = queue.items[queue.position];
       if (!currentTrack || curTrack !== currentTrack) {
@@ -137,11 +137,11 @@ const useSocket = () => {
       }
     });
 
-    socket.on("channel_update", (payload) => {
+    socket.on('channel_update', (payload) => {
       const channel = payload.channel;
       if (!channel) {
         dispatch(setActive(false));
-      } else if (channel.name !== "") {
+      } else if (channel.name !== '') {
         dispatch(setActive(true));
       }
       dispatch(setCurrentChannel(payload.channel));
@@ -151,42 +151,42 @@ const useSocket = () => {
     // TODO: set not active on bot_disconnect
 
     // Triggered periodically to update state of playback
-    socket.on("playback_state", (payload: PlaybackState) => {
+    socket.on('playback_state', (payload: PlaybackState) => {
       dispatch(updatePlaybackState(payload));
     });
 
     /* Actions */
-    socket.on("log_message", ({ message, timestamp }) => {
+    socket.on('log_message', ({ message, timestamp }) => {
       dispatch(pushAction({ message, timestamp }));
     });
 
-    socket.on("shuffle", ({ shuffle }) => {
+    socket.on('shuffle', ({ shuffle }) => {
       dispatch(setShuffle(shuffle));
     });
 
-    socket.on("repeat", ({ repeat }) => {
+    socket.on('repeat', ({ repeat }) => {
       dispatch(setRepeat(repeat));
     });
   };
 
   const getGuildPlayer = () => {
     if (!currentGuild) return;
-    socket?.emit("player_connect", { username, guildId: currentGuild?.id });
+    socket?.emit('player_connect', { username, guildId: currentGuild?.id });
   };
 
   const joinChannel = (guildId: string, channelId: string) => {
     if (!guildId || !socket) return;
-    socket?.emit("join_channel", { guildId, channelId });
+    socket?.emit('join_channel', { guildId, channelId });
   };
 
   // Changes queue position
   const setTrack = (position: number) => {
-    socket?.emit("set_queue_position", { username, position });
+    socket?.emit('set_queue_position', { username, position });
   };
 
   const requestTrack = (track: Track) => {
     if (!currentGuild) return;
-    socket?.emit("request_track", {
+    socket?.emit('request_track', {
       username,
       track,
     });
@@ -194,45 +194,45 @@ const useSocket = () => {
 
   const unpausePlayer = () => {
     if (!currentGuild) return;
-    socket?.emit("unpause", { username });
+    socket?.emit('unpause', { username });
   };
 
   const pausePlayer = () => {
     if (!currentGuild) return;
-    socket?.emit("pause", { username });
+    socket?.emit('pause', { username });
   };
 
   const nextTrack = () => {
     if (!currentGuild) return;
-    socket?.emit("next", { username });
+    socket?.emit('next', { username });
   };
 
   const prevTrack = () => {
     if (!currentGuild) return;
-    socket?.emit("prev", { username });
+    socket?.emit('prev', { username });
   };
 
   const toggleShuffle = () => {
     if (!currentGuild) return;
-    socket?.emit("shuffle", { shuffle: !shuffle });
+    socket?.emit('shuffle', { shuffle: !shuffle });
   };
 
   const toggleRepeat = () => {
     if (!currentGuild) return;
-    socket?.emit("repeat", { repeat: !repeat });
+    socket?.emit('repeat', { repeat: !repeat });
   };
 
   const setVolume = (volume: number) => {
     if (!currentGuild) return;
     volume = volume / 100;
-    socket?.emit("volume", { volume });
+    socket?.emit('volume', { volume });
   };
 
   const leaveChannel = () => {
     if (!currentGuild || !channel) {
       return;
     }
-    socket?.emit("leave_channel", { guildId: currentGuild.id });
+    socket?.emit('leave_channel', { guildId: currentGuild.id });
   };
 
   return {

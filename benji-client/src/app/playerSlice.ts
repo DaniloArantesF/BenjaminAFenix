@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { AppState } from "./store";
-import { Track } from "../types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { AppState } from './store';
+import { Track } from '../types';
 
 export interface PlaybackState {
   progress: number;
@@ -15,12 +15,12 @@ export interface PlayerState extends PlaybackState {
 const initialState: PlayerState = {
   currentTrack: null,
   progress: -1,
-  status: "idle",
+  status: 'idle',
   volume: 1,
 };
 
 export const playerSlice = createSlice({
-  name: "player",
+  name: 'player',
   initialState,
   reducers: {
     setYoutube: (state, action: PayloadAction<any>) => {

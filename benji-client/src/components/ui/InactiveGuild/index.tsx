@@ -1,10 +1,11 @@
-import classes from "./InactiveGuild.module.css";
-import Navbar from "../../common/Navbar/Navbar";
-import ChannelSelection from "../Selection";
-import { useAppSelector } from "../../../app/hooks";
-import { selectDashboard } from "../../../app/dashboardSlice";
-import Button from "../Button/Button";
-import { BOT_INVITE_URL } from "../../../pages/Login";
+import React from 'react';
+import classes from './InactiveGuild.module.css';
+import Navbar from '../../common/Navbar/Navbar';
+import ChannelSelection from '../Selection';
+import { useAppSelector } from '../../../app/hooks';
+import { selectDashboard } from '../../../app/dashboardSlice';
+import Button from '../Button/Button';
+import { BOT_INVITE_URL } from '../../../pages/Login';
 
 interface InactiveGuildProps {
   joinChannel: (guildId: string, channelId: string) => void;
@@ -19,7 +20,7 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
       <div className={classes.prompt}>
         <h1>Benji is not on this server :(</h1>
         <Button
-          type={"btn-large"}
+          type={'btn-large'}
           isActive={() => true}
           onClick={() => {
             window.location.href = BOT_INVITE_URL;

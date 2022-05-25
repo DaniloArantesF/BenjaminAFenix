@@ -87,9 +87,12 @@ class DiscordClient extends Client {
   }
 
   private setUpCommands = () => {
+
+    const commandFilesPath = "dist/commands" //"src/commands/"
+
     const commandFiles = fs
-      .readdirSync("src/commands/")
-      .filter((file) => file.endsWith(".ts"));
+      .readdirSync(commandFilesPath)
+      .filter((file) => file.endsWith(".js") || file.endsWith('.ts'));
 
     for (const file of commandFiles) {
       const { command }: CommandFile = require(`./commands/${file}`);

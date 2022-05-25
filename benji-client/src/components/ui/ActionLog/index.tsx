@@ -1,13 +1,14 @@
-import { useAppSelector } from "../../../app/hooks";
-import { selectActionLogs } from "../../../app/logSlice";
-import classes from "./ActionLog.module.css";
-import type { Action } from "../../../app/logSlice";
-import { timeStamp } from "console";
+import React from 'react';
+import { useAppSelector } from '../../../app/hooks';
+import { selectActionLogs } from '../../../app/logSlice';
+import classes from './ActionLog.module.css';
+import type { Action } from '../../../app/logSlice';
+import { timeStamp } from 'console';
 
 const ActionItem = ({ message, timestamp }: Action) => {
   const date = new Date(timestamp);
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
   return (
     <div className={classes.log__item}>
       <span>{`${message}`}</span>

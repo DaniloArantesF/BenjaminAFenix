@@ -3,20 +3,20 @@ import React, {
   useEffect,
   useLayoutEffect,
   useRef,
-} from "react";
-import { useHistory } from "react-router";
-import classes from "./Navbar.module.css";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { ReactComponent as Logo } from "../../../assets/Logo.svg";
-import { ReactComponent as MenuIcon } from "../../../assets/menu.svg";
+} from 'react';
+import { useHistory } from 'react-router';
+import classes from './Navbar.module.css';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { ReactComponent as Logo } from '../../../assets/Logo.svg';
+import { ReactComponent as MenuIcon } from '../../../assets/menu.svg';
 import {
   Guild,
   selectDashboard,
   setCurrentGuild,
   setNavbarVisibility,
-} from "../../../app/dashboardSlice";
-import { clearCredentials } from "../../../app/authSlice";
-import { getDiscordAvatar } from "../../../libs/Discord";
+} from '../../../app/dashboardSlice';
+import { clearCredentials } from '../../../app/authSlice';
+import { getDiscordAvatar } from '../../../libs/Discord';
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -34,12 +34,12 @@ const Navbar = () => {
   useEffect(() => {
     if (windowWidth > 1150) return;
     if (isVisible) {
-      window.addEventListener("click", handleWindowClick);
+      window.addEventListener('click', handleWindowClick);
     } else {
-      window.removeEventListener("click", handleWindowClick);
+      window.removeEventListener('click', handleWindowClick);
     }
     return () => {
-      window.removeEventListener("click", handleWindowClick);
+      window.removeEventListener('click', handleWindowClick);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible, windowWidth]);
@@ -71,7 +71,7 @@ const Navbar = () => {
    */
   const logout = (event: BaseSyntheticEvent) => {
     dispatch(clearCredentials());
-    history.push("/login");
+    history.push('/login');
   };
 
   return (
@@ -98,14 +98,14 @@ const Navbar = () => {
             return (
               <div
                 className={`${classes.guildIcon} ${
-                  guild.id === currentGuild?.id ? classes.guildActive : ""
+                  guild.id === currentGuild?.id ? classes.guildActive : ''
                 }`}
                 key={index}
                 onClick={() => handleGuildUpdate(guild)}
               >
                 {guild.icon ? (
                   <img
-                    src={getDiscordAvatar("guild", guild.id, guild.icon)}
+                    src={getDiscordAvatar('guild', guild.id, guild.icon)}
                     alt={guild.name}
                   />
                 ) : (
