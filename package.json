@@ -1,0 +1,21 @@
+{
+  "name": "benjaminfenix",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ecosystem.config.js",
+  "scripts": {
+    "build": "docker-compose build && docker-compose push",
+    "pull": "docker-compose pull && docker-compose build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaniloArantesF/BenjaminAFenix.git"
+  },
+  "author": "DaniloArantesF",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DaniloArantesF/BenjaminAFenix/issues"
+  },
+  "homepage": "https://github.com/DaniloArantesF/BenjaminAFenix#readme"
+}

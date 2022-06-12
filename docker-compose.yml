@@ -2,6 +2,7 @@
 services:
   api:
     container_name: api
+    image: daniloarantesf/benjaminfenix_api
     build:
       dockerfile: Dockerfile
       context: "./backend"
@@ -11,6 +12,7 @@ services:
 
   client:
     container_name: client
+    image: daniloarantesf/benjaminfenix_client
     build:
       dockerfile: Dockerfile
       context: "./benji-client"

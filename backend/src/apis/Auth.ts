@@ -40,6 +40,7 @@ class Auth {
   /** Given a code, get access token and create jwt token with user info */
   public logIn = async (req: Request, res: Response) => {
     const code = req.body?.code;
+    console.log(code);
     if (!code) return res.sendStatus(400);
 
     try {
@@ -131,7 +132,7 @@ class Auth {
         expiresIn,
       });
     } catch (error) {
-      // console.log(error.response.data)
+      console.log(error.response.data)
       return res.sendStatus(error?.response?.status ?? 500);
     }
   }
