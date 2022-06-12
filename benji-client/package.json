@@ -28,6 +28,7 @@
     "web-vitals": "^1.1.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.22.2",
     "@types/react-redux": "^7.1.18",
     "@types/react-router-dom": "^5.3.1",
     "@types/youtube-player": "^5.5.4",
