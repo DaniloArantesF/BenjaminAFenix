@@ -12,6 +12,7 @@ import type { ClientOptions } from "discord.js";
 import { CommandInteraction } from "discord.js";
 import PlayerController from "./PlayerController";
 import { EventBus } from "./EventBus";
+import { ENVIRONMENT } from "./config";
 
 interface CommandFile {
   command: Command;
@@ -87,9 +88,7 @@ class DiscordClient extends Client {
   }
 
   private setUpCommands = () => {
-
-    const commandFilesPath = "dist/commands" //"src/commands/"
-
+    const commandFilesPath = ENVIRONMENT === 'production' ? "dist/commands" : "src/commands/";
     const commandFiles = fs
       .readdirSync(commandFilesPath)
       .filter((file) => file.endsWith(".js") || file.endsWith('.ts'));

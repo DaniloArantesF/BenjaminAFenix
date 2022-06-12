@@ -9,9 +9,8 @@ import YoutubeAPI from "./apis/Youtube";
 import BotAPI from "./apis/";
 import MetricsAPI from "./apis/Metrics";
 import rateLimit from "express-rate-limit";
-import { PORT, CLIENT_URL } from "./config";
+import { PORT, CLIENT_URL, ENVIRONMENT } from "./config";
 import morgan from "morgan";
-import promBundle from "express-prom-bundle";
 
 class App {
   public express: express.Application;
@@ -47,7 +46,8 @@ class App {
         methods: ["GET", "POST"],
       })
     );
-    this.express.use(morgan("dev"));
+
+    this.express.use(morgan(ENVIRONMENT === 'production' ? "tiny" : "dev"));
     this.express.use(
       rateLimit({
         windowMs: 1000,

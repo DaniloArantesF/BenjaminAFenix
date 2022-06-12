@@ -8,8 +8,8 @@ dotenv.config();
 import { COOLDOWN_MS } from "./config";
 // FileWatcher();
 
-import Profiler from "./util/Profiler";
-Profiler();
+// import Profiler from "./util/Profiler";
+// Profiler();
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const intents = [

@@ -137,7 +137,7 @@ class PlayerController extends AudioPlayer {
     const state = this.state as AudioPlayerPlayingState;
 
     // Get current playback progress and save timestamp to
-    // TODO: account for latency later
+    // TODO: account for latency ?
     this.progress = state.playbackDuration;
     const timestamp = Date.now();
 

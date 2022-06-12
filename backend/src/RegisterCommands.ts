@@ -1,6 +1,6 @@
 /**IMPORTANT**
  * Only run this file if commands have been added or edited.
- * Else skip it during init process. Idk what happens but avoid it
+ * Else skip it during init process
  */
 import fs from "fs";
 import { REST } from "@discordjs/rest";
