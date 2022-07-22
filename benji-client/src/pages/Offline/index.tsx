@@ -3,7 +3,7 @@ import classes from './Offline.module.css';
 import { ReactComponent as Background } from '../../assets/Background.svg';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
 
-const OfflinePage = () => {
+const OfflinePage: React.FC = () => {
   return (
     <div className={classes.offline_container}>
       <Background className={classes.background} />

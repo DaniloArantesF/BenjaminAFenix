@@ -1,17 +1,14 @@
-import React, { SyntheticEvent, useRef, useState } from 'react';
+import React, { BaseSyntheticEvent, SyntheticEvent, useCallback, useRef, useState } from 'react';
 import { Track } from '../../../types';
 import { msToMinSec } from '../../../util/util';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   selectPosition,
-  selectQueue,
   selectQueueLength,
   setQueue,
 } from '../../../app/queueSlice';
 import classes from './Queue.module.css';
 import { ReactComponent as DraggableIcon } from '../../../assets/draggable.svg';
-import { selectPlayerState } from '../../../app/playerSlice';
-import { selectDashboard } from '../../../app/dashboardSlice';
 
 export interface QItem extends Track {
   itemPosition: number;
@@ -74,7 +71,7 @@ const useDragging = () => {
   return { isDragging, setDragging, newItems, setNewItems };
 };
 
-const Queue = ({ items, setTrack }: QProps) => {
+const Queue: React.FC<QProps> = ({ items, setTrack }) => {
   const dispatch = useAppDispatch();
   const queueLength = useAppSelector(selectQueueLength);
   const position = useAppSelector(selectPosition);
@@ -82,16 +79,29 @@ const Queue = ({ items, setTrack }: QProps) => {
   const queueRef = useRef<HTMLDivElement>(null);
   const { isDragging, setDragging, newItems, setNewItems } = useDragging();
 
-  const endDrag = (event: any) => {
+  const endDrag = useCallback((event: BaseSyntheticEvent) => {
     event.target.style = ''; // Reset CSS used to change row
     if (newItems) {
       // Reset hook
-      dispatch(setQueue({ items: newItems, position }));
+      dispatch(setQueue({ items: newItems, position, shuffle: false, repeat: false }));
       setNewItems(undefined);
     }
+  }, [ dispatch, newItems, setNewItems, position ]);
+
+  const minMax = (value: number, min: number, max: number) => {
+    return Math.min(Math.max(min, value), max);
   };
 
-  const dragHandler = (index: number, event: any) => {
+  const getItemPosition = useCallback((
+    startY: number,
+    mouseY: number,
+    itemHeight: number
+  ) => {
+    const position = Math.round((mouseY - startY) / itemHeight); // snap whenitem is halfway
+    return minMax(position - 1, 0, queueLength - 1);
+  }, [queueLength]);
+
+  const dragHandler = useCallback((index: number, event: any) => { //  eslint-disable-line @typescript-eslint/no-explicit-any
     const { pageY: mouseY, target } = event;
     if (!queueRef.current || !headerRef.current || mouseY === 0) {
       setDragging(false);
@@ -102,8 +112,7 @@ const Queue = ({ items, setTrack }: QProps) => {
     const { height: itemHeight } = target.getBoundingClientRect();
     const { bottom: startY } = headerRef.current.getBoundingClientRect();
     //const { bottom: queueBottom } = queueRef.current.getBoundingClientRect();
-    const { scrollTop: mouseScroll, offsetHeight: scrollOffset } =
-      queueRef.current;
+    const { scrollTop: mouseScroll } = queueRef.current;
     //const endY = queueBottom + scrollOffset;
 
     const newIndex = getItemPosition(startY, mouseY + mouseScroll, itemHeight);
@@ -118,20 +127,7 @@ const Queue = ({ items, setTrack }: QProps) => {
     } else {
       target.style.gridRow = '';
     }
-  };
-
-  const getItemPosition = (
-    startY: number,
-    mouseY: number,
-    itemHeight: number
-  ) => {
-    const position = Math.round((mouseY - startY) / itemHeight); // snap whenitem is halfway
-    return minMax(position - 1, 0, queueLength - 1);
-  };
-
-  const minMax = (value: number, min: number, max: number) => {
-    return Math.min(Math.max(min, value), max);
-  };
+  }, [endDrag, getItemPosition, isDragging, items, setDragging, setNewItems]);
 
   const QueueHeader = () => {
     return (

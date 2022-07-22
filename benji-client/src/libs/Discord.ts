@@ -3,13 +3,21 @@ import { selectToken, setError } from '../app/authSlice';
 import { Channel, Guild } from '../app/dashboardSlice';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 
-const useDiscord = () => {
+interface VoiceChannels {
+  type: "GUILD_TEXT" | "GUILD_VOICE" | "GUILD_CATEGORY" | "GUILD_NEWS" | "GUILD_STORE" | "GUILD_NEWS_THREAD" | "GUILD_PUBLIC_THREAD" | "GUILD_PRIVATE_THREAD" | "GUILD_STAGE_VOICE";
+  id: string;
+  name: string;
+  onlineCount: number;
+  timestamp: number;
+}
+
+const useDiscord = () => { //  eslint-disable-line @typescript-eslint/explicit-module-boundary-types
   const dispatch = useAppDispatch();
   const token = useAppSelector(selectToken);
 
   const getGuildVoiceChannels = async (guildId: string) => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
+      const res: AxiosResponse<{ channels: VoiceChannels[]}> = await axios.get(
         `${process.env.REACT_APP_BOT_HOSTNAME}/discord/channels`,
         {
           params: { guildId, token },
@@ -29,9 +37,9 @@ const useDiscord = () => {
     }
   };
 
-  const getUserData = async (token: string) => {
+  const getUserData = async (token: string): Promise<{ id: string, username: string, avatar: string }> => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
+      const res = await axios.get(
         `${process.env.REACT_APP_BOT_HOSTNAME}/discord/user`,
         {
           params: { token },
@@ -52,9 +60,9 @@ const useDiscord = () => {
     }
   };
 
-  const getUserGuilds = async (token: string) => {
+  const getUserGuilds = async (token: string): Promise<Guild[]> => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
+      const res: AxiosResponse<{ guilds: Guild[] }> = await axios.get(
         `${process.env.REACT_APP_BOT_HOSTNAME}/discord/guilds`,
         {
           params: { token },
@@ -76,9 +84,9 @@ const useDiscord = () => {
     }
   };
 
-  const getUserVoiceChannel = async (token: string, id: string) => {
+  const getUserVoiceChannel = async (token: string): Promise<{ guild: Guild | null, channel: Channel | null }> => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
+      const res: AxiosResponse<{ guild: Guild, channel: Channel }> = await axios.get(
         `${process.env.REACT_APP_BOT_HOSTNAME}/discord/connection`,
         {
           params: { token },
@@ -86,12 +94,16 @@ const useDiscord = () => {
       );
 
       return {
-        guild: res.data.guild as Guild,
-        channel: res.data.channel as Channel,
+        guild: res.data.guild,
+        channel: res.data.channel,
       };
     } catch (error) {
       console.error('Error getting user connection');
-      !error && dispatch(setError('Error getting user connection'));
+      !error && dispatch(setError({
+        message: 'Error getting user connection',
+        code: 401,
+        redirect_path: '/login',
+      }));
       return {
         guild: null,
         channel: null,
@@ -120,7 +132,7 @@ export const getDiscordAvatar = (
   id: string,
   avatarHash: string,
   size = 64
-) => {
+): string => {
   const baseUrl = 'https://cdn.discordapp.com/';
   const userPath = `avatars/${id}/${avatarHash}.png`;
   const guildPath = `icons/${id}/${avatarHash}.png`;
@@ -130,6 +142,7 @@ export const getDiscordAvatar = (
   } else if (type === 'guild') {
     return baseUrl + guildPath + `?size=${size}`;
   }
+  return ""
 };
 
 export default useDiscord;

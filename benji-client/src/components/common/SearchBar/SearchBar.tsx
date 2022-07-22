@@ -9,11 +9,11 @@ type SearchBarProps = {
   isLoading: boolean;
 };
 
-const SearchBar = ({
+const SearchBar: React.FC<SearchBarProps> = ({
   inputCallback,
   submitCallback,
   isLoading,
-}: SearchBarProps) => {
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const submitIntercept: InputHandler = (event) => {

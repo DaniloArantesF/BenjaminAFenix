@@ -8,7 +8,7 @@ import classes from './Switch.module.css';
 import { ReactComponent as LightIcon } from '../../../assets/light_mode.svg';
 import { ReactComponent as DarkIcon } from '../../../assets/dark_mode.svg';
 
-const Switch = () => {
+const Switch: React.FC = () => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector(selectTheme);
 
@@ -18,7 +18,7 @@ const Switch = () => {
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
-    dispatch(setAppTheme({ theme: newTheme }));
+    dispatch(setAppTheme(newTheme));
     localStorage.setItem('theme', newTheme);
   };
 

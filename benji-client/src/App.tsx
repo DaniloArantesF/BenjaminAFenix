@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard/';
 import Offline from './pages/Offline/';
 
-function App() {
+const App:React.FC = () => {
   return (
     <BrowserRouter>
       <Switch>

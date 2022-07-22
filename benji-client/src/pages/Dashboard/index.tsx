@@ -1,7 +1,6 @@
 import React from 'react';
 import classes from './Dashboard.module.css';
 import Queue from '../../components/common/Queue/Queue';
-import YoutubeEmbed from '../../components/common/YoutubeEmbed';
 import Navbar from '../../components/common/Navbar/Navbar';
 import Search from '../../components/common/SearchBar/Search';
 import { useEffect, useState } from 'react';
@@ -40,12 +39,12 @@ export enum breakpoints {
   SMALL = 0,
 }
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
   const {
     expiration,
-    id: userId,
+    // id: userId,
     refreshTimeout,
     token,
   } = useAppSelector(selectAuth);
@@ -53,7 +52,7 @@ const Dashboard = () => {
   const { windowWidth } = useAppSelector(selectDashboard);
   const history = useHistory();
   const {
-    socket,
+    // socket,
     setTrack,
     requestTrack,
     joinChannel,
@@ -68,7 +67,7 @@ const Dashboard = () => {
   } = useSocket();
   const { active } = useAppSelector(selectDashboard);
   const [channelSelectionActive, setChannelSelectionActive] = useState(false);
-  const { getUserData, getUserGuilds } = useDiscordAPI();
+  const { getUserGuilds } = useDiscordAPI();
   const error = useAppSelector(selectError);
   useEffect(() => {
     if (!token) {
@@ -133,9 +132,9 @@ const Dashboard = () => {
 
     // Set user Data
     if (localStorage.getItem('username')) {
-      const id = localStorage.getItem('id');
-      const avatar = localStorage.getItem('avatar');
-      const username = localStorage.getItem('username');
+      const id = localStorage.getItem('id') ?? '';
+      const avatar = localStorage.getItem('avatar') ?? '';
+      const username = localStorage.getItem('username')?? '';
       dispatch(setUser({ id, avatar, username }));
     }
 

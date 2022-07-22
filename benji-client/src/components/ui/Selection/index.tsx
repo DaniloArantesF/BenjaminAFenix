@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Channel, selectDashboard } from '../../../app/dashboardSlice';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {  useAppSelector } from '../../../app/hooks';
 import classes from './Selection.module.css';
 
 interface ChannelSelectionProps {
@@ -9,11 +9,11 @@ interface ChannelSelectionProps {
   setActive?: (val: boolean) => void;
 }
 
-const ChannelSelection = ({
+const ChannelSelection: React.FC<ChannelSelectionProps> = ({
   joinChannel,
   active,
   setActive,
-}: ChannelSelectionProps) => {
+}) => {
   const { currentGuild, channels } = useAppSelector(selectDashboard);
   const selectionRef = useRef<HTMLDivElement>(null);
 

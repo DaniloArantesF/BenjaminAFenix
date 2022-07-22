@@ -1,7 +1,5 @@
 import React, {
-  BaseSyntheticEvent,
   useEffect,
-  useLayoutEffect,
   useRef,
 } from 'react';
 import { useHistory } from 'react-router';
@@ -18,7 +16,7 @@ import {
 import { clearCredentials } from '../../../app/authSlice';
 import { getDiscordAvatar } from '../../../libs/Discord';
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const dispatch = useAppDispatch();
   const {
     guilds,
@@ -69,7 +67,7 @@ const Navbar = () => {
    * Redirects user to login page
    * @param event
    */
-  const logout = (event: BaseSyntheticEvent) => {
+  const logout = () => {
     dispatch(clearCredentials());
     history.push('/login');
   };

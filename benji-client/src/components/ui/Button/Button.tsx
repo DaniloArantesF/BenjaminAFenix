@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import btn1 from './Button1.module.css';
 import btn2 from './Button2.module.css';
-import btn3 from './Button3.module.css';
+// import btn3 from './Button3.module.css';
 import { useAppDispatch } from '../../../app/hooks';
 import { ActionCreator } from 'redux';
 import type { InputHandler } from '../../../types';
@@ -9,12 +9,12 @@ import type { InputHandler } from '../../../types';
 interface ButtonProps {
   type?: string;
   children: React.ReactNode;
-  action?: ActionCreator<any>;
+  action?: ActionCreator<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   isActive: () => boolean;
-  onClick?: () => any;
+  onClick?: () => void;
 }
 
-const Button = ({ children, action, isActive, onClick, type }: ButtonProps) => {
+const Button: React.FC<ButtonProps> = ({ children, action, isActive, onClick, type }) => {
   const [classes, setClasses] = useState(btn2);
   const dispatch = useAppDispatch();
   const active = isActive();

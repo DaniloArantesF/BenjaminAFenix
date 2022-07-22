@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import type { ChangeEvent } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import type { AppState, AppDispatch } from './store';
@@ -6,7 +5,7 @@ import type { AppState, AppDispatch } from './store';
 export const useForm =
   <TContent>(defaultValues: TContent) =>
   (handler: (content: TContent) => void) =>
-  async (event: ChangeEvent<HTMLFormElement>) => {
+  async (event: ChangeEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     event.persist();
     const form = event.target as HTMLFormElement;
@@ -24,5 +23,6 @@ export const useForm =
     //form.reset();
   };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;

@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './hooks';
 import socketIOClient, { Socket } from 'socket.io-client';
 import {
-  Channel,
-  Guild,
   selectDashboard,
   setActive,
   setChannels,
@@ -38,7 +36,7 @@ interface PlaybackState {
   timestamp: number;
 }
 
-const useSocket = () => {
+const useSocket = () => { //  eslint-disable-line @typescript-eslint/explicit-module-boundary-types
   const dispatch = useAppDispatch();
   const { currentGuild, active, channel } = useAppSelector(selectDashboard);
   const { currentTrack } = useAppSelector(selectPlayerState);
@@ -94,7 +92,7 @@ const useSocket = () => {
    */
   const checkBotStatus = async () => {
     try {
-      const res = await axios.get(
+      await axios.get(
         `${process.env.REACT_APP_BOT_HOSTNAME}/status`
       );
       return true;
@@ -124,7 +122,7 @@ const useSocket = () => {
       console.info('Connected to server!');
     });
 
-    socket.on('player_update', (payload: any) => {
+    socket.on('player_update', (payload: { queue: QueueState }) => {
       const queue = payload.queue as QueueState;
       const curTrack = queue.items[queue.position];
       if (!currentTrack || curTrack !== currentTrack) {

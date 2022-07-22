@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { YoutubeItem } from '../types/youtube';
 
-export const getYoutubeItem = async (itemId: string) => {
+export const getYoutubeItem = async (itemId: string): Promise<YoutubeItem> => {
   try {
     const res: AxiosResponse<{ item: YoutubeItem }> = await axios.get(
       `${process.env.REACT_APP_BOT_HOSTNAME}/youtube/`,
@@ -32,9 +32,9 @@ export const getYoutubeItem = async (itemId: string) => {
   }
 };
 
-export const searchYoutube = async (query: string, resultsCount = 5) => {
+export const searchYoutube = async (query: string, resultsCount = 5): Promise<YoutubeItem[]>  => {
   try {
-    const res: AxiosResponse<any> = await axios.get(
+    const res: AxiosResponse<{ items: YoutubeItem[]}> = await axios.get(
       `${process.env.REACT_APP_BOT_HOSTNAME}/youtube/search`,
       {
         params: {
@@ -43,8 +43,10 @@ export const searchYoutube = async (query: string, resultsCount = 5) => {
         },
       }
     );
+
     return res.data.items;
   } catch (error) {
     console.error('Error searching youtube');
+    return [];
   }
 };

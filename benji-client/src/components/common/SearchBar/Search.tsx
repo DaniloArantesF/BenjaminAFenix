@@ -3,7 +3,7 @@ import classes from './Search.module.css';
 import SearchBar from './SearchBar';
 import { YoutubeItem } from '../../../types/youtube';
 import type { InputHandler, Track } from '../../../types';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useAppSelector } from '../../../app/hooks';
 import { getYoutubeItem, searchYoutube } from '../../../libs/Youtube';
 import { selectAuth } from '../../../app/authSlice';
 
@@ -16,8 +16,7 @@ interface SearchProps {
   requestTrack: (track: Track) => void;
 }
 
-const Search = ({ requestTrack }: SearchProps) => {
-  const dispatch = useAppDispatch();
+const Search: React.FC<SearchProps> = ({ requestTrack }) => {
   const [query, setQuery] = useState('');
   const [items, setItems] = useState<Array<YoutubeItem>>([]);
   const [loading, setLoading] = useState(false);
@@ -98,7 +97,7 @@ const Search = ({ requestTrack }: SearchProps) => {
     };
   };
 
-  const SearchItem = ({ item, selectItem }: SearchItemProps) => {
+  const SearchItem: React.FC<SearchItemProps> = ({ item, selectItem }: SearchItemProps) => {
     const { thumbnails, title, channelTitle } = item;
     const thumb = thumbnails.default;
     return (

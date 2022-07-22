@@ -7,7 +7,7 @@ interface SliderProps {
   changeCb: (value: number) => void;
 }
 
-const Slider = ({ changeCb }: SliderProps) => {
+const Slider: React.FC<SliderProps> = ({ changeCb }: SliderProps) => {
   const [value, setValue] = useState(100);
   const [active, setActive] = useState<boolean>();
   const activeTrackRef = useRef<HTMLSpanElement>(null);

@@ -11,11 +11,11 @@ interface InactiveGuildProps {
   joinChannel: (guildId: string, channelId: string) => void;
 }
 
-const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
+const InactiveGuild: React.FC<InactiveGuildProps> = ({ joinChannel }) => {
   const { currentGuild } = useAppSelector(selectDashboard);
 
   /* TODO: test that adding bot to new server updates app correctly */
-  const AddToServer = () => {
+  const AddToServer: React.FC = () => {
     return (
       <div className={classes.prompt}>
         <h1>Benji is not on this server :(</h1>
@@ -32,7 +32,7 @@ const InactiveGuild = ({ joinChannel }: InactiveGuildProps) => {
     );
   };
 
-  const SelectServer = () => {
+  const SelectServer: React.FC = () => {
     return (
       <div className={classes.prompt}>
         <h1>Select a server to start!</h1>

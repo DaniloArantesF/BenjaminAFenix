@@ -5,14 +5,13 @@ import { getDiscordAvatar } from '../../../libs/Discord';
 import { msToMinSec } from '../../../util/util';
 import { ReactComponent as ExitIcon } from '../../../assets/exit.svg';
 import { ReactComponent as SwitchIcon } from '../../../assets/switch.svg';
-
 import classes from './GuildHeader.module.css';
 
 interface props {
   switchHandler: () => void;
   leaveChannel: () => void;
 }
-const GuildHeader = ({ switchHandler, leaveChannel }: props) => {
+const GuildHeader: React.FC<props> = ({ switchHandler, leaveChannel }) => {
   const { currentGuild: guild, channel } = useAppSelector(selectDashboard);
   const [uptime, setUptime] = useState(getUptime(channel?.timestamp ?? 0));
 

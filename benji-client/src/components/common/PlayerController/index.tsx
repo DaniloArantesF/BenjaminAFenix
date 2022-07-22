@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
+import React, { BaseSyntheticEvent, } from 'react';
 import { ReactComponent as BackIcon } from '../../../assets/back.svg';
 import { ReactComponent as SkipIcon } from '../../../assets/skip.svg';
 import { ReactComponent as PlayIcon } from '../../../assets/play.svg';
@@ -7,7 +7,7 @@ import { ReactComponent as ShuffleIcon } from '../../../assets/shuffle.svg';
 import { ReactComponent as SoundIcon } from '../../../assets/sound.svg';
 import { ReactComponent as PauseIcon } from '../../../assets/pause.svg';
 import classes from './PlayerController.module.css';
-import { selectPlayerState, selectStatus } from '../../../app/playerSlice';
+import { selectStatus } from '../../../app/playerSlice';
 import { useAppSelector } from '../../../app/hooks';
 import Slider from '../../ui/Slider/Slider';
 import { selectRepeat, selectShuffle } from '../../../app/queueSlice';
@@ -22,7 +22,7 @@ interface PlayerControllerProps {
   setVolume: (vol: number) => void;
 }
 
-const PlayerController = (props: PlayerControllerProps) => {
+const PlayerController: React.FC<PlayerControllerProps> = (props) => {
   const {
     unpausePlayer,
     pausePlayer,

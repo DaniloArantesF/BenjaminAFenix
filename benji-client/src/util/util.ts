@@ -10,7 +10,7 @@ export type Duration = {
   seconds?: number;
 };
 
-export const msToMinSec = (ms: number) => {
+export const msToMinSec = (ms: number): string => {
   let hours = Math.floor(ms / 3600000);
   let minutes = Math.floor((ms % 3600000) / 60000);
   let seconds = Number((((ms % 3600000) % 60000) / 1000).toFixed(0));
@@ -30,7 +30,7 @@ export const msToMinSec = (ms: number) => {
   }:${seconds ? (seconds < 10 ? '0' : '') + seconds : '00'}`;
 };
 
-export const convertISODurationToMS = (isoDuration: string) => {
+export const convertISODurationToMS = (isoDuration: string): number => {
   const KeysToMS: Duration = {
     years: 31556952000,
     months: 2629800000,
@@ -42,9 +42,9 @@ export const convertISODurationToMS = (isoDuration: string) => {
   let durationMilli = 0;
   const durationObj = parse(isoDuration);
 
-  for (let period in durationObj) {
-    let curPeriod = (durationObj as Duration)[period];
-    let conversion = KeysToMS[period] || 1;
+  for (const period in durationObj) {
+    const curPeriod = (durationObj as Duration)[period];
+    const  conversion = KeysToMS[period] || 1;
     if (curPeriod) {
       durationMilli += curPeriod * conversion;
     }
@@ -52,5 +52,5 @@ export const convertISODurationToMS = (isoDuration: string) => {
   return durationMilli;
 };
 
-export const captalizeName = (name: string) =>
+export const captalizeName = (name: string): string =>
   name.charAt(0).toUpperCase() + name.slice(1);

@@ -6,7 +6,7 @@ interface TrackPreviewProps {
   track: Track | null;
 }
 
-const TrackPreview = ({ track }: TrackPreviewProps) => {
+const TrackPreview: React.FC<TrackPreviewProps> = ({ track }) => {
   return (
     <div className={classes.track_preview}>
       <div className={classes.track__thumbnail}>

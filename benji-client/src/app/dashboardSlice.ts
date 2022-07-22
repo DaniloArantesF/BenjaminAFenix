@@ -1,5 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { msToMinSec } from '../util/util';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AppState } from './store';
 
 export interface Guild {
@@ -45,7 +44,7 @@ export const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState,
   reducers: {
-    setUserGuilds: (state, { payload }) => {
+    setUserGuilds: (state: DashboardState, { payload }: PayloadAction<Guild[]>) => {
       if (!payload) return state;
       // TODO: maybe sort guilds by relevance ?
       payload.sort((item1: Guild, item2: Guild) => {
@@ -57,12 +56,12 @@ export const dashboardSlice = createSlice({
       state.guilds = payload;
       return state;
     },
-    setCurrentGuild: (state, { payload }) => {
+    setCurrentGuild: (state: DashboardState, { payload }: PayloadAction<Guild>) => {
       state.currentGuild = payload;
       localStorage.setItem('guild', JSON.stringify(payload));
       return state;
     },
-    setCurrentChannel: (state, { payload }) => {
+    setCurrentChannel: (state: DashboardState, { payload }: PayloadAction<Channel>) => {
       if (payload) {
         state.channel = payload;
       } else {
@@ -70,24 +69,24 @@ export const dashboardSlice = createSlice({
       }
       return state;
     },
-    setActive: (state, { payload }) => {
+    setActive: (state: DashboardState, { payload }: PayloadAction<boolean>) => {
       state.active = payload;
       return state;
     },
-    setChannels: (state, { payload }) => {
+    setChannels: (state: DashboardState, { payload }: PayloadAction<Channel[]>) => {
       state.channels = [...payload];
       return state;
     },
-    setNavbarVisibility: (state, { payload }) => {
+    setNavbarVisibility: (state: DashboardState, { payload }: PayloadAction<boolean>) => {
       state.navbar = payload;
     },
-    setWindowWidth: (state, { payload }) => {
+    setWindowWidth: (state: DashboardState, { payload }: PayloadAction<number>) => {
       state.windowWidth = payload;
       state.navbar = payload > 1150;
       return state;
     },
-    setTheme: (state, { payload }) => {
-      state.theme = payload.theme;
+    setTheme: (state: DashboardState, { payload }: PayloadAction<string>) => {
+      state.theme = payload;
       return state;
     },
   },
@@ -103,10 +102,10 @@ export const {
   setWindowWidth,
   setTheme,
 } = dashboardSlice.actions;
-export const selectDashboard = (state: AppState) => state.dashboard;
-export const selectUptime = (state: AppState) => {
+export const selectDashboard = (state: AppState): DashboardState => state.dashboard;
+export const selectUptime = (state: AppState): number => {
   if (!state.dashboard.channel) return Date.now();
   return state.dashboard.channel?.timestamp;
 };
-export const selectTheme = (state: AppState) => state.dashboard.theme;
+export const selectTheme = (state: AppState): string => state.dashboard.theme;
 export default dashboardSlice.reducer;
