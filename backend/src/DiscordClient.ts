@@ -88,9 +88,8 @@ class DiscordClient extends Client {
   }
 
   private setUpCommands = () => {
-    const commandFilesPath = ENVIRONMENT === 'production' ? "dist/commands" : "src/commands/";
     const commandFiles = fs
-      .readdirSync(commandFilesPath)
+      .readdirSync(ENVIRONMENT === 'production' ? "dist/commands" : "src/commands/")
       .filter((file) => file.endsWith(".js") || file.endsWith('.ts'));
 
     for (const file of commandFiles) {
@@ -112,8 +111,8 @@ class DiscordClient extends Client {
 
   private setUpEvents = () => {
     const eventFiles = fs
-      .readdirSync("src/events/")
-      .filter((file) => file.endsWith(".ts"));
+      .readdirSync(ENVIRONMENT === 'production' ? "dist/events/" : "src/events/")
+      .filter((file) => file.endsWith(ENVIRONMENT === 'production' ? ".js" : ".ts"));
 
     for (const file of eventFiles) {
       const event = require(`./events/${file}`);
