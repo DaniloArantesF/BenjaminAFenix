@@ -10,6 +10,9 @@ export const command: Command = {
     ),
   async execute(client, interaction) {
     const connection = client.connections.get(interaction.guild.id);
+    if (!connection) {
+      return interaction.reply({ content: "Please play a song before adjusting the volume.", ephemeral: true });
+    }
     let arg = interaction.options.getNumber("percentage");
 
     // Volume constraints
@@ -17,7 +20,7 @@ export const command: Command = {
     arg = arg > 100 ? 100 : arg;
 
     connection.player.setVolume(arg / 100);
-    interaction.reply({
+    await interaction.reply({
       content: "nois",
       ephemeral: true,
     });

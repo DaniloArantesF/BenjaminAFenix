@@ -9,9 +9,14 @@ export const command: Command = {
   async execute(client, interaction) {
     // Get guild to modify playback
     const guildId = interaction.guild.id;
-    const { player } = client.connections.get(guildId);
+    const connection = client.connections.get(guildId);
+    if (!connection) {
+      return interaction.reply({ content: "Bot is not active."})
+    }
+
+    const { player } = connection;
     player.queueController.next();
-    interaction.reply({ content: "fechou", ephemeral: true });
+    interaction.reply({ content: "skipado", ephemeral: true });
   },
   usage: "/next",
   aliases: ["skip", "forward"],

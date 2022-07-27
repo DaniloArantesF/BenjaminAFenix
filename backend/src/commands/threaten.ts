@@ -13,7 +13,7 @@ export const command: Command = {
     ),
   async execute(client, interaction) {
     const target = interaction.options.getUser("target");
-    interaction.reply(`${target} te cuida seu merda`);
+    await interaction.reply(`${target} te cuida seu merda`);
   },
   usage: "/threaten <user_to_threaten>",
 };

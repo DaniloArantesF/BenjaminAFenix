@@ -8,8 +8,11 @@ export const command: Command = {
   async execute(client, interaction) {
     // Get guild to modify playback
     const guildId = interaction.guild.id;
-    const { player } = client.connections.get(guildId);
-    player.queueController.previous();
+    const connection = client.connections.get(guildId);
+    if (connection) {
+      const { player } = connection;
+      player.queueController.previous();
+    }
     interaction.reply({ content: "opa", ephemeral: true });
   },
   usage: "/back",

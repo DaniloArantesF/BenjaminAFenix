@@ -6,7 +6,7 @@ import { getYoutubeUrl } from "../apis/Youtube";
 import { MessageEmbed } from "discord.js";
 
 export const QueueEmbed = (queue: Track[]) => {
-  const fields = [
+  const fields = queue.length > 0 ? [
     { name: `1 - ${queue[0].title}`, value: getYoutubeUrl(queue[0].id) },
     ...queue.slice(1, queue.length).map((item, index) => {
       return {
@@ -15,7 +15,7 @@ export const QueueEmbed = (queue: Track[]) => {
         inline: true,
       };
     }),
-  ];
+  ]: [];
 
   return new MessageEmbed()
     .setColor("#b700ff")
@@ -33,6 +33,13 @@ export const command: Command = {
     .setDescription("Displays server's queue"),
   async execute(client, interaction) {
     const connection = client.connections.get(interaction.guild.id);
+    if (!connection) {
+      interaction.reply({ content: "bot is not active in this channel", ephemeral: true });
+      return await interaction.channel.send({
+        embeds: [QueueEmbed([])],
+      });
+    }
+
     interaction.reply({ content: "pru", ephemeral: true });
 
     // Remove old embeds and save new

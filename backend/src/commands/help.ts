@@ -46,7 +46,6 @@ export const command: Command = {
         .setRequired(false)
     ),
   async execute(client, interaction) {
-    const connection = client.connections.get(interaction.guild.id);
     const arg = interaction.options.getString("command");
 
     if (arg) {

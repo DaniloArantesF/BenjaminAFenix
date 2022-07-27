@@ -9,16 +9,21 @@ export const command: Command = {
   async execute(client, interaction) {
     // Get guild to pause player
     const guildId = interaction.guild.id;
-    const { player } = client.connections.get(guildId);
+    const connection = client.connections.get(guildId);
 
-    // [Error] No song is currently playing
+    if (!connection) {
+      return interaction.reply("Bot is not active.")
+    }
+
+    const { player } = connection;
+    // No song is currently playing
     if (player.status !== AudioPlayerStatus.Playing) {
-      return interaction.reply("Nenhuma musica tocando");
+      return interaction.reply("No songs playing right now.");
     }
 
     // Pause player
-    interaction.reply({ content: "Pausado, chefe", ephemeral: true });
     player.pause();
+    await interaction.reply({ content: "Pausado, chefe", ephemeral: true });
   },
   usage: "/pause",
   aliases: ["p"],
