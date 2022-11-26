@@ -97,7 +97,10 @@ const Search: React.FC<SearchProps> = ({ requestTrack }) => {
     };
   };
 
-  const SearchItem: React.FC<SearchItemProps> = ({ item, selectItem }: SearchItemProps) => {
+  const SearchItem: React.FC<SearchItemProps> = ({
+    item,
+    selectItem,
+  }: SearchItemProps) => {
     const { thumbnails, title, channelTitle } = item;
     const thumb = thumbnails.default;
     return (

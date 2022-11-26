@@ -47,17 +47,17 @@ export const fetchCredentials = createAsyncThunk(
   'login',
   async (code: string, { rejectWithValue }) => {
     try {
-      const { data }: AxiosResponse<{ token: string }> = (await axios.post(
+      const { data }: AxiosResponse<{ token: string }> = await axios.post(
         `${process.env.REACT_APP_BOT_HOSTNAME}/auth/login`,
         {
           code,
         }
-      ));
+      );
 
       const token = data.token;
       type TokenPayload = {
         exp: number;
-      }
+      };
       const decoded = jwtDecode(token) as TokenPayload;
 
       return {
@@ -78,16 +78,16 @@ export const refreshCredentials = createAsyncThunk(
   'refresh',
   async (token: string, { rejectWithValue }) => {
     try {
-      const { data }: AxiosResponse<{ token: string }> = (await axios.post(
+      const { data }: AxiosResponse<{ token: string }> = await axios.post(
         `${process.env.REACT_APP_BOT_HOSTNAME}/auth/refresh`,
         {
           token,
         }
-      ));
+      );
       const newToken = data.token;
       type TokenPayload = {
         exp: number;
-      }
+      };
       const decoded = jwtDecode(newToken) as TokenPayload;
       return {
         token: newToken,
@@ -111,13 +111,21 @@ export const authSlice = createSlice({
       localStorage.clear();
       return { ...initialState, token: '', error: null };
     },
-    setUser: (state: AuthState, { payload }: PayloadAction<{ id: string, avatar: string, username: string }>) => {
+    setUser: (
+      state: AuthState,
+      {
+        payload,
+      }: PayloadAction<{ id: string; avatar: string; username: string }>
+    ) => {
       localStorage.setItem('id', payload.id);
       localStorage.setItem('avatar', payload.avatar);
       localStorage.setItem('username', payload.username);
       return { ...state, ...payload };
     },
-    setCredentials: (state: AuthState, { payload }: PayloadAction<{ token: string }>) => {
+    setCredentials: (
+      state: AuthState,
+      { payload }: PayloadAction<{ token: string }>
+    ) => {
       const { userId, avatar, username } = jwtDecode(
         payload.token
       ) as TokenPayload;
@@ -126,7 +134,10 @@ export const authSlice = createSlice({
       localStorage.setItem('username', username);
       return { ...state, token: payload.token, id: userId, avatar, username };
     },
-    setRefreshTimeout: (state: AuthState, { payload }: PayloadAction<NodeJS.Timeout | undefined>) => {
+    setRefreshTimeout: (
+      state: AuthState,
+      { payload }: PayloadAction<NodeJS.Timeout | undefined>
+    ) => {
       if (state.refreshTimeout) {
         clearTimeout(state.refreshTimeout);
       }
@@ -182,7 +193,8 @@ export const {
 } = authSlice.actions;
 export const selectAuth = (state: AppState): AuthState => state.auth;
 export const selectError = (state: AppState): Error | null => state.auth.error;
-export const selectRefreshTimeout = (state: AppState): NodeJS.Timeout | undefined =>
-  state.auth.refreshTimeout;
+export const selectRefreshTimeout = (
+  state: AppState
+): NodeJS.Timeout | undefined => state.auth.refreshTimeout;
 export const selectToken = (state: AppState): string => state.auth.token;
 export default authSlice.reducer;

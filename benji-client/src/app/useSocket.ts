@@ -30,13 +30,14 @@ import { pushAction } from './logSlice';
 const endpoint = `${process.env.REACT_APP_BOT_HOSTNAME}/bot`;
 
 interface PlaybackState {
-  status: string;
+  status: 'idle' | 'playing' | 'paused';
   volume: number;
   progress: number;
   timestamp: number;
 }
 
-const useSocket = () => { //  eslint-disable-line @typescript-eslint/explicit-module-boundary-types
+const useSocket = () => {
+  //  eslint-disable-line @typescript-eslint/explicit-module-boundary-types
   const dispatch = useAppDispatch();
   const { currentGuild, active, channel } = useAppSelector(selectDashboard);
   const { currentTrack } = useAppSelector(selectPlayerState);
@@ -92,9 +93,7 @@ const useSocket = () => { //  eslint-disable-line @typescript-eslint/explicit-mo
    */
   const checkBotStatus = async () => {
     try {
-      await axios.get(
-        `${process.env.REACT_APP_BOT_HOSTNAME}/status`
-      );
+      await axios.get(`${process.env.REACT_APP_BOT_HOSTNAME}/status`);
       return true;
     } catch (error) {
       dispatch(
@@ -125,9 +124,10 @@ const useSocket = () => { //  eslint-disable-line @typescript-eslint/explicit-mo
     socket.on('player_update', (payload: { queue: QueueState }) => {
       const queue = payload.queue as QueueState;
       const curTrack = queue.items[queue.position];
-      if (!currentTrack || curTrack !== currentTrack) {
-        dispatch(setCurrentTrack(curTrack));
-      }
+      // TODO: fix this :)
+      // if (!currentTrack || curTrack !== currentTrack) {
+      //   dispatch(setCurrentTrack(curTrack));
+      // }
       dispatch(setQueue(queue));
 
       if (!active) {

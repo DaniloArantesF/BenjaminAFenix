@@ -57,7 +57,7 @@
 @media screen and (max-width: 1150px) {
   .navbar_container {
     position: absolute;
-    z-index: 2;
+    z-index: 99;
   }
 
   .navbar_container.active {
@@ -72,13 +72,16 @@
 
   .menu_btn {
     display: block;
-    width: 2.5em;
-    position: absolute;
+    width: auto;
+    position: fixed;
     top: calc(
-      var(--dashboard-margin-top) + 1.5 * (var(--search-bar-height) / 2)
+      var(--dashboard-margin-top) + (var(--search-bar-height) / 2) - 1rem
     );
-    left: 2em;
-    z-index: 2;
+    left: 1rem;
+    z-index: 97;
+    padding: 1rem;
+    background: var(--clr-bg);
+    border-radius: var(--btn-border-radius);
   }
 
   .menu_btn svg {

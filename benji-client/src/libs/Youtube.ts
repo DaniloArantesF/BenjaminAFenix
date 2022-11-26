@@ -32,9 +32,12 @@ export const getYoutubeItem = async (itemId: string): Promise<YoutubeItem> => {
   }
 };
 
-export const searchYoutube = async (query: string, resultsCount = 5): Promise<YoutubeItem[]>  => {
+export const searchYoutube = async (
+  query: string,
+  resultsCount = 5
+): Promise<YoutubeItem[]> => {
   try {
-    const res: AxiosResponse<{ items: YoutubeItem[]}> = await axios.get(
+    const res: AxiosResponse<{ items: YoutubeItem[] }> = await axios.get(
       `${process.env.REACT_APP_BOT_HOSTNAME}/youtube/search`,
       {
         params: {

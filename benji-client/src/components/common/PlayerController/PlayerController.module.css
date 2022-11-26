@@ -57,6 +57,10 @@
   fill: var(--clr-btn-inactive);
 }
 
+.btn_inactive {
+  cursor: not-allowed;
+}
+
 .player_container .btn_active svg {
   fill: var(--clr-btn-active);
 }

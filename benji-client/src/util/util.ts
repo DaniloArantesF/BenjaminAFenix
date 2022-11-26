@@ -44,7 +44,7 @@ export const convertISODurationToMS = (isoDuration: string): number => {
 
   for (const period in durationObj) {
     const curPeriod = (durationObj as Duration)[period];
-    const  conversion = KeysToMS[period] || 1;
+    const conversion = KeysToMS[period] || 1;
     if (curPeriod) {
       durationMilli += curPeriod * conversion;
     }

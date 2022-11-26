@@ -14,8 +14,29 @@ export interface QueueState {
 }
 
 const initialState: QueueState = {
-  items: [],
-  position: -1,
+  items: [
+    {
+      itemPosition: 1,
+      channelTitle: 'Rick Astley',
+      duration: 213000,
+      title: 'Rick Astley - Never Gonna Give You Up (Official Music Video)',
+      id: 'dQw4w9WgXcQ',
+      user: 'DaArFI',
+      thumbnail: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
+      service: 1,
+    },
+    {
+      itemPosition: 1,
+      channelTitle: 'Monstercat Instinct',
+      duration: 193000,
+      title: 'Noisestorm - Crab Rave [Monstercat Release]',
+      id: 'LDU_Txk06tM',
+      user: 'DaArFI',
+      thumbnail: 'https://i.ytimg.com/vi/LDU_Txk06tM/hqdefault.jpg',
+      service: 1,
+    },
+  ],
+  position: 0,
   shuffle: false,
   repeat: false,
 };
@@ -45,7 +66,7 @@ export const queueSlice = createSlice({
       return state;
     },
     setPosition: (state: QueueState, action: PayloadAction<number>) => {
-      state.position = state.position ? (state.position += action.payload) : -1;
+      state.position = action.payload;
       return state;
     },
     pushTrack: (state: QueueState, action: PayloadAction<Track>) => {
@@ -54,6 +75,8 @@ export const queueSlice = createSlice({
         ...action.payload,
       };
       state.items = [...state.items, newItem];
+
+      // Update current position if first song
       if (state.position === -1) state.position = 0;
       return state;
     },
@@ -72,7 +95,8 @@ export const {
 export const selectPosition = (state: AppState): number => state.queue.position;
 export const selectItems = (state: AppState): QItem[] => state.queue.items;
 export const selectQueue = (state: AppState): QueueState => state.queue;
-export const selectQueueLength = (state: AppState): number => state.queue.items.length;
+export const selectQueueLength = (state: AppState): number =>
+  state.queue.items.length;
 export const selectShuffle = (state: AppState): boolean => state.queue.shuffle;
 export const selectRepeat = (state: AppState): boolean => state.queue.repeat;
 export default queueSlice.reducer;

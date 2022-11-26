@@ -14,7 +14,13 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ children, action, isActive, onClick, type }) => {
+const Button: React.FC<ButtonProps> = ({
+  children,
+  action,
+  isActive,
+  onClick,
+  type,
+}) => {
   const [classes, setClasses] = useState(btn2);
   const dispatch = useAppDispatch();
   const active = isActive();

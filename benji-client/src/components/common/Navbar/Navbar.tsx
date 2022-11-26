@@ -1,7 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-} from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 import classes from './Navbar.module.css';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';

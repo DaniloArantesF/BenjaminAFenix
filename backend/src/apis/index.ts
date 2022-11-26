@@ -1,6 +1,4 @@
 import { Router, Request, Response } from "express";
-import Bot from "../bot";
-import axios, { AxiosResponse } from "axios";
 import DiscordClient from "../DiscordClient";
 require("dotenv").config();
 

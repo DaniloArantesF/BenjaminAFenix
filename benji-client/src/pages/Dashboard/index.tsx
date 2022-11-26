@@ -4,7 +4,12 @@ import Queue from '../../components/common/Queue/Queue';
 import Navbar from '../../components/common/Navbar/Navbar';
 import Search from '../../components/common/SearchBar/Search';
 import { useEffect, useState } from 'react';
-import { selectItems } from '../../app/queueSlice';
+import {
+  selectItems,
+  pushTrack,
+  selectPosition,
+  setPosition,
+} from '../../app/queueSlice';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   selectAuth,
@@ -22,16 +27,17 @@ import {
 } from '../../app/dashboardSlice';
 import { setUserGuilds } from '../../app/dashboardSlice';
 import { useHistory } from 'react-router';
-import useSocket from '../../app/useSocket';
+// import useSocket from '../../app/useSocket';
 import PlayerController from '../../components/common/PlayerController';
 import useDiscordAPI from '../../libs/Discord';
-import { selectPlayerState } from '../../app/playerSlice';
+import { updatePlaybackState, selectPlayerState } from '../../app/playerSlice';
 import GuildHeader from '../../components/ui/GuildHeader';
 import TrackPreview from '../../components/ui/TrackPreview';
 import InactiveGuild from '../../components/ui/InactiveGuild';
 import ChannelSelection from '../../components/ui/Selection';
 import Switch from '../../components/ui/Switch';
 import ActionLog from '../../components/ui/ActionLog';
+import YoutubeEmbed from '../../components/common/YoutubeEmbed';
 
 export enum breakpoints {
   LARGE = 1150,
@@ -42,30 +48,19 @@ export enum breakpoints {
 const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectItems);
+  const position = useAppSelector(selectPosition);
   const {
     expiration,
     // id: userId,
     refreshTimeout,
     token,
   } = useAppSelector(selectAuth);
-  const { currentTrack } = useAppSelector(selectPlayerState);
+  const playerState = useAppSelector(selectPlayerState);
   const { windowWidth } = useAppSelector(selectDashboard);
   const history = useHistory();
-  const {
-    // socket,
-    setTrack,
-    requestTrack,
-    joinChannel,
-    unpausePlayer,
-    pausePlayer,
-    nextTrack,
-    prevTrack,
-    toggleRepeat,
-    toggleShuffle,
-    setVolume,
-    leaveChannel,
-  } = useSocket();
+
   const { active } = useAppSelector(selectDashboard);
+  // sets the channel selection modal
   const [channelSelectionActive, setChannelSelectionActive] = useState(false);
   const { getUserGuilds } = useDiscordAPI();
   const error = useAppSelector(selectError);
@@ -134,7 +129,7 @@ const Dashboard: React.FC = () => {
     if (localStorage.getItem('username')) {
       const id = localStorage.getItem('id') ?? '';
       const avatar = localStorage.getItem('avatar') ?? '';
-      const username = localStorage.getItem('username')?? '';
+      const username = localStorage.getItem('username') ?? '';
       dispatch(setUser({ id, avatar, username }));
     }
 
@@ -151,52 +146,48 @@ const Dashboard: React.FC = () => {
     dispatch(refreshCredentials(token));
   };
 
-  if (!active) return <InactiveGuild joinChannel={joinChannel} />;
+  // if (!active) return <InactiveGuild joinChannel={joinChannel} />;
 
   return (
     <div className={classes.dashboard_container}>
       <Navbar />
       <div className={classes.dashboard__body}>
-        <ChannelSelection
+        {/* <ChannelSelection
           active={channelSelectionActive}
           setActive={(val: boolean) => setChannelSelectionActive(val)}
           joinChannel={joinChannel}
-        />
+        /> */}
         <section id={classes.header}>
-          <Search requestTrack={requestTrack} />
+          <Search requestTrack={(track) => dispatch(pushTrack(track))} />
           <Switch />
         </section>
-        <section id={classes.info} className={classes.dashboard__component}>
-          <GuildHeader
+        <section id={classes.video} className={classes.dashboard__component}>
+          {/* <GuildHeader
             switchHandler={() =>
               setChannelSelectionActive(!channelSelectionActive)
             }
             leaveChannel={leaveChannel}
-          />
+          /> */}
+          <YoutubeEmbed embedId={items.length ? items[position].id : ''} />
         </section>
         <section id={classes.queue} className={classes.dashboard__component}>
-          <Queue items={items} setTrack={setTrack} />
+          <Queue
+            items={items}
+            setTrack={(pos: number) => dispatch(setPosition(pos))}
+          />
         </section>
         <section
           id={classes.player_controls}
           className={classes.dashboard__component}
         >
-          <PlayerController
-            unpausePlayer={unpausePlayer}
-            pausePlayer={pausePlayer}
-            nextTrack={nextTrack}
-            prevTrack={prevTrack}
-            toggleRepeat={toggleRepeat}
-            toggleShuffle={toggleShuffle}
-            setVolume={setVolume}
-          />
+          <PlayerController />
         </section>
-        {windowWidth > breakpoints.MEDIUM && (
+        {/* {windowWidth > breakpoints.MEDIUM && (
           <section id={classes.side}>
             <ActionLog />
             {currentTrack && <TrackPreview track={currentTrack} />}
           </section>
-        )}
+        )} */}
       </div>
     </div>
   );

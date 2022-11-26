@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Channel, selectDashboard } from '../../../app/dashboardSlice';
-import {  useAppSelector } from '../../../app/hooks';
+import { useAppSelector } from '../../../app/hooks';
 import classes from './Selection.module.css';
 
 interface ChannelSelectionProps {

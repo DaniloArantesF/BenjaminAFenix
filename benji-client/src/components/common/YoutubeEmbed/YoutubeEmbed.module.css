@@ -1,7 +1,6 @@
 .video_container {
   margin: 0 auto;
   width: auto;
-  max-height: 50vh;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   position: relative;

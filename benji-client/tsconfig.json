@@ -14,7 +14,7 @@
     "noEmit": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "react-jsx"
   },
   "include": ["typings.d.ts", "./src", "tests/config.js"],
   "rules": {

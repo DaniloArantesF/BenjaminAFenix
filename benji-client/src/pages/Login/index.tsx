@@ -16,7 +16,7 @@ if (!process.env.REACT_APP_HOSTNAME) {
   console.error('Hostname is not defined!');
 }
 
-const redirectURI = encodeURIComponent(process.env.REACT_APP_HOSTNAME ?? "");
+const redirectURI = encodeURIComponent(process.env.REACT_APP_HOSTNAME ?? '');
 export const DISCORD_AUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=712958072007688232&permissions=8&redirect_uri=${redirectURI}/login&response_type=code&scope=identify%20guilds`;
 
 export const BOT_INVITE_URL =

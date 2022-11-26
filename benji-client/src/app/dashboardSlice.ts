@@ -44,7 +44,10 @@ export const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState,
   reducers: {
-    setUserGuilds: (state: DashboardState, { payload }: PayloadAction<Guild[]>) => {
+    setUserGuilds: (
+      state: DashboardState,
+      { payload }: PayloadAction<Guild[]>
+    ) => {
       if (!payload) return state;
       // TODO: maybe sort guilds by relevance ?
       payload.sort((item1: Guild, item2: Guild) => {
@@ -56,12 +59,18 @@ export const dashboardSlice = createSlice({
       state.guilds = payload;
       return state;
     },
-    setCurrentGuild: (state: DashboardState, { payload }: PayloadAction<Guild>) => {
+    setCurrentGuild: (
+      state: DashboardState,
+      { payload }: PayloadAction<Guild>
+    ) => {
       state.currentGuild = payload;
       localStorage.setItem('guild', JSON.stringify(payload));
       return state;
     },
-    setCurrentChannel: (state: DashboardState, { payload }: PayloadAction<Channel>) => {
+    setCurrentChannel: (
+      state: DashboardState,
+      { payload }: PayloadAction<Channel>
+    ) => {
       if (payload) {
         state.channel = payload;
       } else {
@@ -73,14 +82,23 @@ export const dashboardSlice = createSlice({
       state.active = payload;
       return state;
     },
-    setChannels: (state: DashboardState, { payload }: PayloadAction<Channel[]>) => {
+    setChannels: (
+      state: DashboardState,
+      { payload }: PayloadAction<Channel[]>
+    ) => {
       state.channels = [...payload];
       return state;
     },
-    setNavbarVisibility: (state: DashboardState, { payload }: PayloadAction<boolean>) => {
+    setNavbarVisibility: (
+      state: DashboardState,
+      { payload }: PayloadAction<boolean>
+    ) => {
       state.navbar = payload;
     },
-    setWindowWidth: (state: DashboardState, { payload }: PayloadAction<number>) => {
+    setWindowWidth: (
+      state: DashboardState,
+      { payload }: PayloadAction<number>
+    ) => {
       state.windowWidth = payload;
       state.navbar = payload > 1150;
       return state;
@@ -102,7 +120,8 @@ export const {
   setWindowWidth,
   setTheme,
 } = dashboardSlice.actions;
-export const selectDashboard = (state: AppState): DashboardState => state.dashboard;
+export const selectDashboard = (state: AppState): DashboardState =>
+  state.dashboard;
 export const selectUptime = (state: AppState): number => {
   if (!state.dashboard.channel) return Date.now();
   return state.dashboard.channel?.timestamp;
