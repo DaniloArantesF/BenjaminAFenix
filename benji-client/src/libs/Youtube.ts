@@ -6,7 +6,10 @@ export const getYoutubeItem = async (itemId: string): Promise<YoutubeItem> => {
     const res: AxiosResponse<{ item: YoutubeItem }> = await axios.get(
       `${process.env.REACT_APP_BOT_HOSTNAME}/youtube/`,
       {
-        params: { itemId },
+        params: {
+          itemId,
+          token: localStorage.getItem('token'),
+        },
       }
     );
     return res.data.item;
@@ -43,6 +46,7 @@ export const searchYoutube = async (
         params: {
           q: query,
           resultsCount,
+          token: localStorage.getItem('token'),
         },
       }
     );

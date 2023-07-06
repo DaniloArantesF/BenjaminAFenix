@@ -15,26 +15,6 @@ export interface QueueState {
 
 const initialState: QueueState = {
   items: [
-    {
-      itemPosition: 1,
-      channelTitle: 'Rick Astley',
-      duration: 213000,
-      title: 'Rick Astley - Never Gonna Give You Up (Official Music Video)',
-      id: 'dQw4w9WgXcQ',
-      user: 'DaArFI',
-      thumbnail: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
-      service: 1,
-    },
-    {
-      itemPosition: 1,
-      channelTitle: 'Monstercat Instinct',
-      duration: 193000,
-      title: 'Noisestorm - Crab Rave [Monstercat Release]',
-      id: 'LDU_Txk06tM',
-      user: 'DaArFI',
-      thumbnail: 'https://i.ytimg.com/vi/LDU_Txk06tM/hqdefault.jpg',
-      service: 1,
-    },
   ],
   position: 0,
   shuffle: false,

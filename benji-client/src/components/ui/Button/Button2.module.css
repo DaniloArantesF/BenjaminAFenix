@@ -1,7 +1,7 @@
 .btn_container {
   --border-width: 4px;
   --duration: 200ms;
-  width: 150px;
+  max-width: 150px;
   height: 60px;
   margin: 1em;
 
@@ -24,6 +24,7 @@
   background: var(--clr-btn);
   color: var(--clr-font);
   transition: color 0.6s cubic-bezier(0.53, 0.21, 0, 1);
+  font-size: 80%;
 }
 
 .btn_border::before {

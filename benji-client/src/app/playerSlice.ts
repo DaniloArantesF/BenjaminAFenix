@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PURGE } from 'redux-persist';
 import type { AppState } from './store';
 
 export interface PlaybackState {
@@ -38,7 +39,7 @@ export const playerSlice = createSlice({
     resetPlayer: () => {
       return { ...initialState };
     },
-  },
+  }
 });
 
 export const { updatePlaybackState, setCurrentTrack, resetPlayer } =

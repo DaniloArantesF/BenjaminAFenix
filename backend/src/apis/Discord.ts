@@ -110,7 +110,7 @@ class DiscordAPI {
           name,
           icon,
           owner,
-          allowed: this.client.guilds.cache.get(id) !== undefined,
+          allowed: this.client===null || this.client?.guilds.cache.get(id) !== undefined,
         };
       });
       return res.send({ guilds });

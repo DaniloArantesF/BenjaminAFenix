@@ -26,9 +26,9 @@ class App {
     this.server = http.createServer(this.express);
 
     // Create bot client and pass it to API
-    this.bot = Bot(this.server);
-    DiscordAPI.setClient(this.bot);
-    BotAPI.setClient(this.bot);
+    // this.bot = Bot(this.server);
+    // DiscordAPI.setClient(this.bot);
+    // BotAPI.setClient(this.bot);
 
     this.server.listen(PORT, () => {
       console.log(`Server listening at ${PORT}`);
@@ -51,8 +51,8 @@ class App {
     this.express.use(
       rateLimit({
         windowMs: 1000,
-        max: 10,
-        message: "Exceeded 10 requests/s",
+        max: 5,
+        message: "Exceeded 5 requests/s",
         headers: true,
       })
     );

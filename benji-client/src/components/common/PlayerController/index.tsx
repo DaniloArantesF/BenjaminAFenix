@@ -71,7 +71,7 @@ const PlayerController: React.FC = (props) => {
       </button>
       <button
         id="back"
-        className={position == 0 ? classes.btn_inactive : ''}
+        className={(position == 0 || qLength === 0) ? classes.btn_inactive : ''}
         onClick={(event) => position > 0 && interceptClick(event, prevTrack)}
       >
         <BackIcon />
@@ -79,21 +79,23 @@ const PlayerController: React.FC = (props) => {
       {status === 'playing' ? (
         <button
           id="pause"
-          onClick={(event) => interceptClick(event, pausePlayer)}
+          className={(qLength === 0) ? classes.btn_inactive : ''}
+          onClick={(event) => (qLength > 0) && interceptClick(event, pausePlayer)}
         >
           <PauseIcon />
         </button>
       ) : (
         <button
           id="play"
-          onClick={(event) => interceptClick(event, resumePlayer)}
+          className={(qLength === 0) ? classes.btn_inactive : ''}
+          onClick={(event) => (qLength > 0) && interceptClick(event, resumePlayer)}
         >
           <PlayIcon />
         </button>
       )}
       <button
         id="skip"
-        className={position == qLength - 1 ? classes.btn_inactive : ''}
+        className={(position == qLength - 1 || qLength === 0) ? classes.btn_inactive : ''}
         onClick={(event) =>
           position < qLength - 1 && interceptClick(event, nextTrack)
         }
@@ -108,10 +110,12 @@ const PlayerController: React.FC = (props) => {
         <RepeatIcon />
       </button>
       <div className={classes.sound_controller}>
-        <button>
+        <button
+          className={qLength > 0 ? classes.btn_active : classes.btn_inactive}
+        >
           <SoundIcon />
         </button>
-        <Slider changeCb={setVolume} />
+        <Slider enabled={qLength > 0} changeCb={setVolume} />
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       context: "./backend"
     ports:
-      - "8000:8000"
+      - "8000:3011"
     restart: always
 
   client:
@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
       context: "./benji-client"
     ports:
-      - "3000:80"
+      - "3010:3010"
     links:
       - api
     environment:

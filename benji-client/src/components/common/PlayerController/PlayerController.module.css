@@ -13,6 +13,7 @@
   position: relative;
   border: none;
   background: transparent;
+  cursor: pointer;
 }
 
 .player_container button svg {
@@ -25,9 +26,9 @@
   transform: scale(0.7);
 }
 
-.player_container button:focus {
+/* .player_container button:focus {
   animation: click 100ms cubic-bezier(0.33, 1, 0.68, 1);
-}
+} */
 
 @keyframes click {
   0% {
@@ -58,7 +59,8 @@
 }
 
 .btn_inactive {
-  cursor: not-allowed;
+  /* cursor: not-allowed; */
+  cursor: default !important;
 }
 
 .player_container .btn_active svg {

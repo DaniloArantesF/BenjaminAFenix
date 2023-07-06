@@ -69,12 +69,16 @@ const Navbar: React.FC = () => {
     history.push('/login');
   };
 
+
   return (
     <>
       {windowWidth < 1150 && (
         <div
           className={classes.menu_btn}
-          onClick={() => dispatch(setNavbarVisibility(true))}
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch(setNavbarVisibility(true))
+          }}
         >
           <MenuIcon />
         </div>

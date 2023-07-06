@@ -1,4 +1,5 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
+
 import queueReducer from './queueSlice';
 import playerReducer from './playerSlice';
 import authReducer from './authSlice';

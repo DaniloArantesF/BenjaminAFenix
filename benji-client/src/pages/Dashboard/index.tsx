@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import classes from './Dashboard.module.css';
 import Queue from '../../components/common/Queue/Queue';
 import Navbar from '../../components/common/Navbar/Navbar';
@@ -64,6 +64,7 @@ const Dashboard: React.FC = () => {
   const [channelSelectionActive, setChannelSelectionActive] = useState(false);
   const { getUserGuilds } = useDiscordAPI();
   const error = useAppSelector(selectError);
+  const isInitialized = useRef(false);
   useEffect(() => {
     if (!token) {
       history.push('/login');
@@ -78,7 +79,10 @@ const Dashboard: React.FC = () => {
       });
     }
 
-    init();
+    if (!isInitialized.current) {
+      isInitialized.current = true;
+      init();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -4,10 +4,11 @@ import { selectPlayerState } from '../../../app/playerSlice';
 import classes from './Slider.module.css';
 
 interface SliderProps {
+  enabled: boolean;
   changeCb: (value: number) => void;
 }
 
-const Slider: React.FC<SliderProps> = ({ changeCb }: SliderProps) => {
+const Slider: React.FC<SliderProps> = ({ changeCb, enabled }: SliderProps) => {
   const [value, setValue] = useState(100);
   const [active, setActive] = useState<boolean>();
   const activeTrackRef = useRef<HTMLSpanElement>(null);
@@ -64,11 +65,12 @@ const Slider: React.FC<SliderProps> = ({ changeCb }: SliderProps) => {
   };
 
   return (
-    <div className={classes.slider_container}>
+    <div className={`${classes.slider_container} ${enabled ? '' : classes.disabled }`}>
       <div
         ref={sliderRef}
         className={classes.slider}
         onMouseDown={(event) => {
+          if (!enabled) return;
           setActive(true);
           const newValue = handleUpdate(event);
           setValue(newValue);
@@ -87,7 +89,7 @@ const Slider: React.FC<SliderProps> = ({ changeCb }: SliderProps) => {
           <span ref={activeTrackRef} className={classes.track__left} />
         </div>
       </div>
-      <div className={classes.volume_counter}>{value}</div>
+      <div className={classes.volume_counter}>{enabled && ~~value}</div>
     </div>
   );
 };

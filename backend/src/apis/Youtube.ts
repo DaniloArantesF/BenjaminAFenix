@@ -4,6 +4,7 @@ import type { ItemsEntity, YoutubeItem } from "./Youtube.d";
 import { convertISODurationToMS } from "../util/time";
 import { Router, Request, Response } from "express";
 import DiscordClient from "../DiscordClient";
+import jwt from "jsonwebtoken";
 
 const YT_API_KEY = process.env.YT_API_KEY;
 const youtube = google.youtube({ version: "v3", auth: YT_API_KEY });
@@ -140,6 +141,9 @@ class YoutubeAPI {
   }
 
   public async search(req: Request, res: Response) {
+    const token = req.query.token as string;
+    if (!token || !jwt.verify(token, process.env.JWT_SECRET_KEY,)) return res.sendStatus(401);
+
     const searchQuery = req.query.q as string;
     const itemCount = Number(req.query.resultsCount as string) || 5;
 
@@ -156,6 +160,8 @@ class YoutubeAPI {
   }
 
   public async getItem(req: Request, res: Response) {
+    const token = req.query.token as string;
+    if (!token || !jwt.verify(token, process.env.JWT_SECRET_KEY,)) return res.sendStatus(401);
     const itemId = req.query.itemId as string;
     if (!itemId) {
       return res.sendStatus(400);

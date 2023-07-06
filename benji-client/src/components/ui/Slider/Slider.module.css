@@ -5,6 +5,14 @@
   margin: 0 1em;
 }
 
+.slider_container.disabled .track__left::before {
+  opacity: 0;
+}
+.slider_container.disabled .slider__track,
+.slider_container.disabled .track__left {
+  background: var(--clr-btn-inactive);
+}
+
 .slider {
   position: relative;
   display: flex;
