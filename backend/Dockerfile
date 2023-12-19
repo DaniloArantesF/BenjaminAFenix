@@ -9,8 +9,8 @@ RUN npm install
 # Copy source code to container
 COPY . .
 
-ENV PORT=8000
-EXPOSE 8000
+ENV PORT=3016
+EXPOSE 3016
 
 RUN npm install -g typescript
 RUN tsc

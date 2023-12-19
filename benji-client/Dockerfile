@@ -11,8 +11,8 @@ COPY . .
 
 RUN npm run build
 
-ENV PORT=3000
-EXPOSE 3000
+ENV PORT=3010
+EXPOSE 3010
 
 # Stage 1
 FROM nginx:stable-alpine as nginx

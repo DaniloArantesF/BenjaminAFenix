@@ -36,15 +36,19 @@ class App {
   }
 
   private middleware() {
+    this.express.set('trust proxy', 1);
     this.express.use(express.urlencoded({ extended: true }));
     this.express.use(express.json());
-    this.express.use(cors());
+
+    const corsConfig = {
+      origin: CLIENT_URL,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'x-access-token', 'XSRF-TOKEN'],
+    }
+    this.express.use(cors(corsConfig));
     this.express.options(
       "*",
-      cors({
-        origin: [CLIENT_URL],
-        methods: ["GET", "POST"],
-      })
+      cors(corsConfig)
     );
 
     this.express.use(morgan(ENVIRONMENT === 'production' ? "tiny" : "dev"));

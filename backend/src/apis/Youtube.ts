@@ -142,7 +142,7 @@ class YoutubeAPI {
 
   public async search(req: Request, res: Response) {
     const token = req.query.token as string;
-    if (!token || !jwt.verify(token, process.env.JWT_SECRET_KEY,)) return res.sendStatus(401);
+    // if (!token || !jwt.verify(token, process.env.JWT_SECRET_KEY,)) return res.sendStatus(401);
 
     const searchQuery = req.query.q as string;
     const itemCount = Number(req.query.resultsCount as string) || 5;
@@ -161,7 +161,7 @@ class YoutubeAPI {
 
   public async getItem(req: Request, res: Response) {
     const token = req.query.token as string;
-    if (!token || !jwt.verify(token, process.env.JWT_SECRET_KEY,)) return res.sendStatus(401);
+    // if (!token || !jwt.verify(token, process.env.JWT_SECRET_KEY,)) return res.sendStatus(401);
     const itemId = req.query.itemId as string;
     if (!itemId) {
       return res.sendStatus(400);

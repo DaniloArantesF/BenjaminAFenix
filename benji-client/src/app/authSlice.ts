@@ -47,13 +47,15 @@ export const fetchCredentials = createAsyncThunk(
   'login',
   async (code: string, { rejectWithValue }) => {
     try {
+      console.log(process.env.REACT_APP_BOT_HOSTNAME);
       const { data }: AxiosResponse<{ token: string }> = await axios.post(
         `${process.env.REACT_APP_BOT_HOSTNAME}/auth/login`,
         {
           code,
         }
       );
-
+	console.log(data)
+      
       const token = data.token;
       type TokenPayload = {
         exp: number;
@@ -65,6 +67,7 @@ export const fetchCredentials = createAsyncThunk(
         expiration: decoded.exp * 1000,
       };
     } catch (err) {
+      console.log(err);
       return rejectWithValue({
         code: 400,
         message: 'Invalid Code!',
